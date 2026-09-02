@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from .models import Destaque
+from .models import Destaque, Noticia
 
 
 class DestaqueForm(forms.ModelForm):
@@ -65,4 +65,36 @@ class DestaqueAdmin(admin.ModelAdmin):
 
     ordering = (
         'ordem',
+    )
+
+
+@admin.register(Noticia)
+class NoticiaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'titulo',
+        'categoria',
+        'data_publicacao',
+        'destaque',
+        'publicada',
+    )
+
+    list_filter = (
+        'categoria',
+        'destaque',
+        'publicada',
+    )
+
+    search_fields = (
+        'titulo',
+        'resumo',
+        'texto',
+    )
+
+    prepopulated_fields = {
+        'slug': ('titulo',)
+    }
+
+    ordering = (
+        '-data_publicacao',
     )

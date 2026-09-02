@@ -1,0 +1,197 @@
+{% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}
+Notícias | Rede Miradas
+{% endblock %}
+
+{% block conteudo %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/noticias.css' %}"
+>
+
+<div class="pagina-noticias">
+
+
+    <!-- =====================================================
+         NOTÍCIA EM DESTAQUE
+         ===================================================== -->
+
+    {% if destaque %}
+
+    <section class="destaque-full">
+
+        <div class="noticia-principal">
+
+            <div class="principal-conteudo">
+
+                <div class="principal-texto">
+
+                    <span class="categoria">
+                        {{ destaque.get_categoria_display }}
+                    </span>
+
+                    <h1>
+                        {{ destaque.titulo }}
+                    </h1>
+
+                    {% if destaque.resumo %}
+                    <p class="principal-resumo">
+                        {{ destaque.resumo }}
+                    </p>
+                    {% endif %}
+
+                    <p class="principal-data">
+                        {{ destaque.data_publicacao|date:"d \d\e F \d\e Y" }}
+                    </p>
+
+                    <a
+                        href="{% url 'noticia_detalhe' destaque.slug %}"
+                        class="botao-leia"
+                    >
+                        Leia a notícia
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+                <div class="principal-imagem">
+
+                    <img
+                        src="{{ destaque.imagem.url }}"
+                        alt="{{ destaque.titulo }}"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         CABEÇALHO DAS ÚLTIMAS NOTÍCIAS
+         ===================================================== -->
+
+    <section class="ultimas-noticias">
+
+        <div class="titulo-noticias">
+
+            <h2>
+                Últimas notícias
+            </h2>
+
+
+            <form
+                class="campo-pesquisa"
+                method="get"
+            >
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ busca }}"
+                    placeholder="O que você está procurando?"
+                >
+
+                <button
+                    type="submit"
+                    aria-label="Pesquisar"
+                >
+                    <i class="bi bi-search"></i>
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             GRADE DE NOTÍCIAS
+             ================================================= -->
+
+        <section class="noticias-grid">
+
+            {% for noticia in noticias %}
+
+                <article
+                    class="
+                        noticia-card
+                        {% if forloop.counter == 1 %}
+                            noticia-grande
+                        {% elif forloop.counter == 2 or forloop.counter == 3 %}
+                            noticia-lateral
+                        {% else %}
+                            noticia-inferior
+                        {% endif %}
+                    "
+                >
+
+                    <a
+                        href="{% url 'noticia_detalhe' noticia.slug %}"
+                        class="noticia-imagem"
+                    >
+
+                        <img
+                            src="{{ noticia.imagem.url }}"
+                            alt="{{ noticia.titulo }}"
+                        >
+
+                    </a>
+
+
+                    <div class="noticia-info">
+
+                        <span class="categoria-card">
+                            {{ noticia.get_categoria_display }}
+                        </span>
+
+
+                        <h3>
+
+                            <a
+                                href="{% url 'noticia_detalhe' noticia.slug %}"
+                            >
+                                {{ noticia.titulo }}
+                            </a>
+
+                        </h3>
+
+
+                        {% if noticia.resumo %}
+                        <p class="noticia-resumo">
+                            {{ noticia.resumo }}
+                        </p>
+                        {% endif %}
+
+
+                        <p class="noticia-data">
+                            {{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}
+                        </p>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <p class="nenhuma-noticia">
+                    Nenhuma notícia publicada no momento.
+                </p>
+
+            {% endfor %}
+
+        </section>
+
+    </section>
+
+</div>
+
+{% endblock %}
