@@ -1,6 +1,6 @@
 <div>
 
-<img src="img/logo.png" alt="Logo Rede Miradas" width="320"/>
+<img src="rede_miradas/static/rede_miradas/img/logo.png" alt="Logo Rede Miradas" width="320"/>
 
 </div>
 
@@ -11,7 +11,7 @@ A **Rede Miradas** é uma plataforma digital desenvolvida para o **Projeto Mirad
 A plataforma disponibiliza **trilhas de aprendizagem, conteúdos sobre produção audiovisual, fóruns de discussão, notícias e um mapa interativo de produtoras**, conectando estudantes, professores e profissionais do setor. O projeto busca fortalecer a educação audiovisual e facilitar o contato entre diferentes participantes da área, oferecendo recursos específicos de acordo com o perfil de cada usuário.
 <div align="center">
 
-<img src="img/demonstracoes.png" alt="Página inicial da Rede Miradas" width="800"/>
+<img src="rede_miradas/static/rede_miradas/img/demonstracoes.png" alt="Página inicial da Rede Miradas" width="800"/>
 
 </div>
 

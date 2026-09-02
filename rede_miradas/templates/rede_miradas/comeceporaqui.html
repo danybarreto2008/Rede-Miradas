@@ -1,0 +1,119 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/comeceporaqui.css' %}"
+>
+
+
+<section class="carrossel">
+
+    {% for destaque in destaques %}
+
+        <div
+            class="
+                slide
+                {% if forloop.first %}ativo{% endif %}
+                horizontal-{{ destaque.posicao_horizontal }}
+                vertical-{{ destaque.posicao_vertical }}
+
+                {% if destaque.titulo_negrito %}titulo-negrito{% endif %}
+                {% if destaque.titulo_italico %}titulo-italico{% endif %}
+                {% if destaque.titulo_sublinhado %}titulo-sublinhado{% endif %}
+
+                {% if destaque.texto_negrito %}texto-negrito{% endif %}
+                {% if destaque.texto_italico %}texto-italico{% endif %}
+                {% if destaque.texto_sublinhado %}texto-sublinhado{% endif %}
+
+                {% if destaque.botao_negrito %}botao-negrito{% endif %}
+                {% if destaque.botao_italico %}botao-italico{% endif %}
+                {% if destaque.botao_sublinhado %}botao-sublinhado{% endif %}
+
+                {% if destaque.botao_com_borda %}botao-com-borda{% else %}botao-sem-borda{% endif %}
+            "
+
+            style="
+                background-image: url('{{ destaque.imagem.url }}');
+
+                --cor-titulo: {{ destaque.cor_titulo }};
+                --cor-texto: {{ destaque.cor_texto }};
+
+                --cor-fundo-botao: {{ destaque.cor_fundo_botao }};
+                --cor-texto-botao: {{ destaque.cor_texto_botao }};
+                --cor-borda-botao: {{ destaque.cor_borda_botao }};
+            "
+        >
+
+            <div class="slide-conteudo">
+
+                {% if destaque.titulo %}
+
+                    <h1>
+                        {{ destaque.titulo }}
+                    </h1>
+
+                {% endif %}
+
+
+                {% if destaque.texto %}
+
+                    <p>
+                        {{ destaque.texto }}
+                    </p>
+
+                {% endif %}
+
+
+                {% if destaque.mostrar_botao and destaque.texto_botao and destaque.link_botao %}
+
+                    <a
+                        href="{{ destaque.link_botao }}"
+                        class="slide-botao"
+                    >
+                        {{ destaque.texto_botao }}
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="sem-destaques">
+            Nenhum destaque cadastrado.
+        </div>
+
+    {% endfor %}
+
+
+    {% if destaques|length > 1 %}
+
+        <button
+            class="carrossel-anterior"
+            onclick="mudarSlide(-1)"
+        >
+            ❮
+        </button>
+
+
+        <button
+            class="carrossel-proximo"
+            onclick="mudarSlide(1)"
+        >
+            ❯
+        </button>
+
+    {% endif %}
+
+</section>
+
+
+<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}"></script>
+
+{% endblock %}

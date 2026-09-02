@@ -1,0 +1,112 @@
+/* Cores principais do projeto */
+:root {
+    --bs-body-bg: #000000;
+
+    --rosa: #ff2fd6;
+    --roxo: #8b2ff7;
+    --azul: #22d3ee;
+}
+
+
+/* Texto com gradiente */
+.gradiente-texto {
+    background: linear-gradient(
+        90deg,
+        var(--rosa),
+        var(--roxo),
+        var(--azul)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* Botão com gradiente */
+.btn-neon {
+    background: linear-gradient(
+        90deg,
+        #7C3AED,
+        #06B6D4
+    );
+
+    border: none;
+
+    color: #fff;
+
+    border-radius: 999px;
+
+    padding: 10px 26px;
+
+    transition:
+        background 0.4s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.btn-neon:hover {
+    color: #fff;
+
+    background: linear-gradient(
+        90deg,
+        #ff2fd6,
+        #8b2ff7
+    );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 18px rgba(255, 47, 214, 0.35);
+}
+
+
+/* Card escuro */
+.card-escuro {
+    background: #14102a;
+
+    border: none;
+
+    border-radius: 16px;
+}
+
+
+/* Bloco de votação */
+.bloco-votacao {
+    background: linear-gradient(
+        120deg,
+        rgba(255, 47, 214, 0.15),
+        rgba(139, 47, 247, 0.15)
+    );
+
+    border-radius: 20px;
+}
+
+
+/* Fundo do menu lateral */
+#menuLateral {
+    background: linear-gradient(
+        180deg,
+        #14102a,
+        #08050f
+    ) !important;
+}
+
+
+/* Links da navbar */
+.navbar .nav-link {
+    color: #ffffff;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.navbar .nav-link:hover {
+    color: #2fe7ff;
+
+    transform: translateY(-1px);
+}

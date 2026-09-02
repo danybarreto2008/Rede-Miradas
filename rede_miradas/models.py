@@ -1,3 +1,162 @@
 from django.db import models
 
-# Create your models here.
+
+# Modelo dos destaques da página "Comece por aqui"
+class Destaque(models.Model):
+
+    POSICAO_HORIZONTAL = [
+        ('esquerda', 'Esquerda'),
+        ('centro', 'Centro'),
+        ('direita', 'Direita'),
+    ]
+
+    POSICAO_VERTICAL = [
+        ('topo', 'Topo'),
+        ('meio', 'Meio'),
+        ('baixo', 'Baixo'),
+    ]
+
+
+    # Conteúdo
+
+    titulo = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    texto = models.TextField(
+        blank=True
+    )
+
+    imagem = models.ImageField(
+        upload_to='destaques/'
+    )
+
+
+    # Cores do título e do texto
+
+    cor_titulo = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+    cor_texto = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+
+    # Formatação do título e do texto
+
+    titulo_negrito = models.BooleanField(
+        default=False
+    )
+
+    titulo_italico = models.BooleanField(
+        default=False
+    )
+
+    titulo_sublinhado = models.BooleanField(
+        default=False
+    )
+
+    texto_negrito = models.BooleanField(
+        default=False
+    )
+
+    texto_italico = models.BooleanField(
+        default=False
+    )
+
+    texto_sublinhado = models.BooleanField(
+        default=False
+    )
+
+
+    # Botão
+
+    mostrar_botao = models.BooleanField(
+        default=True
+    )
+
+    texto_botao = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    link_botao = models.URLField(
+        blank=True
+    )
+
+
+    # Cor do fundo do botão
+
+    cor_fundo_botao = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+
+    # Cor do texto do botão
+
+    cor_texto_botao = models.CharField(
+        max_length=7,
+        default='#000000'
+    )
+
+
+    # Borda do botão
+
+    botao_com_borda = models.BooleanField(
+        default=False
+    )
+
+    cor_borda_botao = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+
+    # Formatação do botão
+
+    botao_negrito = models.BooleanField(
+        default=True
+    )
+
+    botao_italico = models.BooleanField(
+        default=False
+    )
+
+    botao_sublinhado = models.BooleanField(
+        default=False
+    )
+
+
+    # Posição do conteúdo
+
+    posicao_horizontal = models.CharField(
+        max_length=20,
+        choices=POSICAO_HORIZONTAL,
+        default='esquerda'
+    )
+
+    posicao_vertical = models.CharField(
+        max_length=20,
+        choices=POSICAO_VERTICAL,
+        default='meio'
+    )
+
+
+    # Controle do destaque
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+
+    def __str__(self):
+        return self.titulo or f'Destaque {self.id}'

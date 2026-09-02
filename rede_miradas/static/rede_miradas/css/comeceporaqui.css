@@ -1,0 +1,295 @@
+/* Área do carrossel */
+.carrossel {
+    position: relative;
+
+    width: 100%;
+
+    height: calc(100vh - 42px);
+
+    min-height: 450px;
+
+    overflow: hidden;
+}
+
+
+/* Slide */
+.slide {
+    position: absolute;
+
+    inset: 0;
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateX(30px);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+}
+
+
+/* Escurece a imagem de fundo */
+.slide::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.45);
+}
+
+
+/* Slide ativo que aparece na página */
+.slide.ativo {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateX(0);
+}
+
+
+/* Conteúdo do slide */
+.slide-conteudo {
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    height: 100%;
+
+    box-sizing: border-box;
+
+    padding: 40px clamp(50px, 7vw, 120px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* Esse código limita a largura do texto mas não a área de posicionamento */
+.slide-conteudo h1,
+.slide-conteudo p {
+    max-width: 650px;
+}
+
+
+/* Posições horizontais */
+
+/* Esquerda */
+.slide.horizontal-esquerda .slide-conteudo {
+    align-items: flex-start;
+
+    text-align: left;
+}
+
+
+/* Centro */
+.slide.horizontal-centro .slide-conteudo {
+    align-items: center;
+
+    text-align: center;
+}
+
+
+/* Direita */
+.slide.horizontal-direita .slide-conteudo {
+    align-items: flex-end;
+
+    text-align: right;
+}
+
+
+/* Posições verticais */
+
+/* Topo */
+.slide.vertical-topo .slide-conteudo {
+    justify-content: flex-start;
+}
+
+
+/* Meio */
+.slide.vertical-meio .slide-conteudo {
+    justify-content: center;
+}
+
+
+/* Baixo */
+.slide.vertical-baixo .slide-conteudo {
+    justify-content: flex-end;
+}
+
+
+/* Título */
+.slide h1 {
+    font-size: 42px;
+
+    margin: 0;
+
+    color: var(--cor-titulo);
+}
+
+
+/* Texto */
+.slide p {
+    font-size: 18px;
+
+    margin: 0;
+
+    color: var(--cor-texto);
+
+    line-height: 1.5;
+}
+
+
+/* Formatação do título */
+
+.titulo-negrito h1 {
+    font-weight: bold;
+}
+
+
+.titulo-italico h1 {
+    font-style: italic;
+}
+
+
+.titulo-sublinhado h1 {
+    text-decoration: underline;
+}
+
+
+/* Formatação do texto */
+
+.texto-negrito p {
+    font-weight: bold;
+}
+
+
+.texto-italico p {
+    font-style: italic;
+}
+
+
+.texto-sublinhado p {
+    text-decoration: underline;
+}
+
+
+/* Botão */
+.slide-botao {
+    display: inline-block;
+
+    padding: 12px 28px;
+
+    border-radius: 6px;
+
+    width: fit-content;
+
+    box-sizing: border-box;
+
+    background-color: var(--cor-fundo-botao);
+
+    color: var(--cor-texto-botao);
+
+    transition: 0.3s;
+}
+
+
+/* Formatação do botão */
+
+.botao-negrito .slide-botao {
+    font-weight: bold;
+}
+
+
+.botao-italico .slide-botao {
+    font-style: italic;
+}
+
+
+.botao-sublinhado .slide-botao {
+    text-decoration: underline;
+}
+
+
+/* Borda do botão */
+
+.botao-com-borda .slide-botao {
+    border: 2px solid var(--cor-borda-botao);
+}
+
+
+.botao-sem-borda .slide-botao {
+    border: 2px solid transparent;
+}
+
+
+/* Efeito ao passar o mouse no botão */
+.slide-botao:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Setas */
+.carrossel-anterior,
+.carrossel-proximo {
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 10;
+
+    border: none;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    color: white;
+
+    font-size: 30px;
+
+    width: 45px;
+
+    height: 60px;
+
+    cursor: pointer;
+}
+
+
+/* Seta esquerda */
+.carrossel-anterior {
+    left: 15px;
+}
+
+
+/* Seta direita */
+.carrossel-proximo {
+    right: 15px;
+}
+
+
+/* Quando não existir nenhum destaque */
+.sem-destaques {
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
