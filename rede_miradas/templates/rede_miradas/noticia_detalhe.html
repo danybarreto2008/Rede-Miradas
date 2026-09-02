@@ -1,0 +1,68 @@
+{% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}
+{{ noticia.titulo }} | Rede Miradas
+{% endblock %}
+
+{% block conteudo %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/noticias.css' %}"
+>
+
+<div class="pagina-noticias">
+
+    <article class="noticia-detalhe">
+
+        <!-- Categoria da notícia -->
+        <span class="categoria-card">
+            {{ noticia.get_categoria_display }}
+        </span>
+
+
+        <!-- Título -->
+        <h1>
+            {{ noticia.titulo }}
+        </h1>
+
+
+        <!-- Data de publicação -->
+        <p class="card-data">
+            {{ noticia.data_publicacao|date:"d/m/Y" }}
+        </p>
+
+
+        <!-- Imagem da notícia -->
+        <div class="noticia-detalhe-imagem">
+
+            <img
+                src="{{ noticia.imagem.url }}"
+                alt="{{ noticia.titulo }}"
+            >
+
+        </div>
+
+
+        <!-- Texto completo da notícia -->
+        <div class="noticia-detalhe-texto">
+
+            {{ noticia.texto|linebreaks }}
+
+        </div>
+
+
+        <!-- Voltar para a página de notícias -->
+        <a
+            href="{% url 'noticias' %}"
+            class="botao-leia"
+        >
+            ← Voltar para notícias
+        </a>
+
+    </article>
+
+</div>
+
+{% endblock %}
