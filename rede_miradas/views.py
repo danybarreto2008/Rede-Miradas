@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
-from .models import Destaque, Noticia
+from .models import Destaque, Noticia, BlocoApresentacao
 
 
 # View da página "Comece por aqui"
@@ -11,11 +11,16 @@ def home(request):
         ativo=True
     ).order_by('ordem')
 
+    blocos = BlocoApresentacao.objects.filter(
+        ativo=True
+    ).order_by('ordem')
+
     return render(
         request,
         "rede_miradas/comeceporaqui.html",
         {
-            'destaques': destaques
+            'destaques': destaques,
+            'blocos': blocos,
         }
     )
 

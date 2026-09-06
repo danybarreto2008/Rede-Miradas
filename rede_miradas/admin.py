@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from .models import Destaque, Noticia
-
+from .models import Destaque, Noticia, BlocoApresentacao
 
 class DestaqueForm(forms.ModelForm):
 
@@ -43,7 +42,50 @@ class DestaqueForm(forms.ModelForm):
                 }
             ),
         }
+        
+class BlocoApresentacaoForm(forms.ModelForm):
 
+    class Meta:
+        model = BlocoApresentacao
+
+        fields = '__all__'
+
+        widgets = {
+
+            'cor_gradiente_1': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+
+            'cor_gradiente_2': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+        }
+
+
+@admin.register(BlocoApresentacao)
+class BlocoApresentacaoAdmin(admin.ModelAdmin):
+
+    form = BlocoApresentacaoForm
+
+    list_display = (
+        'emoji',
+        'texto',
+        'ordem',
+        'ativo',
+    )
+
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+
+    ordering = (
+        'ordem',
+    )
 
 @admin.register(Destaque)
 class DestaqueAdmin(admin.ModelAdmin):

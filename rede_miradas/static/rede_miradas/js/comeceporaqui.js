@@ -53,3 +53,21 @@ function reiniciarTimer() {
 
     }, 5000);
 }
+
+// Rola a lista de curtas para os lados ao clicar nas setas
+function mudarCurta(direcao) {
+
+    const lista = document.getElementById('curtasLista');
+
+    if (!lista) return;
+
+    const item = lista.querySelector('.curta-item');
+
+    const distancia = item ? item.getBoundingClientRect().width + 20 : 200;
+
+    lista.scrollBy({
+        left: distancia * direcao,
+        behavior: 'smooth'
+    });
+
+}

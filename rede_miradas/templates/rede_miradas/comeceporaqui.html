@@ -112,6 +112,73 @@
     {% endif %}
 
 </section>
+<section class="secao-blocos py-5">
+
+    <div class="container">
+        <section class="secao-blocos py-5">
+
+    <div class="triangulos-fundo">
+
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-1" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-2" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-3" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-4" alt="">
+
+    </div>
+
+
+    <div class="container">
+
+        <h2 class="text-center text-white fw-bold mb-5 titulo-blocos">
+            APRENDA. CRIE. CONECTE.
+        </h2>
+
+
+        <div class="row g-4 justify-content-center">
+
+            {% for bloco in blocos %}
+
+                                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+
+                    <div
+                        class="card-bloco"
+                        style="
+                            --cor-gradiente-1: {{ bloco.cor_gradiente_1 }};
+                            --cor-gradiente-2: {{ bloco.cor_gradiente_2 }};
+                        "
+                    >
+
+                        <div class="card-bloco-luz"></div>
+
+                        <div class="card-bloco-emoji">
+                            {{ bloco.emoji }}
+                        </div>
+
+                        <div class="card-bloco-inner">
+
+                            <p class="card-bloco-texto">
+                                {{ bloco.texto }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-center text-secondary">
+                    Nenhum bloco cadastrado.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
 
 
 <script src="{% static 'rede_miradas/js/comeceporaqui.js' %}"></script>
