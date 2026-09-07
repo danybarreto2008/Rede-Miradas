@@ -574,3 +574,120 @@ html, body {
 .card-bloco:hover .card-bloco-luz {
     opacity: 1;
 }
+
+/* ===== Seção "Curtas em destaque" ===== */
+
+.secao-curtas {
+    position: relative;
+    background-color: #000000;
+}
+
+.titulo-curtas {
+    font-size: 32px;
+    letter-spacing: 1px;
+}
+.subtitulo-curtas {
+    font-size: 15px;
+}
+
+.curtas-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.curtas-viewport {
+    overflow: hidden;
+    width: 100%;
+    min-width: 0;
+    padding: 12px 0;
+    margin: -12px 0;
+}
+
+.curtas-lista {
+    display: flex;
+    gap: var(--gap-curtas, 20px);
+    transition: transform 0.4s ease;
+}
+
+.curta-card {
+    display: block;
+    box-sizing: border-box;
+    flex: 0 0 calc((100% - 4 * var(--gap-curtas, 20px)) / 5);
+    aspect-ratio: 2 / 3;
+    border-radius: 10px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--cor-borda-1), var(--cor-borda-2));
+    transition: transform 0.3s ease;
+}
+.curta-card-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.curta-card:hover {
+    transform: translateY(-6px);
+}
+
+.curta-imagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.seta-curtas {
+    flex: 0 0 auto;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.seta-curtas:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 900px) {
+    .titulo-curtas {
+        font-size: 24px;
+    }
+
+    .curtas-wrapper {
+        --gap-curtas: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .titulo-curtas {
+        font-size: 20px;
+    }
+
+    .curtas-wrapper {
+        --gap-curtas: 6px;
+    }
+}
+
+@media (max-width: 900px) {
+    .titulo-blocos {
+        font-size: 22px;
+    }
+
+    .card-bloco-emoji {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .card-bloco-inner {
+        padding: 32px 12px 14px;
+    }
+}

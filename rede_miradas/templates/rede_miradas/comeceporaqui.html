@@ -6,7 +6,7 @@
 
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/comeceporaqui.css' %}"
+    href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=2"
 >
 
 
@@ -138,8 +138,7 @@
 
             {% for bloco in blocos %}
 
-                                <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
-
+            <div class="col-4 d-flex justify-content-center">
                     <div
                         class="card-bloco"
                         style="
@@ -179,8 +178,69 @@
     </div>
 
 </section>
+<section class="secao-curtas py-5">
 
+    <div class="container">
 
-<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}"></script>
+        <h2 class="text-start text-white fw-bold mb-2 titulo-curtas">
+    {{ secao_curtas.titulo|default:"CURTAS EM DESTAQUE" }}
+        </h2>
+
+        {% if secao_curtas.subtitulo %}
+
+            <p class="text-start text-secondary mb-5 subtitulo-curtas">
+                {{ secao_curtas.subtitulo }}
+            </p>
+
+        {% endif %}
+
+        <div class="curtas-wrapper">
+
+            {% if curtas|length > 1 %}
+
+                <button class="seta-curtas seta-curtas-esquerda" onclick="mudarCurta(-1)">
+                    ❮
+                </button>
+
+            {% endif %}
+
+            <div class="curtas-viewport">
+
+                <div class="curtas-lista">
+
+                 {% for curta in curtas %}
+
+                    <a href="{{ curta.link_youtube }}" target="_blank" rel="noopener" class="curta-card" style="--cor-borda-1: {{ curta.cor_borda_1 }}; --cor-borda-2: {{ curta.cor_borda_2 }};">
+                        <div class="curta-card-inner">
+                            <img src="{{ curta.cartaz.url }}" alt="Curta em destaque" class="curta-imagem">
+                        </div>
+                    </a>
+
+                {% empty %}
+
+                    <p class="text-center text-secondary">
+                        Nenhum curta cadastrado.
+                    </p>
+
+                {% endfor %}
+                </div>
+
+            </div>
+
+            {% if curtas|length > 1 %}
+
+                <button class="seta-curtas seta-curtas-direita" onclick="mudarCurta(1)">
+                    ❯
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=3"></script>
 
 {% endblock %}

@@ -193,6 +193,58 @@ class BlocoApresentacao(models.Model):
     def __str__(self):
         return self.texto[:40] if self.texto else f'Bloco {self.id}'
     
+# Modelo do texto da seção "Curtas em destaque"
+class SecaoCurtas(models.Model):
+
+    titulo = models.CharField(
+        max_length=200,
+        default='CURTAS EM DESTAQUE'
+    )
+
+    subtitulo = models.CharField(
+        max_length=300,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Texto da seção de curtas'
+        verbose_name_plural = 'Texto da seção de curtas'
+
+    def __str__(self):
+        return self.titulo
+    # Modelo dos curtas em destaque da página "Comece por aqui"
+class Curta(models.Model):
+
+    cartaz = models.ImageField(
+        upload_to='curtas/'
+    )
+
+    link_youtube = models.URLField()
+
+    cor_borda_1 = models.CharField(
+        max_length=7,
+        default='#7C3AED'
+    )
+
+    cor_borda_2 = models.CharField(
+        max_length=7,
+        default='#06B6D4'
+    )
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        verbose_name = 'Curta em destaque'
+        verbose_name_plural = 'Curtas em destaque'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return f'Curta {self.id}'
 # Modelo das notícias do blog
 class Noticia(models.Model):
 
