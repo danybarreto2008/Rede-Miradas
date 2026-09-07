@@ -150,7 +150,101 @@ class Destaque(models.Model):
     def __str__(self):
         return self.titulo or f'Destaque {self.id}'
 
+# Modelo dos cards "Aprenda. Crie. Conecte." da página "Comece por aqui"
+class BlocoApresentacao(models.Model):
 
+    # Conteúdo
+
+    emoji = models.CharField(
+        max_length=10,
+        help_text='Emoji exibido no topo do card. Ex: 🎬'
+    )
+
+    texto = models.TextField(
+        max_length=200
+    )
+
+    # Degradê da borda
+
+    cor_gradiente_1 = models.CharField(
+        max_length=7,
+        default='#8b2ff7'
+    )
+
+    cor_gradiente_2 = models.CharField(
+        max_length=7,
+        default='#22d3ee'
+    )
+
+    # Controle do card
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        verbose_name = 'Bloco de apresentação'
+        verbose_name_plural = 'Blocos de apresentação'
+
+    def __str__(self):
+        return self.texto[:40] if self.texto else f'Bloco {self.id}'
+    
+# Modelo do texto da seção "Curtas em destaque"
+class SecaoCurtas(models.Model):
+
+    titulo = models.CharField(
+        max_length=200,
+        default='CURTAS EM DESTAQUE'
+    )
+
+    subtitulo = models.CharField(
+        max_length=300,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Texto da seção de curtas'
+        verbose_name_plural = 'Texto da seção de curtas'
+
+    def __str__(self):
+        return self.titulo
+    # Modelo dos curtas em destaque da página "Comece por aqui"
+class Curta(models.Model):
+
+    cartaz = models.ImageField(
+        upload_to='curtas/'
+    )
+
+    link_youtube = models.URLField()
+
+    cor_borda_1 = models.CharField(
+        max_length=7,
+        default='#7C3AED'
+    )
+
+    cor_borda_2 = models.CharField(
+        max_length=7,
+        default='#06B6D4'
+    )
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        verbose_name = 'Curta em destaque'
+        verbose_name_plural = 'Curtas em destaque'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return f'Curta {self.id}'
 # Modelo das notícias do blog
 class Noticia(models.Model):
 

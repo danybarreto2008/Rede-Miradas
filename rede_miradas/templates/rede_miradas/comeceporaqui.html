@@ -6,7 +6,7 @@
 
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/comeceporaqui.css' %}"
+    href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=2"
 >
 
 
@@ -112,8 +112,135 @@
     {% endif %}
 
 </section>
+<section class="secao-blocos py-5">
+
+    <div class="container">
+        <section class="secao-blocos py-5">
+
+    <div class="triangulos-fundo">
+
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-1" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-2" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-3" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo triangulo-4" alt="">
+
+    </div>
 
 
-<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}"></script>
+    <div class="container">
+
+        <h2 class="text-center text-white fw-bold mb-5 titulo-blocos">
+            APRENDA. CRIE. CONECTE.
+        </h2>
+
+
+        <div class="row g-4 justify-content-center">
+
+            {% for bloco in blocos %}
+
+            <div class="col-4 d-flex justify-content-center">
+                    <div
+                        class="card-bloco"
+                        style="
+                            --cor-gradiente-1: {{ bloco.cor_gradiente_1 }};
+                            --cor-gradiente-2: {{ bloco.cor_gradiente_2 }};
+                        "
+                    >
+
+                        <div class="card-bloco-luz"></div>
+
+                        <div class="card-bloco-emoji">
+                            {{ bloco.emoji }}
+                        </div>
+
+                        <div class="card-bloco-inner">
+
+                            <p class="card-bloco-texto">
+                                {{ bloco.texto }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-center text-secondary">
+                    Nenhum bloco cadastrado.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+<section class="secao-curtas py-5">
+
+    <div class="container">
+
+        <h2 class="text-start text-white fw-bold mb-2 titulo-curtas">
+    {{ secao_curtas.titulo|default:"CURTAS EM DESTAQUE" }}
+        </h2>
+
+        {% if secao_curtas.subtitulo %}
+
+            <p class="text-start text-secondary mb-5 subtitulo-curtas">
+                {{ secao_curtas.subtitulo }}
+            </p>
+
+        {% endif %}
+
+        <div class="curtas-wrapper">
+
+            {% if curtas|length > 1 %}
+
+                <button class="seta-curtas seta-curtas-esquerda" onclick="mudarCurta(-1)">
+                    ❮
+                </button>
+
+            {% endif %}
+
+            <div class="curtas-viewport">
+
+                <div class="curtas-lista">
+
+                 {% for curta in curtas %}
+
+                    <a href="{{ curta.link_youtube }}" target="_blank" rel="noopener" class="curta-card" style="--cor-borda-1: {{ curta.cor_borda_1 }}; --cor-borda-2: {{ curta.cor_borda_2 }};">
+                        <div class="curta-card-inner">
+                            <img src="{{ curta.cartaz.url }}" alt="Curta em destaque" class="curta-imagem">
+                        </div>
+                    </a>
+
+                {% empty %}
+
+                    <p class="text-center text-secondary">
+                        Nenhum curta cadastrado.
+                    </p>
+
+                {% endfor %}
+                </div>
+
+            </div>
+
+            {% if curtas|length > 1 %}
+
+                <button class="seta-curtas seta-curtas-direita" onclick="mudarCurta(1)">
+                    ❯
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=3"></script>
 
 {% endblock %}

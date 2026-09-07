@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from .models import Destaque, Noticia
-
+from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas
 
 class DestaqueForm(forms.ModelForm):
 
@@ -43,7 +42,58 @@ class DestaqueForm(forms.ModelForm):
                 }
             ),
         }
+        
+class BlocoApresentacaoForm(forms.ModelForm):
 
+    class Meta:
+        model = BlocoApresentacao
+
+        fields = '__all__'
+
+        widgets = {
+
+            'cor_gradiente_1': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+
+            'cor_gradiente_2': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+        }
+
+
+@admin.register(BlocoApresentacao)
+class BlocoApresentacaoAdmin(admin.ModelAdmin):
+
+    form = BlocoApresentacaoForm
+
+    list_display = (
+        'emoji',
+        'texto',
+        'ordem',
+        'ativo',
+    )
+
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+
+    ordering = (
+        'ordem',
+    )
+    
+@admin.register(SecaoCurtas)
+class SecaoCurtasAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'titulo',
+        'subtitulo',
+    )
 
 @admin.register(Destaque)
 class DestaqueAdmin(admin.ModelAdmin):
@@ -67,7 +117,51 @@ class DestaqueAdmin(admin.ModelAdmin):
         'ordem',
     )
 
+class CurtaForm(forms.ModelForm):
 
+    class Meta:
+        model = Curta
+
+        fields = '__all__'
+
+        widgets = {
+
+            'cor_borda_1': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+
+            'cor_borda_2': forms.TextInput(
+                attrs={
+                    'type': 'color'
+                }
+            ),
+        }
+
+
+@admin.register(Curta)
+class CurtaAdmin(admin.ModelAdmin):
+
+    form = CurtaForm
+
+    list_display = (
+        'id',
+        'link_youtube',
+        'ordem',
+        'ativo',
+    )
+
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+
+    ordering = (
+        'ordem',
+    )
+
+    
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
 
