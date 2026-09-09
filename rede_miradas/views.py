@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
-from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas
+from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas, SecaoFinal
 
 # View da página "Comece por aqui"
 def home(request):
@@ -20,6 +20,8 @@ def home(request):
         ativo=True
     ).order_by('ordem')
 
+    secao_final = SecaoFinal.objects.first()
+
     return render(
         request,
         "rede_miradas/comeceporaqui.html",
@@ -28,6 +30,7 @@ def home(request):
             'destaques': destaques,
             'blocos': blocos,
             'curtas': curtas,
+            'secao_final': secao_final,
         }
     )
 

@@ -6,7 +6,7 @@
 
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=2"
+    href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=6"
 >
 
 
@@ -16,7 +16,7 @@
 
         <div
             class="
-                slide
+                slide 
                 {% if forloop.first %}ativo{% endif %}
                 horizontal-{{ destaque.posicao_horizontal }}
                 vertical-{{ destaque.posicao_vertical }}
@@ -112,9 +112,6 @@
     {% endif %}
 
 </section>
-<section class="secao-blocos py-5">
-
-    <div class="container">
         <section class="secao-blocos py-5">
 
     <div class="triangulos-fundo">
@@ -240,7 +237,74 @@
     </div>
 
 </section>
+<section class="secao-votacao py-5">
 
-<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=3"></script>
+    <div class="container text-center">
+
+        <span class="badge-em-breve d-inline-block mb-3">
+            Em breve
+        </span>
+
+        <h2 class="fw-bold mb-3">
+            O <span class="gradiente-texto">júri</span> é você
+        </h2>
+
+        <p class="text-secondary mx-auto mb-4" style="max-width: 500px;">
+            Durante a época de votação, você vai poder escolher seus curtas favoritos direto por aqui e ajudar a eleger o vencedor do Júri Popular.
+        </p>
+
+        <button class="btn-neon" disabled>
+            Votação ainda não iniciada
+        </button>
+
+    </div>
+            <img
+            src="{% static 'rede_miradas/img/demonstracoes.png' %}"
+            alt="Demonstração da votação"
+            class="img-fluid mt-4"
+        >
+
+</section>
+<section class="secao-final py-5">
+
+   <div class="triangulos-final-clip">
+
+        <div class="triangulos-final">
+
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo-final triangulo-final-esquerda" alt="">
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="triangulo-final triangulo-final-direita" alt="">
+
+        </div>
+
+    </div>
+
+    <div class="container text-center position-relative">
+
+        <h2 class="fw-bold mb-3 titulo-final">
+            {{ secao_final.titulo|default:"PRONTO PARA DAR VIDA ÀS SUAS IDEIAS?" }}
+        </h2>
+
+        {% if secao_final.subtitulo %}
+
+            <p class="text-secondary mx-auto subtitulo-final">
+                {{ secao_final.subtitulo }}
+            </p>
+
+        {% endif %}
+
+        {% if secao_final.texto_botao and secao_final.link_botao %}
+
+    
+            <a href="{{ secao_final.link_botao }}" class="btn-neon mt-3 d-inline-block">
+                {{ secao_final.texto_botao }}
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=4"></script>
 
 {% endblock %}

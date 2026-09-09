@@ -180,3 +180,24 @@ function ajustarTextoBlocos() {
 
 window.addEventListener('load', ajustarTextoBlocos);
 window.addEventListener('resize', ajustarTextoBlocos);
+
+function ajustarTriangulosFinal() {
+
+    const secaoFinal = document.querySelector('.secao-final');
+    const footer = document.querySelector('footer');
+    const clip = document.querySelector('.triangulos-final-clip');
+    const wrapperTriangulos = document.querySelector('.triangulos-final');
+
+    if (!secaoFinal || !footer || !clip || !wrapperTriangulos) {
+        return;
+    }
+
+    const alturaSecao = secaoFinal.offsetHeight;
+    const alturaFooter = footer.offsetHeight;
+
+    clip.style.height = `${alturaSecao + alturaFooter}px`;
+    wrapperTriangulos.style.height = `${alturaSecao}px`;
+}
+
+window.addEventListener('load', ajustarTriangulosFinal);
+window.addEventListener('resize', ajustarTriangulosFinal);

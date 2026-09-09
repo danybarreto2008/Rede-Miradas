@@ -213,6 +213,7 @@ class SecaoCurtas(models.Model):
     def __str__(self):
         return self.titulo
     # Modelo dos curtas em destaque da página "Comece por aqui"
+
 class Curta(models.Model):
 
     cartaz = models.ImageField(
@@ -245,6 +246,38 @@ class Curta(models.Model):
 
     def __str__(self):
         return f'Curta {self.id}'
+
+
+
+# Modelo do texto da seção final (chamada para ação)
+class SecaoFinal(models.Model):
+
+    titulo = models.CharField(
+        max_length=200,
+        default='PRONTO PARA DAR VIDA ÀS SUAS IDEIAS?'
+    )
+
+    subtitulo = models.TextField(
+        blank=True
+    )
+
+    texto_botao = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    link_botao = models.URLField(
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Texto da seção final'
+        verbose_name_plural = 'Texto da seção final'
+
+    def __str__(self):
+        return self.titulo
+    
+    
 # Modelo das notícias do blog
 class Noticia(models.Model):
 
