@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas
+from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas, SecaoFinal
 
 class DestaqueForm(forms.ModelForm):
 
@@ -161,7 +161,13 @@ class CurtaAdmin(admin.ModelAdmin):
         'ordem',
     )
 
-    
+@admin.register(SecaoFinal)
+class SecaoFinalAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'titulo',
+    )
+
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
 

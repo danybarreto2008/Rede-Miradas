@@ -691,3 +691,132 @@ html, body {
         padding: 32px 12px 14px;
     }
 }
+.passo-icone {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #ffffff;
+    background:
+        linear-gradient(#000000, #000000) padding-box,
+        linear-gradient(135deg, var(--roxo), var(--azul)) border-box;
+    border: 2px solid transparent;
+}
+
+.passo-titulo {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0;
+}
+
+.passo-texto {
+    color: #a0a0a0;
+    font-size: 14px;
+    margin: 0;
+}
+
+.slide-conteudo h1,
+.slide-conteudo p {
+    max-width: 650px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+@media (max-width: 600px) {
+    .slide h1 {
+        font-size: 26px;
+    }
+
+    .slide p {
+        font-size: 15px;
+    }
+
+    .slide-conteudo {
+        padding: 24px 20px;
+    }
+}
+
+/* ===== Seção final (chamada para ação) ===== */
+.secao-final {
+    position: relative;
+    background-color: #000000;
+    padding-top: 40px;
+    padding-bottom: 180px;
+}
+
+.triangulos-final-clip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.triangulos-final {
+    position: relative;
+    width: 100%;
+}
+
+.triangulo-final {
+    position: absolute;
+    width: 450px;
+    bottom: -230px;
+    opacity: 1;
+    mix-blend-mode: screen;
+}
+
+.triangulo-final-esquerda {
+    left: -100px;
+    transform: rotate(-35deg);
+}
+
+.triangulo-final-direita {
+    right: -100px;
+    transform: scaleX(-1) rotate(-35deg);
+}
+
+.secao-final .container {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 600px) {
+
+    .triangulo-final {
+        width: 220px;
+        bottom: -110px;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .secao-final {
+        padding-bottom: 130px;
+    }
+
+    .triangulo-final {
+        width: 300px;
+        bottom: -150px;
+    }
+
+    .triangulo-final-esquerda {
+        left: -120px;
+    }
+
+    .triangulo-final-direita {
+        right: -120px;
+    }
+
+}
+footer {
+    position: relative;
+    z-index: 2;
+    background-color: #000000;
+}
