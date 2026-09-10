@@ -1,3 +1,14 @@
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #040508;
+}
+
 /* Área do carrossel */
 .carrossel {
     position: relative;
@@ -297,8 +308,7 @@
 
 .secao-blocos {
     position: relative;
-
-    background-color: #000000;
+    padding-top: 200px !important;
 }
 
 
@@ -475,20 +485,43 @@
 
     mix-blend-mode: screen;
 }
+.secao-votacao {
+    padding-bottom: 0 !important;
+}
 
+.secao-final {
+    padding-top: 0px !important;
+}
 .triangulo-1 {
-    top: 30%;
-    left: -120px;
+    top: 45%;
+    left: -100px;
 
     filter: hue-rotate(0deg);
 
     transform: rotate(-10deg);
 }
+.triangulo-2 {
+    top: 45%;
+    left: 28%;
 
+    filter: hue-rotate(0);
+
+    transform: rotate(15deg);
+}
+
+
+.triangulo-3 {
+    top: 45%;
+    left: 55%;
+
+    filter: hue-rotate(0);
+
+    transform: rotate(-20deg);
+}
 
 .triangulo-4 {
-    top: 30%;
-    right: -140px;
+    top: 45%;
+    right: -120px;
 
     filter: hue-rotate(0deg);
 
@@ -498,27 +531,6 @@
 html, body {
     overflow-x: hidden;
 }
-
-.triangulo-2 {
-    top: 30%;
-    left: 26%;
-
-    filter: hue-rotate(0);
-
-    transform: rotate(15deg);
-}
-
-
-.triangulo-3 {
-    top: 30%;
-    left: 58%;
-
-    filter: hue-rotate(0);
-
-    transform: rotate(-20deg);
-}
-
-
 
 /* Conteúdo da seção precisa ficar acima dos triângulos */
 .secao-blocos .container {
@@ -579,7 +591,7 @@ html, body {
 
 .secao-curtas {
     position: relative;
-    background-color: #000000;
+
 }
 
 .titulo-curtas {
@@ -743,7 +755,7 @@ html, body {
 /* ===== Seção final (chamada para ação) ===== */
 .secao-final {
     position: relative;
-    background-color: #000000;
+  
     padding-top: 40px;
     padding-bottom: 180px;
 }
@@ -819,4 +831,34 @@ footer {
     position: relative;
     z-index: 2;
     background-color: #000000;
+}
+
+/* ===== Divisor de filme ===== */
+
+.divisor-filme {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    margin-top: -60px;
+    margin-bottom: -60px;
+    overflow: visible;
+    z-index: 5;
+}
+
+.divisor-filme img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+}
+
+@media (max-width: 767.98px) {
+
+    .divisor-filme {
+        height: 120px;
+    }
+
 }

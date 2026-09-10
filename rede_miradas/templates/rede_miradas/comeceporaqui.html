@@ -92,7 +92,7 @@
     {% endfor %}
 
 
-    {% if destaques|length > 1 %}
+       {% if destaques|length > 1 %}
 
         <button
             class="carrossel-anterior"
@@ -100,7 +100,6 @@
         >
             ❮
         </button>
-
 
         <button
             class="carrossel-proximo"
@@ -112,7 +111,15 @@
     {% endif %}
 
 </section>
-        <section class="secao-blocos py-5">
+
+<div class="divisor-filme">
+    <img
+        src="{% static 'rede_miradas/img/stripRA2.png' %}"
+        alt=""
+    >
+</div>
+
+<section class="secao-blocos py-5">
 
     <div class="triangulos-fundo">
 
