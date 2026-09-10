@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradPurple1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="gradPurple2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3e8ff" />
+      <stop offset="100%" stop-color="#e9d5ff" />
+    </linearGradient>
+    <filter id="shadowPurple" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#8b5cf6" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadowPurple)" transform="translate(15, 8)">
+    <!-- Book Cover Bottom Shadow/Spine -->
+    <path d="M 65 72 C 40 64 20 68 8 78 L 12 88 C 24 78 44 75 65 83 C 86 75 106 78 118 88 L 122 78 C 110 68 90 64 65 72 Z" 
+          fill="#7c3aed" stroke="#6d28d9" stroke-width="3" stroke-linejoin="round" />
+
+    <!-- Left Open Page Set (Lower Stack) -->
+    <path d="M 65 67 C 42 59 22 63 12 73 L 14 36 C 24 26 44 22 65 30 Z" 
+          fill="url(#gradPurple1)" opacity="0.8" stroke="#6d28d9" stroke-width="4" stroke-linejoin="round" />
+
+    <!-- Right Open Page Set (Lower Stack) -->
+    <path d="M 65 67 C 88 59 108 63 118 73 L 116 36 C 106 26 86 22 65 30 Z" 
+          fill="url(#gradPurple1)" opacity="0.8" stroke="#6d28d9" stroke-width="4" stroke-linejoin="round" />
+
+    <!-- Main Left Open Page (Top) -->
+    <path d="M 65 62 C 42 54 20 58 12 66 L 14 26 C 24 16 46 14 65 22 Z" 
+          fill="url(#gradPurple2)" stroke="#7c3aed" stroke-width="4.5" stroke-linejoin="round" />
+
+    <!-- Main Right Open Page (Top) -->
+    <path d="M 65 22 C 84 14 106 16 116 26 L 118 66 C 110 58 88 54 65 62 Z" 
+          fill="url(#gradPurple2)" stroke="#7c3aed" stroke-width="4.5" stroke-linejoin="round" />
+
+    <!-- Spine Center Line -->
+    <path d="M 65 22 L 65 65" stroke="#6d28d9" stroke-width="4.5" stroke-linecap="round" />
+
+    <!-- Text Lines Left Page -->
+    <path d="M 28 30 C 38 27 48 29 54 32" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 26 39 C 36 36 46 38 54 41" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 26 48 C 34 45 44 47 52 50" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Text Lines Right Page -->
+    <path d="M 76 32 C 82 29 92 27 102 30" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 76 41 C 84 38 94 36 104 39" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 78 50 C 86 47 96 45 104 48" stroke="#8b5cf6" stroke-width="3.5" stroke-linecap="round" />
+  </g>
+</svg>
