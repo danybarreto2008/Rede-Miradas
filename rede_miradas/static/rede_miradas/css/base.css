@@ -110,3 +110,23 @@
 
     transform: translateY(-1px);
 }
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+}
+
+main {
+    width: 100%;
+}
+
+footer {
+    width: 100%;
+    margin-top: 0 !important;
+}

@@ -201,3 +201,4 @@ function ajustarTriangulosFinal() {
 
 window.addEventListener('load', ajustarTriangulosFinal);
 window.addEventListener('resize', ajustarTriangulosFinal);
+
