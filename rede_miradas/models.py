@@ -334,3 +334,288 @@ class Noticia(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+# ==============================================================================
+# Modelos da Página Inicial das Trilhas de Aprendizagem
+# ==============================================================================
+
+class TrilhasHero(models.Model):
+
+    # Textos
+    titulo = models.CharField(
+        max_length=200,
+        default='Bem-Vindo(a)',
+        blank=True
+    )
+
+    subtitulo = models.TextField(
+        default='Aprenda produção audiovisual em módulos práticos e criativos.',
+        blank=True
+    )
+
+    imagem_fundo = models.ImageField(
+        upload_to='trilhas/hero/',
+        blank=True,
+        null=True,
+        help_text='Opcional. Se não enviada, mantém o fundo escuro com iluminação neon.'
+    )
+
+    # Botão
+    mostrar_botao = models.BooleanField(
+        default=True
+    )
+
+    texto_botao = models.CharField(
+        max_length=100,
+        default='Conheça as trilhas',
+        blank=True
+    )
+
+    link_botao = models.CharField(
+        max_length=255,
+        default='/trilhas/visao-geral/',
+        blank=True
+    )
+
+    # Cores
+    cor_titulo = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+    cor_subtitulo = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+    cor_fundo_botao = models.CharField(
+        max_length=7,
+        default='#FFFFFF'
+    )
+
+    cor_texto_botao = models.CharField(
+        max_length=7,
+        default='#0B0C10'
+    )
+
+    cor_glow_1 = models.CharField(
+        max_length=7,
+        default='#7C3AED',
+        help_text='Cor primária do brilho neon central'
+    )
+
+    cor_glow_2 = models.CharField(
+        max_length=7,
+        default='#22D3EE',
+        help_text='Cor secundária do brilho neon central'
+    )
+
+    # Formatação
+    titulo_negrito = models.BooleanField(
+        default=True
+    )
+
+    titulo_italico = models.BooleanField(
+        default=False
+    )
+
+    subtitulo_negrito = models.BooleanField(
+        default=False
+    )
+
+    subtitulo_italico = models.BooleanField(
+        default=False
+    )
+
+    class Meta:
+        verbose_name = 'Trilhas - Seção de Boas-Vindas (Hero)'
+        verbose_name_plural = 'Trilhas - Seção de Boas-Vindas (Hero)'
+
+    def __str__(self):
+        return self.titulo or 'Seção de Boas-Vindas'
+
+
+class TrilhasFaixaItem(models.Model):
+
+    texto = models.CharField(
+        max_length=100,
+        help_text='Ex: 5 ETAPAS, DEZENAS DE MATERIAIS, EXERCÍCIOS, EXEMPLOS REAIS'
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Trilhas - Item da Faixa Informativa'
+        verbose_name_plural = 'Trilhas - Itens da Faixa Informativa'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return self.texto
+
+
+class TrilhasCard(models.Model):
+
+    CHOICES_ICONE = [
+        ('equipes', 'Aperto de mão (Equipes)'),
+        ('texto', 'Livro aberto (Texto Autoral)'),
+        ('roteiro', 'Lápis (Roteiro)'),
+        ('personalizado', 'Imagem / SVG personalizado'),
+    ]
+
+    CHOICES_BORDA = [
+        ('dashed', 'Tracejada'),
+        ('solid', 'Sólida'),
+        ('dotted', 'Pontilhada'),
+        ('none', 'Sem borda'),
+    ]
+
+    # Conteúdo
+    tag = models.CharField(
+        max_length=100,
+        help_text='Ex: INSCRIÇÃO DAS EQUIPES'
+    )
+
+    titulo = models.CharField(
+        max_length=250,
+        help_text='Ex: Toda grande produção começa com uma boa equipe.'
+    )
+
+    descricao = models.TextField(
+        help_text='Ex: Conheça a ficha de inscrição, apresente sua equipe...'
+    )
+
+    # Ícone
+    tipo_icone = models.CharField(
+        max_length=30,
+        choices=CHOICES_ICONE,
+        default='equipes',
+        help_text='Selecione o ícone ilustrado padrão ou envie uma imagem própria'
+    )
+
+    icone_personalizado = models.ImageField(
+        upload_to='trilhas/icones/',
+        blank=True,
+        null=True,
+        help_text='Opcional. Imagem ou SVG caso tenha selecionado ícone personalizado'
+    )
+
+    # Botão
+    mostrar_botao = models.BooleanField(
+        default=True
+    )
+
+    texto_botao = models.CharField(
+        max_length=100,
+        default='Explorar trilha',
+        blank=True
+    )
+
+    link_botao = models.CharField(
+        max_length=255,
+        default='/trilhas/visao-geral/',
+        blank=True
+    )
+
+    # Cores
+    cor_fundo_card = models.CharField(
+        max_length=7,
+        default='#EBF1E8',
+        help_text='Cor de fundo do card'
+    )
+
+    cor_borda_card = models.CharField(
+        max_length=7,
+        default='#141414',
+        help_text='Cor da borda do card'
+    )
+
+    estilo_borda = models.CharField(
+        max_length=20,
+        choices=CHOICES_BORDA,
+        default='dashed'
+    )
+
+    cor_glow = models.CharField(
+        max_length=7,
+        default='#EA580C',
+        help_text='Cor do brilho neon no fundo do card'
+    )
+
+    cor_tag = models.CharField(
+        max_length=7,
+        default='#1E293B',
+        help_text='Cor da tag superior'
+    )
+
+    cor_titulo = models.CharField(
+        max_length=7,
+        default='#0F172A',
+        help_text='Cor do título'
+    )
+
+    cor_descricao = models.CharField(
+        max_length=7,
+        default='#475569',
+        help_text='Cor da descrição'
+    )
+
+    cor_fundo_botao = models.CharField(
+        max_length=7,
+        default='#000000',
+        help_text='Cor de fundo do botão'
+    )
+
+    cor_texto_botao = models.CharField(
+        max_length=7,
+        default='#FFFFFF',
+        help_text='Cor do texto do botão'
+    )
+
+    # Formatação de fontes
+    tag_negrito = models.BooleanField(
+        default=True
+    )
+
+    tag_italico = models.BooleanField(
+        default=False
+    )
+
+    titulo_negrito = models.BooleanField(
+        default=True
+    )
+
+    titulo_italico = models.BooleanField(
+        default=True
+    )
+
+    descricao_negrito = models.BooleanField(
+        default=False
+    )
+
+    descricao_italico = models.BooleanField(
+        default=False
+    )
+
+    # Controle
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        verbose_name = 'Trilhas - Card de Trilha'
+        verbose_name_plural = 'Trilhas - Cards de Trilhas'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return f'{self.tag} - {self.titulo[:30]}'

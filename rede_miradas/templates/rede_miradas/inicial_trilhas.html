@@ -1,0 +1,337 @@
+{% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}Trilhas de Aprendizagem | Rede Miradas{% endblock %}
+
+{% block conteudo %}
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/inicial_trilhas.css' %}?v=2"
+>
+
+<div class="trilhas-pagina">
+
+    <!-- 1. SEÇÃO HERO (BOAS-VINDAS) -->
+    <section
+        class="trilhas-hero"
+        {% if hero.imagem_fundo %}data-hero-bg="{{ hero.imagem_fundo.url }}"{% endif %}
+        data-glow-1="{{ hero.cor_glow_1|default:'#7C3AED' }}"
+        data-glow-2="{{ hero.cor_glow_2|default:'#22D3EE' }}"
+        data-title-color="{{ hero.cor_titulo|default:'#FFFFFF' }}"
+        data-subtitle-color="{{ hero.cor_subtitulo|default:'rgba(255, 255, 255, 0.88)' }}"
+        data-btn-bg="{{ hero.cor_fundo_botao|default:'#FFFFFF' }}"
+        data-btn-color="{{ hero.cor_texto_botao|default:'#0B0C10' }}"
+    >
+
+        <!-- Brilho neon de fundo -->
+        <div class="trilhas-hero-glow"></div>
+
+        <!-- Triângulos decorativos nas bordas -->
+        <div class="trilhas-hero-triangulos">
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="hero-triangulo-top-right"
+                alt=""
+                aria-hidden="true"
+            >
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="hero-triangulo-bottom-left"
+                alt=""
+                aria-hidden="true"
+            >
+        </div>
+
+        <!-- Conteúdo central de boas-vindas -->
+        <div class="trilhas-hero-content container">
+
+            <h1
+                class="trilhas-hero-title {% if hero.titulo_negrito %}fw-bold{% else %}fw-normal{% endif %} {% if hero.titulo_italico %}fst-italic{% endif %}"
+            >
+                {{ hero.titulo|default:"Bem-Vindo(a)" }}
+            </h1>
+
+            <p
+                class="trilhas-hero-subtitle {% if hero.subtitulo_negrito %}fw-bold{% endif %} {% if hero.subtitulo_italico %}fst-italic{% endif %}"
+            >
+                {{ hero.subtitulo|default:"Aprenda produção audiovisual em módulos práticos e criativos." }}
+            </p>
+
+            {% if hero.mostrar_botao|default_if_none:True %}
+                <div>
+                    <a
+                        href="{{ hero.link_botao|default:'/trilhas/visao-geral/' }}"
+                        class="btn-conheca-trilhas"
+                    >
+                        {{ hero.texto_botao|default:"Conheça as trilhas" }}
+                    </a>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- 2. FAIXA DE INFORMAÇÕES (RIBBON BAR / LAÇO BRANCO) -->
+    <section class="trilhas-ribbon">
+
+        <div class="trilhas-ribbon-container">
+
+            {% for item in itens_faixa %}
+
+                <div class="ribbon-item">
+                    {{ item.texto }}
+                </div>
+
+                {% if not forloop.last %}
+                    <div class="ribbon-separator" aria-hidden="true">
+                        <svg class="star-burst-icon" viewBox="0 0 24 24">
+                            <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                        </svg>
+                    </div>
+                {% endif %}
+
+            {% empty %}
+
+                <div class="ribbon-item">
+                    5 ETAPAS
+                </div>
+
+                <div class="ribbon-separator" aria-hidden="true">
+                    <svg class="star-burst-icon" viewBox="0 0 24 24">
+                        <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                    </svg>
+                </div>
+
+                <div class="ribbon-item">
+                    DEZENAS DE MATERIAIS
+                </div>
+
+                <div class="ribbon-separator" aria-hidden="true">
+                    <svg class="star-burst-icon" viewBox="0 0 24 24">
+                        <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                    </svg>
+                </div>
+
+                <div class="ribbon-item">
+                    EXERCÍCIOS
+                </div>
+
+                <div class="ribbon-separator" aria-hidden="true">
+                    <svg class="star-burst-icon" viewBox="0 0 24 24">
+                        <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                    </svg>
+                </div>
+
+                <div class="ribbon-item">
+                    EXEMPLOS REAIS
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- 3. SEÇÃO DE CARDS DE TRILHAS -->
+    <section class="trilhas-cards-section">
+
+        <!-- Triângulos decorativos ao fundo da seção de cards -->
+        <div class="trilhas-cards-triangulos">
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="cards-triangulo-bottom-left"
+                alt=""
+                aria-hidden="true"
+            >
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="cards-triangulo-bottom-right"
+                alt=""
+                aria-hidden="true"
+            >
+        </div>
+
+        <div class="container trilhas-cards-container">
+
+            <div class="row g-4 justify-content-center">
+
+                {% for card in cards %}
+
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+
+                        <div
+                            class="trilha-card-wrapper w-100"
+                            data-glow="{{ card.cor_glow|default:'#EA580C' }}"
+                            data-card-bg="{{ card.cor_fundo_card|default:'#EBF1E8' }}"
+                            data-border-style="{{ card.estilo_borda|default:'dashed' }}"
+                            data-border-color="{{ card.cor_borda_card|default:'#141414' }}"
+                            data-tag-color="{{ card.cor_tag|default:'#1E293B' }}"
+                            data-title-color="{{ card.cor_titulo|default:'#0F172A' }}"
+                            data-desc-color="{{ card.cor_descricao|default:'#475569' }}"
+                            data-btn-bg="{{ card.cor_fundo_botao|default:'#000000' }}"
+                            data-btn-color="{{ card.cor_texto_botao|default:'#FFFFFF' }}"
+                        >
+
+                            <!-- Brilho neon de fundo customizável -->
+                            <div class="trilha-card-glow"></div>
+
+                            <!-- Caixa do card com fundo e borda configuráveis -->
+                            <div class="trilha-card">
+
+                                <!-- Ícone do card -->
+                                <div class="trilha-card-icon-box">
+
+                                    {% if card.icone_personalizado %}
+                                        <img
+                                            src="{{ card.icone_personalizado.url }}"
+                                            alt="{{ card.tag }}"
+                                            class="trilha-card-icon-svg"
+                                        >
+                                    {% elif card.tipo_icone == 'equipes' %}
+                                        <img
+                                            src="{% static 'rede_miradas/img/icone-equipes.svg' %}"
+                                            alt="{{ card.tag }}"
+                                            class="trilha-card-icon-svg"
+                                        >
+                                    {% elif card.tipo_icone == 'texto' %}
+                                        <img
+                                            src="{% static 'rede_miradas/img/icone-texto.svg' %}"
+                                            alt="{{ card.tag }}"
+                                            class="trilha-card-icon-svg"
+                                        >
+                                    {% elif card.tipo_icone == 'roteiro' %}
+                                        <img
+                                            src="{% static 'rede_miradas/img/icone-roteiro.svg' %}"
+                                            alt="{{ card.tag }}"
+                                            class="trilha-card-icon-svg"
+                                        >
+                                    {% else %}
+                                        <img
+                                            src="{% static 'rede_miradas/img/icone-equipes.svg' %}"
+                                            alt="{{ card.tag }}"
+                                            class="trilha-card-icon-svg"
+                                        >
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- Textos do card -->
+                                <div class="trilha-card-body">
+
+                                    <span
+                                        class="trilha-card-tag {% if card.tag_negrito %}fw-bold{% endif %} {% if card.tag_italico %}fst-italic{% endif %}"
+                                    >
+                                        {{ card.tag }}
+                                    </span>
+
+                                    <h2
+                                        class="trilha-card-headline {% if card.titulo_negrito %}fw-bold{% else %}fw-normal{% endif %} {% if card.titulo_italico %}fst-italic{% endif %}"
+                                    >
+                                        {{ card.titulo }}
+                                    </h2>
+
+                                    <p
+                                        class="trilha-card-desc {% if card.descricao_negrito %}fw-bold{% endif %} {% if card.descricao_italico %}fst-italic{% endif %}"
+                                    >
+                                        {{ card.descricao }}
+                                    </p>
+
+                                </div>
+
+                                <!-- Botão de ação do card -->
+                                {% if card.mostrar_botao %}
+                                    <div>
+                                        <a
+                                            href="{{ card.link_botao|default:'/trilhas/visao-geral/' }}"
+                                            class="btn-explorar-trilha"
+                                        >
+                                            {{ card.texto_botao }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-center text-secondary">
+                        Nenhum card de trilha cadastrado.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+    (function () {
+        // Hero dynamic styles
+        var hero = document.querySelector('.trilhas-hero');
+        if (hero) {
+            if (hero.dataset.heroBg) {
+                hero.style.backgroundImage = 'url(' + hero.dataset.heroBg + ')';
+                hero.style.backgroundSize = 'cover';
+                hero.style.backgroundPosition = 'center';
+            }
+            if (hero.dataset.glow1) hero.style.setProperty('--hero-glow-1', hero.dataset.glow1);
+            if (hero.dataset.glow2) hero.style.setProperty('--hero-glow-2', hero.dataset.glow2);
+            if (hero.dataset.titleColor) {
+                var title = hero.querySelector('.trilhas-hero-title');
+                if (title) title.style.color = hero.dataset.titleColor;
+            }
+            if (hero.dataset.subtitleColor) {
+                var subtitle = hero.querySelector('.trilhas-hero-subtitle');
+                if (subtitle) subtitle.style.color = hero.dataset.subtitleColor;
+            }
+            if (hero.dataset.btnBg || hero.dataset.btnColor) {
+                var btn = hero.querySelector('.btn-conheca-trilhas');
+                if (btn) {
+                    if (hero.dataset.btnBg) btn.style.backgroundColor = hero.dataset.btnBg;
+                    if (hero.dataset.btnColor) btn.style.color = hero.dataset.btnColor;
+                }
+            }
+        }
+
+        // Cards dynamic styles
+        var cards = document.querySelectorAll('.trilha-card-wrapper');
+        cards.forEach(function (card) {
+            if (card.dataset.glow) card.style.setProperty('--glow-color', card.dataset.glow);
+
+            var box = card.querySelector('.trilha-card');
+            if (box) {
+                if (card.dataset.cardBg) box.style.backgroundColor = card.dataset.cardBg;
+                if (card.dataset.borderStyle) box.style.borderStyle = card.dataset.borderStyle;
+                if (card.dataset.borderColor) box.style.borderColor = card.dataset.borderColor;
+            }
+
+            var tag = card.querySelector('.trilha-card-tag');
+            if (tag && card.dataset.tagColor) tag.style.color = card.dataset.tagColor;
+
+            var headline = card.querySelector('.trilha-card-headline');
+            if (headline && card.dataset.titleColor) headline.style.color = card.dataset.titleColor;
+
+            var desc = card.querySelector('.trilha-card-desc');
+            if (desc && card.dataset.descColor) desc.style.color = card.dataset.descColor;
+
+            var cardBtn = card.querySelector('.btn-explorar-trilha');
+            if (cardBtn) {
+                if (card.dataset.btnBg) cardBtn.style.backgroundColor = card.dataset.btnBg;
+                if (card.dataset.btnColor) cardBtn.style.color = card.dataset.btnColor;
+            }
+        });
+    })();
+</script>
+
+{% endblock %}

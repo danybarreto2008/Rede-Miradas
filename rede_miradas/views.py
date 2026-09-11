@@ -1,7 +1,17 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
-from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas, SecaoFinal
+from .models import (
+    Destaque,
+    Noticia,
+    BlocoApresentacao,
+    Curta,
+    SecaoCurtas,
+    SecaoFinal,
+    TrilhasHero,
+    TrilhasFaixaItem,
+    TrilhasCard
+)
 
 # View da página "Comece por aqui"
 def home(request):
@@ -102,3 +112,29 @@ def noticia_detalhe(request, slug):
             'noticia': noticia
         }
     )
+
+
+# View da página inicial das Trilhas de Aprendizagem
+def inicial_trilhas(request):
+    hero = TrilhasHero.objects.first()
+    itens_faixa = TrilhasFaixaItem.objects.filter(ativo=True).order_by('ordem')
+    cards = TrilhasCard.objects.filter(ativo=True).order_by('ordem')
+
+    return render(
+        request,
+        "rede_miradas/inicial_trilhas.html",
+        {
+            'hero': hero,
+            'itens_faixa': itens_faixa,
+            'cards': cards,
+        }
+    )
+
+
+# View da página de visão geral das trilhas
+def trilhas_visao_geral(request):
+    return render(
+        request,
+        "rede_miradas/trilhas_visão_geral.html"
+    )
+

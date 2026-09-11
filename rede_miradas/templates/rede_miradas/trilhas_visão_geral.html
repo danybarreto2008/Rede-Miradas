@@ -1,0 +1,28 @@
+{% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}Visão Geral das Trilhas | Rede Miradas{% endblock %}
+
+{% block conteudo %}
+<div class="container py-5 text-center min-vh-100 d-flex flex-column align-items-center justify-content-center">
+
+    <span class="badge rounded-pill px-3 py-2 mb-3" style="background: rgba(124, 58, 237, 0.2); color: #c084fc; border: 1px solid #7c3aed;">
+        Trilhas de Aprendizagem
+    </span>
+
+    <h1 class="fw-bold mb-3 display-4">
+        Visão Geral das <span class="gradiente-texto">Trilhas</span>
+    </h1>
+
+    <p class="text-secondary mx-auto mb-4" style="max-width: 600px; font-size: 1.15rem;">
+        Esta página apresentará a visão detalhada de todas as etapas e módulos das Trilhas de Aprendizagem da Rede Miradas.
+    </p>
+
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{% url 'inicial_trilhas' %}" class="btn btn-outline-light rounded-pill px-4 py-2">
+            ← Voltar para Página Inicial das Trilhas
+        </a>
+    </div>
+
+</div>
+{% endblock %}
