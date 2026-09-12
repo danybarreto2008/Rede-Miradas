@@ -1,0 +1,16 @@
+{% for noticia in pagina_outros %}
+
+    <a href="{% url 'noticia_detalhe' noticia.slug %}" class="card-outro-post">
+
+        <div class="card-outro-imagem">
+            <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+        </div>
+
+        <div class="card-outro-info">
+            <h3>{{ noticia.titulo }}</h3>
+            <p class="card-outro-data">{{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}</p>
+        </div>
+
+    </a>
+
+{% endfor %}

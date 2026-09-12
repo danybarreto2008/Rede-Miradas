@@ -17,6 +17,14 @@ urlpatterns = [
         name='noticias'
     ),
 
+    # Carregar mais posts (precisa vir ANTES da rota de slug,
+    # senão "carregar-mais" é interpretado como um slug de notícia)
+    path(
+        'noticias/carregar-mais/',
+        views.carregar_mais_noticias,
+        name='carregar_mais_noticias'
+    ),
+
     # Página inicial das Trilhas de Aprendizagem
     path(
         'trilhas/',
@@ -32,6 +40,7 @@ urlpatterns = [
     ),
 
     # Página individual de uma notícia
+    # (sempre por último, pois <slug:slug> combina com qualquer texto)
     path(
         'noticias/<slug:slug>/',
         views.noticia_detalhe,

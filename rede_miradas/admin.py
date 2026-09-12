@@ -178,8 +178,20 @@ class SecaoFinalAdmin(admin.ModelAdmin):
         'titulo',
     )
 
+class NoticiaForm(forms.ModelForm):
+
+    class Meta:
+        model = Noticia
+        fields = '__all__'
+        widgets = {
+            'cor_fundo_destaque': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+
 @admin.register(Noticia)
 class NoticiaAdmin(admin.ModelAdmin):
+
+    form = NoticiaForm
 
     list_display = (
         'titulo',
@@ -209,6 +221,18 @@ class NoticiaAdmin(admin.ModelAdmin):
         '-data_publicacao',
     )
 
+    fieldsets = (
+            ('Conteúdo', {
+                'fields': ('titulo', 'slug', 'categoria', 'resumo', 'texto', 'imagem')
+            }),
+            ('Destaque', {
+                'fields': ('destaque', 'destaque_secundario', 'cor_fundo_destaque'),
+                'description': 'A cor de fundo é usada tanto no destaque principal quanto nos cards de destaque secundário.'
+            }),
+            ('Publicação', {
+                'fields': ('publicada',)
+            }),
+    )
 
 # Admin - Página Inicial das Trilhas de Aprendizagem
 

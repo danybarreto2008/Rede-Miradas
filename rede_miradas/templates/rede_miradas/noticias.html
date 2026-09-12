@@ -7,191 +7,196 @@ Notícias | Rede Miradas
 
 {% block conteudo %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/noticias.css' %}"
->
+<link rel="stylesheet" href="{% static 'rede_miradas/css/noticias.css' %}">
 
 <div class="pagina-noticias">
 
-
-    <!-- =====================================================
-         NOTÍCIA EM DESTAQUE
-         ===================================================== -->
-
     {% if destaque %}
 
-    <section class="destaque-full">
+        <section class="destaque-full" style="background-color: {{ destaque.cor_fundo_destaque }};">
 
-        <div class="noticia-principal">
+            <div class="destaque-conteudo">
 
-            <div class="principal-conteudo">
+                <div class="destaque-texto">
 
-                <div class="principal-texto">
+                    <span class="destaque-selo">MIRADAS</span>
 
-                    <span class="categoria">
-                        {{ destaque.get_categoria_display }}
-                    </span>
+                    <h1>{{ destaque.titulo }}</h1>
 
-                    <h1>
-                        {{ destaque.titulo }}
-                    </h1>
-
-                    {% if destaque.resumo %}
-                    <p class="principal-resumo">
-                        {{ destaque.resumo }}
-                    </p>
-                    {% endif %}
-
-                    <p class="principal-data">
+                    <p class="destaque-data">
                         {{ destaque.data_publicacao|date:"d \d\e F \d\e Y" }}
                     </p>
 
-                    <a
-                        href="{% url 'noticia_detalhe' destaque.slug %}"
-                        class="botao-leia"
-                    >
-                        Leia a notícia
-                        <span>→</span>
+                    <a href="{% url 'noticia_detalhe' destaque.slug %}" class="botao-leia">
+                        Leia a notícia <span>→</span>
                     </a>
 
                 </div>
 
-
-                <div class="principal-imagem">
-
-                    <img
-                        src="{{ destaque.imagem.url }}"
-                        alt="{{ destaque.titulo }}"
-                    >
-
+                <div class="destaque-imagem">
+                    <img src="{{ destaque.imagem.url }}" alt="{{ destaque.titulo }}">
                 </div>
 
             </div>
+
+        </section>
+
+    {% endif %}
+
+
+    <section class="ultimas-noticias">
+
+        <div class="titulo-noticias">
+
+            <h2>Últimas notícias</h2>
+
+            <form class="campo-pesquisa" method="get">
+                <input type="text" name="q" id="campo-busca" value="{{ busca }}" placeholder="O que você está procurando?">
+                <button type="submit" aria-label="Pesquisar"><i class="bi bi-search"></i></button>
+            </form>
+
+        </div>
+
+        <div class="noticias-grid">
+
+            {% for noticia in noticias %}
+
+                <a href="{% url 'noticia_detalhe' noticia.slug %}" class="noticia-card {% if forloop.counter == 1 %}noticia-grande{% else %}noticia-pequena{% endif %}">
+
+                    <div class="noticia-imagem">
+                        <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                    </div>
+
+                    <div class="noticia-info">
+                        <h3>{{ noticia.titulo }}</h3>
+                        <p class="noticia-data">{{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}</p>
+                    </div>
+
+                </a>
+
+            {% empty %}
+
+                <p class="nenhuma-noticia">Nenhuma notícia publicada no momento.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    {% if destaques_secundarios %}
+
+    <section class="destaques-secundarios">
+
+        <div class="destaques-secundarios-grid">
+
+            {% for noticia in destaques_secundarios %}
+
+                <a href="{% url 'noticia_detalhe' noticia.slug %}" class="card-destaque-secundario">
+
+                    <div class="card-destaque-imagem">
+                        <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                    </div>
+
+                    <div class="card-destaque-info" style="background-color: {{ noticia.cor_fundo_destaque }};">
+                        <h3>{{ noticia.titulo }}</h3>
+                        <p class="card-destaque-data">{{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}</p>
+                    </div>
+
+                </a>
+
+            {% endfor %}
 
         </div>
 
     </section>
 
     {% endif %}
+        {% if pagina_outros %}
 
+    <section class="outros-posts" data-pagina-atual="1" data-tem-proxima="{{ pagina_outros.has_next|yesno:'1,0' }}">
 
-    <!-- =====================================================
-         CABEÇALHO DAS ÚLTIMAS NOTÍCIAS
-         ===================================================== -->
-
-    <section class="ultimas-noticias">
-
-        <div class="titulo-noticias">
-
-            <h2>
-                Últimas notícias
-            </h2>
-
-
-            <form
-                class="campo-pesquisa"
-                method="get"
-            >
-
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ busca }}"
-                    placeholder="O que você está procurando?"
-                >
-
-                <button
-                    type="submit"
-                    aria-label="Pesquisar"
-                >
-                    <i class="bi bi-search"></i>
-                </button>
-
-            </form>
-
+        <div class="outros-posts-grid" id="grid-outros-posts">
+            {% include "rede_miradas/_cards_outros_posts.html" %}
         </div>
 
+        {% if pagina_outros.has_next %}
 
-        <!-- =================================================
-             GRADE DE NOTÍCIAS
-             ================================================= -->
+        <div class="carregar-mais-container">
+            <button type="button" id="botao-carregar-mais" class="botao-carregar-mais">
+                Carregar mais <span>→</span>
+            </button>
+        </div>
 
-        <section class="noticias-grid">
-
-            {% for noticia in noticias %}
-
-                <article
-                    class="
-                        noticia-card
-                        {% if forloop.counter == 1 %}
-                            noticia-grande
-                        {% elif forloop.counter == 2 or forloop.counter == 3 %}
-                            noticia-lateral
-                        {% else %}
-                            noticia-inferior
-                        {% endif %}
-                    "
-                >
-
-                    <a
-                        href="{% url 'noticia_detalhe' noticia.slug %}"
-                        class="noticia-imagem"
-                    >
-
-                        <img
-                            src="{{ noticia.imagem.url }}"
-                            alt="{{ noticia.titulo }}"
-                        >
-
-                    </a>
-
-
-                    <div class="noticia-info">
-
-                        <span class="categoria-card">
-                            {{ noticia.get_categoria_display }}
-                        </span>
-
-
-                        <h3>
-
-                            <a
-                                href="{% url 'noticia_detalhe' noticia.slug %}"
-                            >
-                                {{ noticia.titulo }}
-                            </a>
-
-                        </h3>
-
-
-                        {% if noticia.resumo %}
-                        <p class="noticia-resumo">
-                            {{ noticia.resumo }}
-                        </p>
-                        {% endif %}
-
-
-                        <p class="noticia-data">
-                            {{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}
-                        </p>
-
-                    </div>
-
-                </article>
-
-            {% empty %}
-
-                <p class="nenhuma-noticia">
-                    Nenhuma notícia publicada no momento.
-                </p>
-
-            {% endfor %}
-
-        </section>
+        {% endif %}
 
     </section>
 
+    {% endif %}
+
 </div>
+
+<script>
+    (function () {
+        const input = document.getElementById('campo-busca');
+        const form = input.closest('form');
+        let temporizador;
+
+        input.addEventListener('input', function () {
+            clearTimeout(temporizador);
+
+            temporizador = setTimeout(function () {
+                form.submit();
+            }, 600);
+        });
+
+        input.focus();
+        const valor = input.value;
+        input.value = '';
+        input.value = valor;
+    })();
+</script>
+
+<script>
+    (function () {
+        const secao = document.querySelector('.outros-posts');
+        if (!secao) return;
+
+        const botao = document.getElementById('botao-carregar-mais');
+        const grid = document.getElementById('grid-outros-posts');
+        let paginaAtual = parseInt(secao.dataset.paginaAtual, 10);
+
+        if (!botao) return;
+
+        botao.addEventListener('click', function () {
+            const proximaPagina = paginaAtual + 1;
+            const busca = new URLSearchParams(window.location.search).get('q') || '';
+
+            botao.disabled = true;
+            botao.textContent = 'Carregando...';
+
+            const url = "{% url 'carregar_mais_noticias' %}?pagina=" + proximaPagina + "&q=" + encodeURIComponent(busca);
+
+            fetch(url)
+                .then(function (resposta) { return resposta.text(); })
+                .then(function (html) {
+                    grid.insertAdjacentHTML('beforeend', html);
+                    paginaAtual = proximaPagina;
+
+                    if (!html.trim()) {
+                        botao.remove();
+                    } else {
+                        botao.disabled = false;
+                        botao.innerHTML = 'Carregar mais <span>→</span>';
+                    }
+                })
+                .catch(function () {
+                    botao.disabled = false;
+                    botao.innerHTML = 'Carregar mais <span>→</span>';
+                });
+        });
+    })();
+</script>
 
 {% endblock %}

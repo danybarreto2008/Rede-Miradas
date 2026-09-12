@@ -289,53 +289,32 @@ class Noticia(models.Model):
         ('outros', 'Outros'),
     ]
 
-    # Informações principais da notícia
-
-    titulo = models.CharField(
-        max_length=200
-    )
-
-    slug = models.SlugField(
-        unique=True
-    )
-
-    categoria = models.CharField(
-        max_length=30,
-        choices=CATEGORIAS
-    )
-
-    resumo = models.TextField(
-        max_length=300
-    )
-
+    titulo = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    categoria = models.CharField(max_length=30, choices=CATEGORIAS)
+    resumo = models.TextField(max_length=300)
     texto = models.TextField()
+    imagem = models.ImageField(upload_to='noticias/')
+    data_publicacao = models.DateTimeField(auto_now_add=True)
 
-    # Imagem da notícia
-
-    imagem = models.ImageField(
-        upload_to='noticias/'
+    destaque = models.BooleanField(default=False)
+    destaque_secundario = models.BooleanField(
+        default=False,
+        help_text='Aparece na seção de destaques abaixo dos posts recentes. Não entra mais na lista de "Últimas notícias".'
     )
 
-    # Data de publicação
+    publicada = models.BooleanField(default=True)
 
-    data_publicacao = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    # Controle da notícia
-
-    destaque = models.BooleanField(
-        default=False
-    )
-
-    publicada = models.BooleanField(
-        default=True
+    # Cor de fundo usada quando a notícia está marcada como destaque
+    cor_fundo_destaque = models.CharField(
+        max_length=7,
+        default='#B6495F',
+        help_text='Cor de fundo exibida na seção de destaque (só é usada quando "destaque" estiver marcado).'
     )
 
     def __str__(self):
         return self.titulo
-
-
+    
 # ==============================================================================
 # Modelos da Página Inicial das Trilhas de Aprendizagem
 # ==============================================================================
@@ -618,4 +597,4 @@ class TrilhasCard(models.Model):
         ordering = ['ordem']
 
     def __str__(self):
-        return f'{self.tag} - {self.titulo[:30]}'
+        return f'{self.tag} - {self.titulo[:30]}'
