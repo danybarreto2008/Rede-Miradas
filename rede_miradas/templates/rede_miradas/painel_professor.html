@@ -1,0 +1,14 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% block conteudo %}
+
+<div class="container py-5 text-white text-center">
+
+    <h2>Bem-vindo(a), {{ user.first_name }}!</h2>
+    <p class="text-secondary">Este é o painel do professor.</p>
+
+    <a href="{% url 'logout' %}" class="btn-neon d-inline-block mt-3">Sair</a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% block conteudo %}
+
+<div class="container py-5" style="max-width: 420px;">
+
+    <h2 class="text-center text-white fw-bold mb-4">Criar conta de professor</h2>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        {% for campo in form %}
+
+            <div class="mb-3">
+                <label class="form-label text-white">{{ campo.label }}</label>
+                {{ campo }}
+                {% if campo.errors %}
+                    <div class="text-danger small">{{ campo.errors }}</div>
+                {% endif %}
+            </div>
+
+        {% endfor %}
+
+        <button type="submit" class="btn-neon w-100">Cadastrar</button>
+
+    </form>
+
+    <p class="text-center text-secondary mt-3">
+        Já tem conta? <a href="{% url 'login' %}" class="text-white">Entrar</a>
+    </p>
+
+</div>
+
+{% endblock %}

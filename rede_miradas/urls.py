@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+from .views import LoginRedirecionadoView
 
 
 urlpatterns = [
@@ -46,4 +48,15 @@ urlpatterns = [
         views.noticia_detalhe,
         name='noticia_detalhe'
     ),
+    #login
+    path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),
+    path('cadastro/professor/', views.cadastro_professor, name='cadastro_professor'),
+
+    path('login/', LoginRedirecionadoView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+
+    path('login-superadmin/', views.login_superadmin, name='login_superadmin'),
+
+    path('painel/aluno/', views.painel_aluno, name='painel_aluno'),
+    path('painel/professor/', views.painel_professor, name='painel_professor'),
 ]

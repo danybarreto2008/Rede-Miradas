@@ -1,6 +1,50 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
+# Código que a coordenação distribui pros professores usarem no cadastro
+class CodigoProfessor(models.Model):
+
+    codigo = models.CharField(
+        max_length=50,
+        default='PROFESSOR2026'
+    )
+
+    class Meta:
+        verbose_name = 'Código de acesso do professor'
+        verbose_name_plural = 'Código de acesso do professor'
+
+    def __str__(self):
+        return self.codigo
+
+# Diz se o usuário é Aluno ou Professor
+class Perfil(models.Model):
+
+    ALUNO = 'aluno'
+    PROFESSOR = 'professor'
+
+    TIPO_CHOICES = [
+        (ALUNO, 'Aluno'),
+        (PROFESSOR, 'Professor'),
+    ]
+
+    usuario = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    tipo = models.CharField(
+        max_length=20,
+        choices=TIPO_CHOICES
+    )
+
+    class Meta:
+        verbose_name = 'Perfil'
+        verbose_name_plural = 'Perfis'
+
+    def __str__(self):
+        return f'{self.usuario} ({self.get_tipo_display()})'
+    
 # Modelo dos destaques da página "Comece por aqui"
 class Destaque(models.Model):
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-
+from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas, SecaoFinal, Perfil, CodigoProfessor
 from .models import (
     Destaque,
     Noticia,
@@ -12,6 +12,24 @@ from .models import (
     TrilhasFaixaItem,
     TrilhasCard
 )
+#login
+@admin.register(CodigoProfessor)
+class CodigoProfessorAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'codigo',
+    )
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'usuario',
+        'tipo',
+    )
+
+    list_filter = (
+        'tipo',
+    )
 
 class DestaqueForm(forms.ModelForm):
 

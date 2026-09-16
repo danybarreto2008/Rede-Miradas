@@ -1,7 +1,15 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage
+#imports do login
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.urls import reverse
+from .forms import CadastroForm, LoginForm, CadastroProfessorForm
+from .models import Perfil
+from django.contrib.auth import authenticate
 
 from .models import (
     Destaque,
@@ -16,7 +24,51 @@ from .models import (
 )
 
 POSTS_POR_PAGINA = 6
+#views do login
+def cadastro_aluno(request):
 
+        if request.method == 'POST':
+
+            form = CadastroForm(request.POST)
+
+            if form.is_valid():
+
+                usuario = form.save()
+
+                Perfil.objects.create(usuario=usuario, tipo=Perfil.ALUNO)
+
+                auth_login(request, usuario)
+
+                return redirect('painel_aluno')
+
+        else:
+
+            form = CadastroForm()
+
+        return render(request, 'rede_miradas/cadastro_aluno.html', {'form': form})
+
+
+def cadastro_professor(request):
+
+    if request.method == 'POST':
+
+        form = CadastroProfessorForm(request.POST)
+
+        if form.is_valid():
+
+            usuario = form.save()
+
+            Perfil.objects.create(usuario=usuario, tipo=Perfil.PROFESSOR)
+
+            auth_login(request, usuario)
+
+            return redirect('painel_professor')
+
+    else:
+
+        form = CadastroProfessorForm()
+
+    return render(request, 'rede_miradas/cadastro_professor.html', {'form': form})
 
 # View da página "Comece por aqui"
 def home(request):
@@ -49,7 +101,54 @@ def home(request):
         }
     )
 
+class LoginRedirecionadoView(LoginView):
 
+    template_name = 'rede_miradas/login.html'
+    authentication_form = LoginForm
+
+    def get_success_url(self):
+
+        usuario = self.request.user
+
+        if hasattr(usuario, 'perfil') and usuario.perfil.tipo == Perfil.PROFESSOR:
+            return reverse('painel_professor')
+
+        if hasattr(usuario, 'perfil'):
+            return reverse('painel_aluno')
+
+        return reverse('home')
+
+@login_required
+def painel_aluno(request):
+    return render(request, 'rede_miradas/painel_aluno.html')
+
+
+@login_required
+def painel_professor(request):
+    return render(request, 'rede_miradas/painel_professor.html')
+
+
+
+def login_superadmin(request):
+
+    erro = None
+
+    if request.method == 'POST':
+
+        identificador = request.POST.get('username')
+        senha = request.POST.get('password')
+
+        usuario = authenticate(request, username=identificador, password=senha)
+
+        if usuario is not None and usuario.is_superuser:
+
+            auth_login(request, usuario)
+
+            return redirect('admin:index')
+
+        erro = 'Credenciais inválidas ou sem permissão de superadministrador.'
+
+    return render(request, 'rede_miradas/login_superadmin.html', {'erro': erro})
 # View da página de notícias
 def pagina_noticias(request):
 
