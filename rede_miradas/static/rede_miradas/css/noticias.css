@@ -477,6 +477,84 @@
     cursor: default;
 }
 
+
+/* =========================================================
+   DETALHE DA NOTÍCIA
+   ========================================================= */
+
+.noticia-detalhe {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+    box-sizing: border-box;
+}
+
+.noticia-detalhe .categoria-card {
+    display: inline-block;
+
+    padding: 6px 16px;
+    margin-bottom: 24px;
+
+    background: rgba(255, 255, 255, 0.85);
+    color: #1a1a1a;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    border-radius: 20px;
+}
+
+.noticia-detalhe h1 {
+    margin: 0 0 16px;
+
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    color: #ffffff;
+}
+
+.noticia-detalhe .card-data {
+    margin: 0 0 32px;
+
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.noticia-detalhe-imagem {
+    width: 100%;
+    margin-bottom: 40px;
+
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.noticia-detalhe-imagem img {
+    display: block;
+    width: 100%;
+    height: 360px;
+
+    object-fit: cover;
+}
+
+.noticia-detalhe-texto {
+    font-size: 16px;
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.noticia-detalhe-texto p {
+    margin: 0 0 20px;
+}
+
+.noticia-detalhe .botao-leia {
+    margin-top: 24px;
+}
+
+
 /* =========================================================
    RESPONSIVIDADE
    ========================================================= */
@@ -525,6 +603,22 @@
         min-height: 140px;
 
         border-radius: 10px;
+    }
+
+    .noticia-detalhe {
+        padding: 40px 20px 60px;
+    }
+
+    .noticia-detalhe h1 {
+        font-size: 24px;
+    }
+
+    .noticia-detalhe-imagem img {
+        height: 240px;
+    }
+
+    .noticia-detalhe-texto {
+        font-size: 15px;
     }
 }
 
