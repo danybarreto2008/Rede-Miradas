@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rede_miradas',
+    'django_ckeditor_5',
 
 ]
 
@@ -107,6 +108,24 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ]
 
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': [
+            'heading', '|',
+            'bold', 'italic', 'underline', '|',
+            'bulletedList', 'numberedList', 'blockQuote', '|',
+            'link', '|',
+            'undo', 'redo',
+        ],
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Parágrafo', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Título 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Título 3', 'class': 'ck-heading_heading3'},
+            ]
+        },
+    },
+}
 
 LANGUAGE_CODE = 'en-us'
 

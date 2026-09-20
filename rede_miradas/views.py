@@ -298,3 +298,29 @@ def trilhas_visao_geral(request):
         request,
         "rede_miradas/trilhas_visão_geral.html"
     )
+
+# View da página individual de uma notícia
+def noticia_detalhe(request, slug):
+
+    noticia = get_object_or_404(
+        Noticia,
+        slug=slug,
+        publicada=True
+    )
+
+    # Notícias semelhantes: mesma categoria, publicadas, excluindo a atual
+    noticias_semelhantes = Noticia.objects.filter(
+        categoria=noticia.categoria,
+        publicada=True
+    ).exclude(
+        id=noticia.id
+    ).order_by('-data_publicacao', '-id')[:3]
+
+    return render(
+        request,
+        "rede_miradas/noticia_detalhe.html",
+        {
+            'noticia': noticia,
+            'noticias_semelhantes': noticias_semelhantes,
+        }
+    )

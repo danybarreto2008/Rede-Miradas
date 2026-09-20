@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 # Código que a coordenação distribui pros professores usarem no cadastro
@@ -337,7 +338,7 @@ class Noticia(models.Model):
     slug = models.SlugField(unique=True)
     categoria = models.CharField(max_length=30, choices=CATEGORIAS)
     resumo = models.TextField(max_length=300)
-    texto = models.TextField()
+    texto = CKEditor5Field('Texto', config_name='default')
     imagem = models.ImageField(upload_to='noticias/')
     data_publicacao = models.DateTimeField(auto_now_add=True)
 

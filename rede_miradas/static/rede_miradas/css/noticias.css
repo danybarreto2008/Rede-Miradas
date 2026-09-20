@@ -556,6 +556,216 @@
 
 
 /* =========================================================
+   CORPO DA NOTÍCIA + MENU LATERAL
+   ========================================================= */
+
+.noticia-conteudo {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.noticia-indice {
+    position: sticky;
+    top: 40px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.noticia-indice a {
+    text-decoration: none;
+
+    font-size: 14px;
+    line-height: 1.4;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.noticia-indice a:hover {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.noticia-indice a.ativo {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.noticia-indice a.em-evidencia {
+    color: #ffffff;
+    font-weight: 600;
+    transform: translateX(4px);
+}
+
+.noticia-detalhe-texto h2 {
+    margin: 40px 0 16px;
+
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    color: #ffffff;
+
+    scroll-margin-top: 40px;
+}
+
+.noticia-detalhe-texto h2:first-child {
+    margin-top: 0;
+}
+
+.noticia-detalhe-texto p {
+    margin: 0 0 20px;
+}
+
+.noticia-detalhe-texto blockquote {
+    margin: 32px 0;
+    padding: 28px 32px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.6;
+
+    color: #ffffff;
+
+    position: relative;
+}
+
+.noticia-detalhe-texto blockquote::before {
+    content: "\201C";
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    margin-bottom: 16px;
+
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+
+    font-size: 22px;
+    font-weight: 700;
+    font-style: normal;
+    color: #ffffff;
+}
+
+.noticia-detalhe-texto blockquote p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   NOTÍCIAS SEMELHANTES
+   ========================================================= */
+
+.noticias-semelhantes {
+    width: 100%;
+    padding: 60px 0;
+
+    background: #B6495F;
+}
+
+.noticias-semelhantes-conteudo {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.noticias-semelhantes-conteudo h2 {
+    margin: 0 0 24px;
+
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+
+    color: #ffffff;
+}
+
+.noticias-semelhantes-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.card-semelhante {
+    display: block;
+
+    text-decoration: none;
+    color: inherit;
+
+    border-radius: 10px;
+    overflow: hidden;
+
+    transition: transform 0.2s ease;
+}
+
+.card-semelhante:hover {
+    transform: translateY(-4px);
+}
+
+.card-semelhante-imagem {
+    width: 100%;
+    overflow: hidden;
+
+    border-radius: 10px;
+}
+
+.card-semelhante-imagem img {
+    display: block;
+    width: 100%;
+    height: 180px;
+
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.card-semelhante:hover .card-semelhante-imagem img {
+    transform: scale(1.05);
+}
+
+.card-semelhante-info {
+    padding: 14px 4px 0;
+}
+
+.card-semelhante-info h3 {
+    margin: 0 0 6px;
+
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    color: #ffffff;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-semelhante-data {
+    margin: 0;
+
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+
+/* =========================================================
    RESPONSIVIDADE
    ========================================================= */
 
@@ -619,6 +829,36 @@
 
     .noticia-detalhe-texto {
         font-size: 15px;
+    }
+
+    .noticia-conteudo {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0 20px 60px;
+    }
+
+    .noticia-indice {
+        position: static;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .noticias-semelhantes {
+        padding: 40px 0;
+    }
+
+    .noticias-semelhantes-conteudo {
+        padding: 0 20px;
+    }
+
+    .noticias-semelhantes-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
 

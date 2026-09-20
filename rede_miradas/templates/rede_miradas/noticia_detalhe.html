@@ -44,25 +44,143 @@
 
         </div>
 
+    </article>
 
-        <!-- Texto completo da notícia -->
-        <div class="noticia-detalhe-texto">
 
-            {{ noticia.texto|linebreaks }}
+    <!-- Corpo da notícia com menu lateral fixo -->
+    <div class="noticia-conteudo">
+
+        <nav class="noticia-indice" id="noticia-indice">
+            <!-- Preenchido automaticamente via JavaScript -->
+        </nav>
+
+        <div class="noticia-detalhe-texto" id="noticia-texto">
+            {{ noticia.texto|safe }}
+        </div>
+
+    </div>
+
+
+    <!-- Notícias semelhantes -->
+    {% if noticias_semelhantes %}
+    <section class="noticias-semelhantes">
+
+        <div class="noticias-semelhantes-conteudo">
+
+            <h2>Notícias semelhantes</h2>
+
+            <div class="noticias-semelhantes-grid">
+
+                {% for semelhante in noticias_semelhantes %}
+                <a
+                    href="{% url 'noticia_detalhe' semelhante.slug %}"
+                    class="card-semelhante"
+                >
+                    <div class="card-semelhante-imagem">
+                        <img
+                            src="{{ semelhante.imagem.url }}"
+                            alt="{{ semelhante.titulo }}"
+                        >
+                    </div>
+
+                    <div class="card-semelhante-info">
+                        <h3>{{ semelhante.titulo }}</h3>
+                        <p class="card-semelhante-data">
+                            {{ semelhante.data_publicacao|date:"d/m/Y" }}
+                        </p>
+                    </div>
+                </a>
+                {% endfor %}
+
+            </div>
 
         </div>
 
+    </section>
+    {% endif %}
 
-        <!-- Voltar para a página de notícias -->
+
+    <!-- Voltar para a página de notícias -->
+    <div class="noticia-detalhe">
         <a
             href="{% url 'noticias' %}"
             class="botao-leia"
         >
             ← Voltar para notícias
         </a>
-
-    </article>
+    </div>
 
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const texto = document.getElementById("noticia-texto");
+    const indice = document.getElementById("noticia-indice");
+
+    if (!texto || !indice) return;
+
+    const titulos = texto.querySelectorAll("h2");
+
+    if (titulos.length === 0) {
+        indice.style.display = "none";
+        return;
+    }
+
+    // Gera um id único (slug) para cada título e monta os links do menu
+    titulos.forEach(function (titulo, index) {
+        if (!titulo.id) {
+            const slug = titulo.textContent
+                .toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/(^-|-$)/g, "");
+            titulo.id = slug || "secao-" + index;
+        }
+
+        const link = document.createElement("a");
+        link.href = "#" + titulo.id;
+        link.textContent = titulo.textContent;
+        link.dataset.target = titulo.id;
+
+        indice.appendChild(link);
+
+        // Passar o mouse em cima do título no texto destaca o item no menu
+        titulo.addEventListener("mouseenter", function () {
+            link.classList.add("em-evidencia");
+        });
+
+        titulo.addEventListener("mouseleave", function () {
+            link.classList.remove("em-evidencia");
+        });
+    });
+
+    // Observa qual seção está visível e destaca o link correspondente
+    const links = indice.querySelectorAll("a");
+
+    const observer = new IntersectionObserver(
+        function (entries) {
+            entries.forEach(function (entry) {
+                const link = indice.querySelector(
+                    '[data-target="' + entry.target.id + '"]'
+                );
+                if (!link) return;
+
+                if (entry.isIntersecting) {
+                    links.forEach(function (l) { l.classList.remove("ativo"); });
+                    link.classList.add("ativo");
+                }
+            });
+        },
+        {
+            rootMargin: "-20% 0px -70% 0px"
+        }
+    );
+
+    titulos.forEach(function (titulo) {
+        observer.observe(titulo);
+    });
+});
+</script>
 
 {% endblock %}
