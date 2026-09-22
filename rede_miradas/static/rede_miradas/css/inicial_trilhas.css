@@ -1,8 +1,11 @@
-/* página inicial trilhas de aprendizagem */
+/* ==========================================================================
+   PÁGINA INICIAL DAS TRILHAS DE APRENDIZAGEM - REDE MIRADAS
+   Estética Escura Premium com Efeitos Neon e Glassmorphism
+   ========================================================================== */
 
 /* Layout base da página */
 .trilhas-pagina {
-    background-color: #000000;
+    background-color: #03050d;
     color: #ffffff;
     overflow-x: hidden;
     position: relative;
@@ -10,38 +13,39 @@
     min-height: 100vh;
 }
 
-/* boas vindas trilhas */
+/* ==========================================================================
+   1. SEÇÃO HERO (BOAS-VINDAS)
+   ========================================================================== */
 .trilhas-hero {
     position: relative;
-    min-height: 520px;
-    height: calc(75vh - 70px);
-    max-height: 700px;
+    min-height: 480px;
+    height: calc(65vh - 70px);
+    max-height: 620px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 50% 50%, rgba(35, 18, 60, 0.85) 0%, rgba(5, 3, 10, 0.98) 70%, #000000 100%);
+    background: radial-gradient(circle at 50% 50%, rgba(30, 16, 56, 0.85) 0%, rgba(5, 7, 18, 0.98) 75%, #03050d 100%);
     overflow: hidden;
-    padding: 60px 20px;
+    padding: 50px 20px;
     text-align: center;
 }
 
-/* Brilho neon */
+/* Brilho neon de fundo */
 .trilhas-hero-glow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
+    width: 650px;
     max-width: 90vw;
-    height: 400px;
+    height: 420px;
     background: radial-gradient(ellipse at center, var(--hero-glow-1, rgba(124, 58, 237, 0.45)) 0%, var(--hero-glow-2, rgba(34, 211, 238, 0.25)) 45%, transparent 75%);
-    filter: blur(50px);
+    filter: blur(55px);
     pointer-events: none;
     z-index: 1;
 }
 
-
-/* Triângulos inicial trilhas */
+/* Triângulos decorativos */
 .trilhas-hero-triangulos {
     position: absolute;
     inset: 0;
@@ -56,7 +60,7 @@
     right: -80px;
     width: 480px;
     max-width: 65vw;
-    opacity: 0.9;
+    opacity: 0.85;
     transform: rotate(50deg) scaleX(-1);
     mix-blend-mode: screen;
     filter: drop-shadow(0 0 25px rgba(255, 47, 214, 0.4));
@@ -69,83 +73,80 @@
     left: -100px;
     width: 420px;
     max-width: 60vw;
-    opacity: 0.85;
+    opacity: 0.8;
     transform: rotate(190deg);
     mix-blend-mode: screen;
     filter: drop-shadow(0 0 25px rgba(34, 211, 238, 0.4));
     animation: floatSlowAlt 9s ease-in-out infinite alternate;
 }
 
-/* Conteúdo central inicial trilhas*/
+/* Conteúdo central do hero */
 .trilhas-hero-content {
     position: relative;
     z-index: 3;
-    max-width: 780px;
+    max-width: 800px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
 }
 
 .trilhas-hero-title {
-    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
     margin: 0;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(124, 58, 237, 0.35);
 }
 
 .trilhas-hero-subtitle {
-    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
     font-weight: 400;
     color: rgba(255, 255, 255, 0.88);
-    max-width: 520px;
-    line-height: 1.45;
+    max-width: 560px;
+    line-height: 1.5;
     margin: 0;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 /* Botão Conheça as trilhas */
 .btn-conheca-trilhas {
-    margin-top: 10px;
-    background-color: #ffffff;
-    color: #0b0c10;
-    font-weight: 800;
-    font-size: 1.1rem;
-    padding: 12px 34px;
-    border-radius: 8px;
+    margin-top: 12px;
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 12px 36px;
+    border-radius: 9999px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.25);
-    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    border: 2px solid transparent;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5), 0 0 15px rgba(37, 99, 235, 0.3);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-conheca-trilhas:hover {
-    background-color: #f8fafc;
-    color: #000000;
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.45), 0 0 20px rgba(34, 211, 238, 0.3);
+    background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+    color: #ffffff;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(147, 51, 234, 0.7), 0 0 25px rgba(34, 211, 238, 0.5);
 }
 
-.btn-conheca-trilhas:active {
-    transform: translateY(-1px) scale(0.99);
-}
-
-/* cards laço branco */
+/* ==========================================================================
+   2. FAIXA DE INFORMAÇÕES (RIBBON BAR ESCURO)
+   ========================================================================== */
 .trilhas-ribbon {
     position: relative;
     z-index: 5;
-    background-color: #ebf2e7;
-    background-image: linear-gradient(180deg, #f0f5ec 0%, #e6eee2 100%);
-    border-top: 2px solid #22d3ee;
-    border-bottom: 2px solid #38bdf8;
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.25);
-    padding: 16px 20px;
+    background: linear-gradient(90deg, #090d24 0%, #111738 50%, #090d24 100%);
+    border-top: 1.5px solid rgba(124, 58, 237, 0.6);
+    border-bottom: 1.5px solid rgba(34, 211, 238, 0.6);
+    box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
+    padding: 18px 20px;
     width: 100%;
 }
 
@@ -160,38 +161,40 @@
 }
 
 .ribbon-item {
-    color: #0f172a;
-    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
-    font-weight: 800;
-    letter-spacing: 1.2px;
+    color: #f1f5f9;
+    font-size: clamp(0.85rem, 1.3vw, 1rem);
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 10px;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
 }
 
 .ribbon-separator {
-    color: #111827;
-    font-size: 1.1rem;
+    color: #38bdf8;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.9;
 }
 
-/* Ícone de estrela */
 .star-burst-icon {
     display: inline-block;
-    width: 18px;
-    height: 18px;
-    fill: #0f172a;
+    width: 16px;
+    height: 16px;
+    fill: #22d3ee;
+    filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.8));
 }
 
-/* cards de trilhas */
+/* ==========================================================================
+   3. SEÇÃO DE CARDS DE TRILHAS (PADRÃO ESCURO DO SITE)
+   ========================================================================== */
 .trilhas-cards-section {
     position: relative;
-    background-color: #000000;
+    background-color: #03050d;
+    background-image: radial-gradient(circle at 50% 30%, rgba(18, 24, 60, 0.5) 0%, #03050d 80%);
     padding: 80px 20px 140px;
     overflow: hidden;
     z-index: 1;
@@ -212,10 +215,10 @@
     left: -120px;
     width: 520px;
     max-width: 65vw;
-    opacity: 0.95;
+    opacity: 0.8;
     transform: rotate(20deg);
     mix-blend-mode: screen;
-    filter: drop-shadow(0 0 35px rgba(250, 204, 21, 0.45));
+    filter: drop-shadow(0 0 35px rgba(250, 204, 21, 0.35));
 }
 
 .cards-triangulo-bottom-right {
@@ -224,104 +227,94 @@
     right: -130px;
     width: 580px;
     max-width: 70vw;
-    opacity: 0.95;
+    opacity: 0.8;
     transform: scaleX(-1) rotate(-25deg);
     mix-blend-mode: screen;
-    filter: drop-shadow(0 0 40px rgba(255, 47, 214, 0.5));
+    filter: drop-shadow(0 0 40px rgba(255, 47, 214, 0.4));
 }
 
-/* Grid de cards */
 .trilhas-cards-container {
     position: relative;
     z-index: 3;
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
 }
 
-/* Card Individual */
+/* Card Individual Wrapper */
 .trilha-card-wrapper {
     position: relative;
     height: 100%;
     display: flex;
+    border-radius: 22px;
 }
 
-/* Brilho colorido de fundo de cada card */
+/* Brilho neon colorido de fundo */
 .trilha-card-glow {
     position: absolute;
-    inset: -10px;
-    border-radius: 28px;
-    filter: blur(28px);
-    opacity: 0.45;
+    inset: -6px;
+    border-radius: 26px;
+    filter: blur(24px);
+    opacity: 0.35;
     z-index: 0;
     pointer-events: none;
-    background: radial-gradient(circle, var(--glow-color, rgba(249, 115, 22, 0.65)) 0%, transparent 75%);
+    background: radial-gradient(circle, var(--glow-color, rgba(124, 58, 237, 0.65)) 0%, transparent 75%);
     transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.glow-equipes {
-    --glow-color: rgba(249, 115, 22, 0.65);
-}
-
-.glow-texto {
-    --glow-color: rgba(168, 85, 247, 0.65);
-}
-
-.glow-roteiro {
-    --glow-color: rgba(56, 189, 248, 0.65);
-}
-
 .trilha-card-wrapper:hover .trilha-card-glow {
-    opacity: 0.8;
-    transform: scale(1.05);
+    opacity: 0.75;
+    transform: scale(1.06);
 }
 
-
-/* Caixa principal do card */
+/* Caixa principal do card no padrão escuro do site */
 .trilha-card {
     position: relative;
     z-index: 1;
-    background-color: #ebf1e8;
-    background-image: linear-gradient(180deg, #f1f5ee 0%, #e6ece3 100%);
-    border: 2.5px dashed rgba(20, 20, 20, 0.65);
+    background: linear-gradient(165deg, #10163a 0%, #080b1e 100%) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-style: solid !important;
+    border-width: 1.5px;
+    border-color: rgba(255, 255, 255, 0.12);
     border-radius: 20px;
-    padding: 38px 26px 32px;
+    padding: 36px 26px 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     width: 100%;
-    min-height: 480px;
+    min-height: 460px;
     justify-content: space-between;
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s ease, border-color 0.35s ease;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .trilha-card-wrapper:hover .trilha-card {
     transform: translateY(-8px);
-    border-color: rgba(0, 0, 0, 0.9);
-    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(124, 58, 237, 0.25);
 }
 
-/* Área do ícone do card */
+/* Área do ícone ilustrado */
 .trilha-card-icon-box {
-    width: 120px;
-    height: 105px;
+    width: 140px;
+    height: 115px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
 }
 
 .trilha-card-wrapper:hover .trilha-card-icon-box {
-    transform: scale(1.1) translateY(-2px);
+    transform: scale(1.08) translateY(-4px);
 }
 
 .trilha-card-icon-svg {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
 }
 
 /* Textos do card */
@@ -337,65 +330,67 @@
 .trilha-card-tag {
     font-size: 0.8rem;
     font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #1e293b;
+    letter-spacing: 1.8px;
+    color: #38bdf8;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
 .trilha-card-headline {
-    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
-    font-weight: 800;
-    font-style: italic;
-    color: #0f172a;
-    line-height: 1.25;
-    margin-bottom: 14px;
-    max-width: 290px;
+    font-size: clamp(1.25rem, 1.8vw, 1.45rem);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 300px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .trilha-card-desc {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #475569;
-    line-height: 1.42;
-    max-width: 260px;
-    margin: 0 auto 20px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #94a3b8;
+    line-height: 1.5;
+    max-width: 280px;
+    margin: 0 auto 24px;
 }
 
-/* Botão Explorar Trilha */
+/* Botão Explorar Trilha (Estilo Neon do Site) */
 .btn-explorar-trilha {
-    background-color: #000000;
+    background: linear-gradient(135deg, #ba4d62 0%, #8b2ff7 100%);
     color: #ffffff;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 700;
-    letter-spacing: 0.3px;
-    padding: 9px 26px;
-    border-radius: 999px;
+    letter-spacing: 0.5px;
+    padding: 10px 28px;
+    border-radius: 9999px;
     text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-    border: 1.5px solid transparent;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 16px rgba(186, 77, 98, 0.35);
 }
 
 .btn-explorar-trilha:hover {
-    background-color: #1e1b2e;
+    background: linear-gradient(135deg, #d25871 0%, #a855f7 100%);
     color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 24px rgba(186, 77, 98, 0.55), 0 0 15px rgba(168, 85, 247, 0.4);
+    filter: brightness(1.1);
 }
 
 .btn-explorar-trilha:active {
     transform: scale(0.98);
 }
 
-/* animações e responsividade */
+/* Animações e Responsividade */
 @keyframes floatSlow {
     0% {
         transform: rotate(50deg) scaleX(-1) translateY(0px);
     }
-
     100% {
         transform: rotate(52deg) scaleX(-1) translateY(-15px);
     }
@@ -405,22 +400,15 @@
     0% {
         transform: rotate(190deg) translateY(0px);
     }
-
     100% {
         transform: rotate(188deg) translateY(12px);
     }
 }
 
-/* Responsividade Mobile e Tablet */
 @media (max-width: 991.98px) {
     .trilhas-hero {
-        min-height: 440px;
+        min-height: 420px;
         padding: 40px 16px;
-    }
-
-    .trilhas-ribbon-container {
-        justify-content: center;
-        gap: 12px 18px;
     }
 
     .trilhas-cards-section {
@@ -428,24 +416,22 @@
     }
 
     .trilha-card {
-        min-height: 440px;
-        padding: 32px 20px 28px;
+        min-height: 420px;
+        padding: 30px 20px 26px;
     }
 }
 
 @media (max-width: 767.98px) {
     .hero-triangulo-top-right {
-        width: 320px;
-        top: -80px;
-        right: -60px;
-        opacity: 0.75;
+        width: 300px;
+        top: -70px;
+        right: -50px;
     }
 
     .hero-triangulo-bottom-left {
-        width: 280px;
-        bottom: -90px;
-        left: -70px;
-        opacity: 0.7;
+        width: 260px;
+        bottom: -80px;
+        left: -60px;
     }
 
     .ribbon-separator {
@@ -463,20 +449,6 @@
         justify-content: center;
         font-size: 0.85rem;
     }
-
-    .trilhas-cards-container .row>[class*="col-"] {
-        margin-bottom: 28px;
-    }
-
-    .trilhas-cards-container .row>[class*="col-"]:last-child {
-        margin-bottom: 0;
-    }
-
-    .cards-triangulo-bottom-left,
-    .cards-triangulo-bottom-right {
-        width: 340px;
-        opacity: 0.7;
-    }
 }
 
 @media (max-width: 480px) {
@@ -490,6 +462,6 @@
     }
 
     .trilha-card {
-        padding: 28px 16px 24px;
+        padding: 26px 16px 22px;
     }
 }
