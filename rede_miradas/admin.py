@@ -10,7 +10,8 @@ from .models import (
     SecaoFinal,
     TrilhasHero,
     TrilhasFaixaItem,
-    TrilhasCard
+    TrilhasCard,
+    SubtopicoTrilha
 )
 #login
 @admin.register(CodigoProfessor)
@@ -296,6 +297,12 @@ class TrilhasFaixaItemAdmin(admin.ModelAdmin):
     )
 
 
+class SubtopicoTrilhaInline(admin.TabularInline):
+    model = SubtopicoTrilha
+    extra = 1
+    fields = ('ordem', 'titulo', 'link', 'mostrar_botao_comecar', 'ativo')
+
+
 class TrilhasCardForm(forms.ModelForm):
 
     class Meta:
@@ -316,10 +323,10 @@ class TrilhasCardForm(forms.ModelForm):
 @admin.register(TrilhasCard)
 class TrilhasCardAdmin(admin.ModelAdmin):
     form = TrilhasCardForm
+    inlines = [SubtopicoTrilhaInline]
     list_display = (
         'tag',
         'titulo',
-        'tipo_icone',
         'ordem',
         'ativo',
     )
@@ -330,3 +337,66 @@ class TrilhasCardAdmin(admin.ModelAdmin):
     ordering = (
         'ordem',
     )
+    fieldsets = (
+        ('Conteúdo da Trilha', {
+            'fields': ('tag', 'titulo', 'descricao', 'imagem_capa')
+        }),
+        ('Botão de Ação', {
+            'fields': ('mostrar_botao', 'texto_botao', 'link_botao')
+        }),
+        ('Personalização Visual (Cores)', {
+            'fields': (
+                'cor_fundo_card',
+                'cor_borda_card',
+                'estilo_borda',
+                'cor_glow',
+                'cor_tag',
+                'cor_titulo',
+                'cor_descricao',
+                'cor_fundo_botao',
+                'cor_texto_botao',
+            ),
+            'classes': ('collapse',),
+        }),
+        ('Formatação de Texto', {
+            'fields': (
+                'tag_negrito',
+                'tag_italico',
+                'titulo_negrito',
+                'titulo_italico',
+                'descricao_negrito',
+                'descricao_italico',
+            ),
+            'classes': ('collapse',),
+        }),
+        ('Controle de Exibição', {
+            'fields': ('ordem', 'ativo', 'tipo_icone', 'icone_personalizado')
+        }),
+    )
+
+
+@admin.register(SubtopicoTrilha)
+class SubtopicoTrilhaAdmin(admin.ModelAdmin):
+    list_display = (
+        'titulo',
+        'trilha',
+        'ordem',
+        'ativo',
+    )
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+    list_filter = (
+        'trilha',
+        'ativo',
+    )
+    search_fields = (
+        'titulo',
+        'trilha__titulo',
+    )
+    ordering = (
+        'trilha',
+        'ordem',
+    )
+

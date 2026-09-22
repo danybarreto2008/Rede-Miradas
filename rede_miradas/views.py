@@ -149,6 +149,7 @@ def login_superadmin(request):
         erro = 'Credenciais inválidas ou sem permissão de superadministrador.'
 
     return render(request, 'rede_miradas/login_superadmin.html', {'erro': erro})
+    
 # View da página de notícias
 def pagina_noticias(request):
 
@@ -279,7 +280,7 @@ def noticia_detalhe(request, slug):
 def inicial_trilhas(request):
     hero = TrilhasHero.objects.first()
     itens_faixa = TrilhasFaixaItem.objects.filter(ativo=True).order_by('ordem')
-    cards = TrilhasCard.objects.filter(ativo=True).order_by('ordem')
+    cards = TrilhasCard.objects.filter(ativo=True).prefetch_related('subtopicos').order_by('ordem')
 
     return render(
         request,
@@ -292,35 +293,14 @@ def inicial_trilhas(request):
     )
 
 
-# View da página de visão geral das trilhas
+# View da página de visão geral das trilhas (Layout Substack Figma)
 def trilhas_visao_geral(request):
-    return render(
-        request,
-        "rede_miradas/trilhas_visão_geral.html"
-    )
-
-# View da página individual de uma notícia
-def noticia_detalhe(request, slug):
-
-    noticia = get_object_or_404(
-        Noticia,
-        slug=slug,
-        publicada=True
-    )
-
-    # Notícias semelhantes: mesma categoria, publicadas, excluindo a atual
-    noticias_semelhantes = Noticia.objects.filter(
-        categoria=noticia.categoria,
-        publicada=True
-    ).exclude(
-        id=noticia.id
-    ).order_by('-data_publicacao', '-id')[:3]
+    cards = TrilhasCard.objects.filter(ativo=True).prefetch_related('subtopicos').order_by('ordem')
 
     return render(
         request,
-        "rede_miradas/noticia_detalhe.html",
+        "rede_miradas/trilhas_visão_geral.html",
         {
-            'noticia': noticia,
-            'noticias_semelhantes': noticias_semelhantes,
+            'cards': cards,
         }
     )

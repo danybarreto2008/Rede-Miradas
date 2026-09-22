@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradEmerald1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="gradEmerald2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a7f3d0" />
+      <stop offset="100%" stop-color="#6ee7b7" />
+    </linearGradient>
+    <linearGradient id="gradRedRec" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <filter id="shadowEmerald" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#059669" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadowEmerald)" transform="translate(18, 10)">
+    <!-- Tripod Legs -->
+    <path d="M 60 75 L 35 102" stroke="#059669" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 60 75 L 60 104" stroke="#059669" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 60 75 L 85 102" stroke="#059669" stroke-width="4.5" stroke-linecap="round" />
+    <!-- Tripod Mount Head -->
+    <path d="M 52 70 L 68 70 L 65 76 L 55 76 Z" fill="#047857" stroke="#059669" stroke-width="3" stroke-linejoin="round" />
+
+    <!-- Camera Main Body -->
+    <rect x="25" y="32" width="56" height="38" rx="6" fill="url(#gradEmerald1)" stroke="#047857" stroke-width="4" stroke-linejoin="round" />
+
+    <!-- Camera Top Handle -->
+    <path d="M 36 32 L 36 20 C 36 17 40 17 45 17 L 62 17 C 67 17 70 20 70 24 L 70 32" fill="none" stroke="#059669" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Shotgun Mic on Top -->
+    <rect x="20" y="12" width="34" height="7" rx="3.5" fill="url(#gradEmerald2)" stroke="#047857" stroke-width="2.5" />
+    <path d="M 28 12 L 28 19 M 34 12 L 34 19 M 40 12 L 40 19" stroke="#047857" stroke-width="2" />
+
+    <!-- Main Lens Barrel (Right) -->
+    <path d="M 81 40 L 98 33 L 98 67 L 81 60 Z" fill="url(#gradEmerald2)" stroke="#047857" stroke-width="4" stroke-linejoin="round" />
+    <!-- Lens Hood -->
+    <path d="M 98 31 L 105 28 L 105 72 L 98 69 Z" fill="url(#gradEmerald1)" stroke="#047857" stroke-width="3.5" stroke-linejoin="round" />
+
+    <!-- Lens Glass Reflection -->
+    <ellipse cx="103" cy="50" rx="2" ry="14" fill="#ecfdf5" opacity="0.9" />
+
+    <!-- Viewfinder / Side Screen -->
+    <rect x="12" y="36" width="13" height="24" rx="3" fill="url(#gradEmerald2)" stroke="#047857" stroke-width="3" />
+    <rect x="15" y="39" width="7" height="18" rx="1.5" fill="#0f172a" />
+
+    <!-- Recording Indicator Tally Light (Glow) -->
+    <circle cx="72" cy="40" r="3.5" fill="url(#gradRedRec)" stroke="#b91c1c" stroke-width="1.5" />
+    <circle cx="72" cy="40" r="1.5" fill="#ffffff" />
+
+    <!-- Body Controls & Accent Reel Lines -->
+    <circle cx="44" cy="51" r="7" fill="none" stroke="#a7f3d0" stroke-width="3" />
+    <circle cx="60" cy="51" r="5" fill="#047857" stroke="#a7f3d0" stroke-width="2.5" />
+  </g>
+</svg>

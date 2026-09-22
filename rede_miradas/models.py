@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+# pyrefly: ignore [missing-import]
 from django_ckeditor_5.fields import CKEditor5Field
 
 
@@ -360,9 +361,8 @@ class Noticia(models.Model):
     def __str__(self):
         return self.titulo
     
-# ==============================================================================
+
 # Modelos da Página Inicial das Trilhas de Aprendizagem
-# ==============================================================================
 
 class TrilhasHero(models.Model):
 
@@ -490,6 +490,8 @@ class TrilhasCard(models.Model):
         ('equipes', 'Aperto de mão (Equipes)'),
         ('texto', 'Livro aberto (Texto Autoral)'),
         ('roteiro', 'Lápis (Roteiro)'),
+        ('producao', 'Câmera de Cinema (Produção e Gravação)'),
+        ('edicao', 'Ilha de Edição e Corte (Edição e Finalização)'),
         ('personalizado', 'Imagem / SVG personalizado'),
     ]
 
@@ -515,6 +517,14 @@ class TrilhasCard(models.Model):
         help_text='Ex: Conheça a ficha de inscrição, apresente sua equipe...'
     )
 
+    # Imagem de capa do Card (estilo Substack / Figma)
+    imagem_capa = models.ImageField(
+        upload_to='trilhas/capas/',
+        blank=True,
+        null=True,
+        help_text='Imagem de capa ilustrativa do card da trilha'
+    )
+
     # Ícone
     tipo_icone = models.CharField(
         max_length=30,
@@ -537,7 +547,7 @@ class TrilhasCard(models.Model):
 
     texto_botao = models.CharField(
         max_length=100,
-        default='Explorar trilha',
+        default='Começar',
         blank=True
     )
 
@@ -550,49 +560,49 @@ class TrilhasCard(models.Model):
     # Cores
     cor_fundo_card = models.CharField(
         max_length=7,
-        default='#EBF1E8',
+        default='#101535',
         help_text='Cor de fundo do card'
     )
 
     cor_borda_card = models.CharField(
         max_length=7,
-        default='#141414',
+        default='#1E2659',
         help_text='Cor da borda do card'
     )
 
     estilo_borda = models.CharField(
         max_length=20,
         choices=CHOICES_BORDA,
-        default='dashed'
+        default='solid'
     )
 
     cor_glow = models.CharField(
         max_length=7,
-        default='#EA580C',
+        default='#7C3AED',
         help_text='Cor do brilho neon no fundo do card'
     )
 
     cor_tag = models.CharField(
         max_length=7,
-        default='#1E293B',
+        default='#94A3B8',
         help_text='Cor da tag superior'
     )
 
     cor_titulo = models.CharField(
         max_length=7,
-        default='#0F172A',
+        default='#FFFFFF',
         help_text='Cor do título'
     )
 
     cor_descricao = models.CharField(
         max_length=7,
-        default='#475569',
+        default='#CBD5E1',
         help_text='Cor da descrição'
     )
 
     cor_fundo_botao = models.CharField(
         max_length=7,
-        default='#000000',
+        default='#B94B61',
         help_text='Cor de fundo do botão'
     )
 
@@ -616,7 +626,7 @@ class TrilhasCard(models.Model):
     )
 
     titulo_italico = models.BooleanField(
-        default=True
+        default=False
     )
 
     descricao_negrito = models.BooleanField(
@@ -643,3 +653,46 @@ class TrilhasCard(models.Model):
 
     def __str__(self):
         return f'{self.tag} - {self.titulo[:30]}'
+
+
+class SubtopicoTrilha(models.Model):
+
+    trilha = models.ForeignKey(
+        TrilhasCard,
+        on_delete=models.CASCADE,
+        related_name='subtopicos'
+    )
+
+    titulo = models.CharField(
+        max_length=255,
+        help_text='Título do item/subtópico. Ex: CONTO e CRÔNICA: como diferenciar?'
+    )
+
+    link = models.CharField(
+        max_length=255,
+        blank=True,
+        default='',
+        help_text='Link específico para o material ou aula (opcional). Se vazio, usará o link da trilha.'
+    )
+
+    mostrar_botao_comecar = models.BooleanField(
+        default=False,
+        help_text='Exibir o botão "Começar" ao lado deste item'
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Subtópico da Trilha'
+        verbose_name_plural = 'Subtópicos da Trilha'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return f'{self.trilha.titulo} - {self.titulo}'
+
