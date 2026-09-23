@@ -1,11 +1,42 @@
 from django.core.management.base import BaseCommand
-from rede_miradas.models import TrilhasCard, SubtopicoTrilha
+from rede_miradas.models import TrilhasCard, SubtopicoTrilha, TrilhasHero, TrilhasFaixaItem
 
 
 class Command(BaseCommand):
-    help = 'Popula as 5 Trilhas de Aprendizagem e seus subtópicos reais com ícones específicos'
+    help = 'Popula as 5 Trilhas de Aprendizagem, subtópicos, Hero e Faixa informativa'
 
     def handle(self, *args, **options):
+        # 1. Popula Seção Hero se não existir
+        if not TrilhasHero.objects.exists():
+            TrilhasHero.objects.create(
+                titulo='Bem-Vindo(a)',
+                subtitulo='Aprenda produção audiovisual em módulos práticos e criativos.',
+                mostrar_botao=True,
+                texto_botao='Conheça as trilhas',
+                link_botao='/trilhas/visao-geral/',
+                cor_titulo='#FFFFFF',
+                cor_subtitulo='#FFFFFF',
+                cor_fundo_botao='#FFFFFF',
+                cor_texto_botao='#0B0C10',
+                cor_glow_1='#7C3AED',
+                cor_glow_2='#22D3EE',
+                titulo_negrito=True,
+            )
+            self.stdout.write(self.style.SUCCESS('Hero das Trilhas cadastrado.'))
+
+        # 2. Popula Itens da Faixa Informativa se não existirem
+        if not TrilhasFaixaItem.objects.exists():
+            itens_faixa = [
+                '5 ETAPAS',
+                'DEZENAS DE MATERIAIS',
+                'EXERCÍCIOS',
+                'EXEMPLOS REAIS',
+            ]
+            for idx, txt in enumerate(itens_faixa, start=1):
+                TrilhasFaixaItem.objects.create(texto=txt, ordem=idx, ativo=True)
+            self.stdout.write(self.style.SUCCESS('Itens da Faixa informativa cadastrados.'))
+
+        # 3. Popula os 5 Cards de Trilhas e Subtópicos
         dados_trilhas = [
             {
                 'tag': 'Etapa 1',
