@@ -273,9 +273,106 @@
 
                 {% empty %}
 
-                    <p class="text-center text-secondary">
-                        Nenhum card de trilha cadastrado.
-                    </p>
+                    <!-- Fallback Completo das 5 Trilhas caso a base ainda não tenha sido populada -->
+                    <!-- Card 1: Equipes -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="trilha-card-wrapper w-100" data-glow="#ea580c" data-card-bg="#0c102a" data-border-style="solid" data-border-color="#f97316" data-tag-color="#fdba74" data-title-color="#FFFFFF" data-desc-color="#CBD5E1" data-btn-bg="#B94B61" data-btn-color="#FFFFFF">
+                            <div class="trilha-card-glow"></div>
+                            <div class="trilha-card">
+                                <div class="trilha-card-icon-box">
+                                    <img src="{% static 'rede_miradas/img/icone-equipes.svg' %}" alt="Etapa 1" class="trilha-card-icon-svg">
+                                </div>
+                                <div class="trilha-card-body">
+                                    <span class="trilha-card-tag fw-bold">Etapa 1</span>
+                                    <h2 class="trilha-card-headline fw-bold">Inscrição das equipes</h2>
+                                    <p class="trilha-card-desc">Apresentação dos participantes, formação dos grupos e identidade visual do projeto.</p>
+                                </div>
+                                <div>
+                                    <a href="/trilhas/visao-geral/" class="btn-explorar-trilha">Começar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Texto Autoral -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="trilha-card-wrapper w-100" data-glow="#7c3aed" data-card-bg="#0c102a" data-border-style="solid" data-border-color="#8b5cf6" data-tag-color="#c4b5fd" data-title-color="#FFFFFF" data-desc-color="#CBD5E1" data-btn-bg="#B94B61" data-btn-color="#FFFFFF">
+                            <div class="trilha-card-glow"></div>
+                            <div class="trilha-card">
+                                <div class="trilha-card-icon-box">
+                                    <img src="{% static 'rede_miradas/img/icone-texto.svg' %}" alt="Etapa 2" class="trilha-card-icon-svg">
+                                </div>
+                                <div class="trilha-card-body">
+                                    <span class="trilha-card-tag fw-bold">Etapa 2</span>
+                                    <h2 class="trilha-card-headline fw-bold">Texto autoral</h2>
+                                    <p class="trilha-card-desc">Da leitura à criação: conto, crônica e narrativa autoral para o curta.</p>
+                                </div>
+                                <div>
+                                    <a href="/trilhas/visao-geral/" class="btn-explorar-trilha">Começar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Roteiro -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="trilha-card-wrapper w-100" data-glow="#0284c7" data-card-bg="#0c102a" data-border-style="solid" data-border-color="#0ea5e9" data-tag-color="#7dd3fc" data-title-color="#FFFFFF" data-desc-color="#CBD5E1" data-btn-bg="#B94B61" data-btn-color="#FFFFFF">
+                            <div class="trilha-card-glow"></div>
+                            <div class="trilha-card">
+                                <div class="trilha-card-icon-box">
+                                    <img src="{% static 'rede_miradas/img/icone-roteiro.svg' %}" alt="Etapa 3" class="trilha-card-icon-svg">
+                                </div>
+                                <div class="trilha-card-body">
+                                    <span class="trilha-card-tag fw-bold">Etapa 3</span>
+                                    <h2 class="trilha-card-headline fw-bold">Roteiro</h2>
+                                    <p class="trilha-card-desc">Transforme suas ideias e textos em roteiro cinematográfico com cenas e diálogos.</p>
+                                </div>
+                                <div>
+                                    <a href="/trilhas/visao-geral/" class="btn-explorar-trilha">Começar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Produção e Gravação -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="trilha-card-wrapper w-100" data-glow="#059669" data-card-bg="#0c102a" data-border-style="solid" data-border-color="#10b981" data-tag-color="#6ee7b7" data-title-color="#FFFFFF" data-desc-color="#CBD5E1" data-btn-bg="#B94B61" data-btn-color="#FFFFFF">
+                            <div class="trilha-card-glow"></div>
+                            <div class="trilha-card">
+                                <div class="trilha-card-icon-box">
+                                    <img src="{% static 'rede_miradas/img/icone-producao.svg' %}" alt="Etapa 4" class="trilha-card-icon-svg">
+                                </div>
+                                <div class="trilha-card-body">
+                                    <span class="trilha-card-tag fw-bold">Etapa 4</span>
+                                    <h2 class="trilha-card-headline fw-bold">Produção e Gravação</h2>
+                                    <p class="trilha-card-desc">Técnicas práticas de filmagem, planos de câmera, áudio e iluminação no set.</p>
+                                </div>
+                                <div>
+                                    <a href="/trilhas/visao-geral/" class="btn-explorar-trilha">Começar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Edição e Finalização -->
+                    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                        <div class="trilha-card-wrapper w-100" data-glow="#e11d48" data-card-bg="#0c102a" data-border-style="solid" data-border-color="#f43f5e" data-tag-color="#fda4af" data-title-color="#FFFFFF" data-desc-color="#CBD5E1" data-btn-bg="#B94B61" data-btn-color="#FFFFFF">
+                            <div class="trilha-card-glow"></div>
+                            <div class="trilha-card">
+                                <div class="trilha-card-icon-box">
+                                    <img src="{% static 'rede_miradas/img/icone-edicao.svg' %}" alt="Etapa 5" class="trilha-card-icon-svg">
+                                </div>
+                                <div class="trilha-card-body">
+                                    <span class="trilha-card-tag fw-bold">Etapa 5</span>
+                                    <h2 class="trilha-card-headline fw-bold">Edição e Finalização</h2>
+                                    <p class="trilha-card-desc">Montagem, ritmo de corte, trilha sonora, efeitos e exportação para a grande tela.</p>
+                                </div>
+                                <div>
+                                    <a href="/trilhas/visao-geral/" class="btn-explorar-trilha">Começar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 {% endfor %}
 
