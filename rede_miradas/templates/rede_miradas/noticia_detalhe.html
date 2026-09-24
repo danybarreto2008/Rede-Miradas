@@ -50,9 +50,11 @@
     <!-- Corpo da notícia com menu lateral fixo -->
     <div class="noticia-conteudo">
 
-        <nav class="noticia-indice" id="noticia-indice">
-            <!-- Preenchido automaticamente via JavaScript -->
-        </nav>
+        <div class="noticia-indice-wrapper">
+            <nav class="noticia-indice" id="noticia-indice">
+                <!-- Preenchido automaticamente via JavaScript -->
+            </nav>
+        </div>
 
         <div class="noticia-detalhe-texto" id="noticia-texto">
             {{ noticia.texto|safe }}
