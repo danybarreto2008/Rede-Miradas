@@ -353,9 +353,9 @@ class Noticia(models.Model):
 
     # Cor de fundo usada quando a notícia está marcada como destaque
     cor_fundo_destaque = models.CharField(
-        max_length=7,
-        default='#B6495F',
-        help_text='Cor de fundo exibida na seção de destaque (só é usada quando "destaque" estiver marcado).'
+    max_length=7,
+    default='#3A1660',
+    help_text='Cor de fundo exibida na seção de destaque (só é usada quando "destaque" estiver marcado).'
     )
 
     def __str__(self):
