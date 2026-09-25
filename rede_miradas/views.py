@@ -267,11 +267,41 @@ def noticia_detalhe(request, slug):
         publicada=True
     )
 
+    # Primeiro tenta notícias da mesma categoria
+    da_mesma_categoria = list(
+        Noticia.objects.filter(
+            categoria=noticia.categoria,
+            publicada=True
+        ).exclude(
+            id=noticia.id
+        ).order_by('-data_publicacao', '-id')[:3]
+    )
+
+    # Se não tiver 3 da mesma categoria, completa com outras notícias
+    # recentes do site (de qualquer categoria)
+    if len(da_mesma_categoria) < 3:
+
+        ids_ja_escolhidos = [n.id for n in da_mesma_categoria] + [noticia.id]
+
+        faltam = 3 - len(da_mesma_categoria)
+
+        outras = Noticia.objects.filter(
+            publicada=True
+        ).exclude(
+            id__in=ids_ja_escolhidos
+        ).order_by('-data_publicacao', '-id')[:faltam]
+
+        noticias_semelhantes = da_mesma_categoria + list(outras)
+
+    else:
+        noticias_semelhantes = da_mesma_categoria
+
     return render(
         request,
         "rede_miradas/noticia_detalhe.html",
         {
-            'noticia': noticia
+            'noticia': noticia,
+            'noticias_semelhantes': noticias_semelhantes,
         }
     )
 
