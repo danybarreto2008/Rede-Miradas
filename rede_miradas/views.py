@@ -3,13 +3,11 @@ from django.http import HttpResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage
 #imports do login
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.urls import reverse
-from .forms import CadastroForm, LoginForm, CadastroProfessorForm
 from .models import Perfil
-from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from .forms import PerfilForm
 
 from .models import (
     Destaque,
@@ -20,55 +18,177 @@ from .models import (
     SecaoFinal,
     TrilhasHero,
     TrilhasFaixaItem,
-    TrilhasCard
+    TrilhasCard,
+    Voto,
+    CurtaVotacao
 )
 
 POSTS_POR_PAGINA = 6
-#views do login
-def cadastro_aluno(request):
+@login_required
+def meu_perfil(request):
 
-        if request.method == 'POST':
+    perfil = getattr(request.user, 'perfil', None)
 
-            form = CadastroForm(request.POST)
+    if not perfil:
+        return render(
+            request,
+            'rede_miradas/perfil_bloqueado.html'
+        )
 
-            if form.is_valid():
+    favoritos = perfil.curtas_favoritos.all()
 
-                usuario = form.save()
+    voto = Voto.objects.filter(
+        usuario=request.user
+    ).first()
 
-                Perfil.objects.create(usuario=usuario, tipo=Perfil.ALUNO)
+    selos = []
 
-                auth_login(request, usuario)
+    selos.append({
+        'icone': 'bi-stars',
+        'nome': 'Primeiro passo',
+        'descricao': 'Você entrou para a Rede Miradas.',
+        'cor': 'rosa'
+    })
 
-                return redirect('painel_aluno')
+    if favoritos.count() >= 3:
+        selos.append({
+            'icone': 'bi-film',
+            'nome': 'Olhar de cinema',
+            'descricao': 'Você adicionou 3 ou mais curtas aos favoritos.',
+            'cor': 'roxo'
+        })
 
-        else:
+    if perfil.nome_curta_participou:
+        selos.append({
+            'icone': 'bi-pencil',
+            'nome': 'Mão na massa',
+            'descricao': 'Você participou de uma produção audiovisual.',
+            'cor': 'azul'
+        })
 
-            form = CadastroForm()
+    if voto:
+        selos.append({
+            'icone': 'bi-star',
+            'nome': 'Júri popular',
+            'descricao': 'Você participou da votação.',
+            'cor': 'verde'
+        })
 
-        return render(request, 'rede_miradas/cadastro_aluno.html', {'form': form})
+    return render(
+        request,
+        'rede_miradas/meu_perfil.html',
+        {
+            'perfil': perfil,
+            'favoritos': favoritos,
+            'selos': selos,
+            'voto': voto,
+        }
+    )
 
+@login_required
+def editar_perfil(request):
 
-def cadastro_professor(request):
+    perfil = getattr(request.user, 'perfil', None)
+
+    if not perfil:
+        return render(
+            request,
+            'rede_miradas/perfil_bloqueado.html'
+        )
 
     if request.method == 'POST':
 
-        form = CadastroProfessorForm(request.POST)
+        form = PerfilForm(
+            request.POST,
+            request.FILES,
+            instance=perfil
+        )
 
         if form.is_valid():
+            form.save()
 
-            usuario = form.save()
-
-            Perfil.objects.create(usuario=usuario, tipo=Perfil.PROFESSOR)
-
-            auth_login(request, usuario)
-
-            return redirect('painel_professor')
+            return redirect('meu_perfil')
 
     else:
 
-        form = CadastroProfessorForm()
+        form = PerfilForm(instance=perfil)
 
-    return render(request, 'rede_miradas/cadastro_professor.html', {'form': form})
+    return render(
+        request,
+        'rede_miradas/editar_perfil.html',
+        {
+            'form': form,
+            'perfil': perfil,
+        }
+    )
+
+@login_required
+def votacao(request):
+
+    curtas = CurtaVotacao.objects.filter(
+        ativo=True
+    ).order_by('ordem')
+
+    voto_usuario = Voto.objects.filter(usuario=request.user).first()
+
+    if request.method == 'POST' and not voto_usuario:
+
+        curta_id = request.POST.get('curta_id')
+        curta = get_object_or_404(CurtaVotacao, id=curta_id)
+
+        Voto.objects.create(usuario=request.user, curta=curta)
+
+        return redirect('votacao')
+
+    return render(request, 'rede_miradas/votacao.html', {
+        'curtas': curtas,
+        'voto_usuario': voto_usuario,
+})
+
+@login_required
+def redirecionar_apos_login(request):
+
+    perfil = getattr(request.user, 'perfil', None)
+
+    if perfil and perfil.tipo == Perfil.PROFESSOR:
+        return redirect('painel_professor')
+
+    if perfil:
+        return redirect('painel_aluno')
+
+    return redirect('home')
+
+def login_superadmin(request):
+
+    erro = None
+
+    if request.method == 'POST':
+
+        identificador = request.POST.get('username')
+        senha = request.POST.get('password')
+
+        usuario = authenticate(request, username=identificador, password=senha)
+
+        if usuario is not None and usuario.is_superuser:
+
+            auth_login(request, usuario)
+
+            return redirect('admin:index')
+
+        erro = 'Credenciais inválidas ou sem permissão de superadministrador.'
+
+    return render(request, 'rede_miradas/login_superadmin.html', {'erro': erro})
+
+
+@login_required
+def painel_aluno(request):
+    return render(request, 'rede_miradas/painel_aluno.html')
+
+
+@login_required
+def painel_professor(request):
+    return render(request, 'rede_miradas/painel_professor.html')
+
 
 # View da página "Comece por aqui"
 def home(request):
@@ -101,55 +221,7 @@ def home(request):
         }
     )
 
-class LoginRedirecionadoView(LoginView):
 
-    template_name = 'rede_miradas/login.html'
-    authentication_form = LoginForm
-
-    def get_success_url(self):
-
-        usuario = self.request.user
-
-        if hasattr(usuario, 'perfil') and usuario.perfil.tipo == Perfil.PROFESSOR:
-            return reverse('painel_professor')
-
-        if hasattr(usuario, 'perfil'):
-            return reverse('painel_aluno')
-
-        return reverse('home')
-
-@login_required
-def painel_aluno(request):
-    return render(request, 'rede_miradas/painel_aluno.html')
-
-
-@login_required
-def painel_professor(request):
-    return render(request, 'rede_miradas/painel_professor.html')
-
-
-
-def login_superadmin(request):
-
-    erro = None
-
-    if request.method == 'POST':
-
-        identificador = request.POST.get('username')
-        senha = request.POST.get('password')
-
-        usuario = authenticate(request, username=identificador, password=senha)
-
-        if usuario is not None and usuario.is_superuser:
-
-            auth_login(request, usuario)
-
-            return redirect('admin:index')
-
-        erro = 'Credenciais inválidas ou sem permissão de superadministrador.'
-
-    return render(request, 'rede_miradas/login_superadmin.html', {'erro': erro})
-    
 # View da página de notícias
 def pagina_noticias(request):
 

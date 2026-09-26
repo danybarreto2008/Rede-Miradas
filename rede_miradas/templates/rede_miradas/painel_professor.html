@@ -7,7 +7,12 @@
     <h2>Bem-vindo(a), {{ user.first_name }}!</h2>
     <p class="text-secondary">Este é o painel do professor.</p>
 
-    <a href="{% url 'logout' %}" class="btn-neon d-inline-block mt-3">Sair</a>
+    <a href="{% url 'meu_perfil' %}" class="btn btn-outline-light d-inline-block mt-3 me-2">Meu perfil</a>
+
+    <form method="post" action="{% url 'account_logout' %}" class="d-inline-block mt-3">
+        {% csrf_token %}
+        <button type="submit" class="btn-neon">Sair</button>
+    </form>
 
 </div>
 

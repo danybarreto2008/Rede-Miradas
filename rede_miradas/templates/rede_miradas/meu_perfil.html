@@ -1,0 +1,514 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% load static %}
+
+{% block titulo %}
+    Meu perfil | Rede Miradas
+{% endblock %}
+
+{% block conteudo %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/perfil.css' %}?v=22"
+>
+
+
+<div class="pagina-perfil">
+
+
+    <!-- =====================================================
+         TOPO
+    ===================================================== -->
+
+    <section class="perfil-topo">
+
+        <!-- BANNER -->
+
+        <div class="perfil-banner">
+
+            {% if perfil.banner %}
+
+                <img
+                    src="{{ perfil.banner.url }}"
+                    alt="Banner do perfil"
+                >
+
+            {% else %}
+
+                <div class="banner-padrao"></div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- FOTO DE PERFIL -->
+
+        <div class="perfil-foto">
+
+            {% if perfil.foto %}
+
+                <img
+                    src="{{ perfil.foto.url }}"
+                    alt="Foto de perfil"
+                >
+
+            {% else %}
+
+                <div class="perfil-foto-vazia">
+                    <i class="bi bi-person"></i>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- CARD PRINCIPAL -->
+
+        <div class="perfil-card-principal">
+
+
+            <!-- PARTE DO NOME -->
+
+            <div class="perfil-card-nome">
+
+                <div class="perfil-tipo">
+
+                    {% if perfil.tipo_usuario == 'professor' %}
+                        PROFESSOR
+                    {% else %}
+                        ALUNO
+                    {% endif %}
+
+                </div>
+
+
+                <h1>
+                    {{ user.get_full_name|default:user.username }}
+                </h1>
+
+
+                <div class="linha-perfil"></div>
+
+            </div>
+
+
+            <!-- INFORMAÇÕES -->
+
+            <div class="perfil-card-informacoes">
+
+
+                <!-- REDES -->
+
+                <div class="perfil-redes">
+
+                    {% if perfil.instagram %}
+
+                        <a
+                            href="{{ perfil.instagram }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Instagram"
+                        >
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                    {% endif %}
+
+
+                    {% if perfil.link_outra_rede %}
+
+                        <a
+                            href="{{ perfil.link_outra_rede }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Outra rede"
+                        >
+                            <i class="bi bi-link-45deg"></i>
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ESCOLA + EMAIL -->
+
+                <div class="perfil-dados">
+
+                    {% if perfil.escola %}
+
+                        <div>
+
+                            <strong>
+                                Escola:
+                            </strong>
+
+                            <span>
+                                {{ perfil.escola }}
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    {% if user.email %}
+
+                        <div>
+
+                            <strong>
+                                E-mail:
+                            </strong>
+
+                            <span>
+                                {{ user.email }}
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CONTEÚDO
+    ===================================================== -->
+
+    <div class="perfil-conteudo">
+
+
+        <!-- EDITAR -->
+
+        <div class="perfil-editar-area">
+
+            <a
+                href="{% url 'editar_perfil' %}"
+                class="botao-editar-perfil"
+            >
+
+                <i class="bi bi-pencil"></i>
+
+                EDITAR PERFIL
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SOBRE + INSÍGNIAS
+        ================================================= -->
+
+        <div class="perfil-duas-colunas">
+
+
+            <!-- SOBRE -->
+
+            <section class="perfil-card">
+
+                <div class="perfil-card-titulo">
+
+                    <i class="bi bi-person"></i>
+
+                    <h2>
+                        Sobre
+                    </h2>
+
+                </div>
+
+
+                {% if perfil.bio %}
+
+                    <p class="perfil-bio">
+                        {{ perfil.bio }}
+                    </p>
+
+                {% else %}
+
+                    <p class="perfil-vazio-texto">
+                        Você ainda não adicionou uma bio.
+                    </p>
+
+                {% endif %}
+
+
+                {% if perfil.grupo %}
+
+                    <div class="perfil-info">
+
+                        <strong>
+                            Grupo:
+                        </strong>
+
+                        <span>
+                            {{ perfil.grupo }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+
+            <!-- INSÍGNIAS -->
+
+            <section class="perfil-card insignias-card">
+
+                <div class="perfil-card-titulo">
+
+                    <i class="bi bi-award"></i>
+
+                    <h2>
+                        Insígnias
+                    </h2>
+
+                </div>
+
+
+                <div class="insignias-vazio">
+
+                    <i class="bi bi-award"></i>
+
+                    <p>
+                        Você ainda não conquistou nenhuma insígnia.
+                    </p>
+
+                    <span>
+                        Continue participando da Rede Miradas!
+                    </span>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MINHA PRODUÇÃO + CURTAS FAVORITOS
+        ================================================= -->
+
+        <div class="perfil-producao-favoritos">
+
+
+            <!-- =================================================
+                 MINHA PRODUÇÃO
+            ================================================= -->
+
+            {% if perfil.nome_curta_participou or perfil.foto_curta_participou or perfil.link_curta_participou %}
+
+                <section class="perfil-secao minha-producao">
+
+
+                    <div class="perfil-secao-titulo">
+
+                        <h2>
+                            Minha produção
+                        </h2>
+
+                    </div>
+
+
+                    <div class="producao-card">
+
+
+                        <!-- TEXTO -->
+
+                        <div class="producao-texto">
+
+
+                            {% if perfil.nome_curta_participou %}
+
+                                <h3>
+                                    {{ perfil.nome_curta_participou }}
+                                </h3>
+
+                            {% endif %}
+
+
+                            {% if perfil.grupo %}
+
+                                <p class="producao-grupo">
+                                    {{ perfil.grupo }}
+                                </p>
+
+                            {% endif %}
+
+
+                            {% if perfil.link_curta_participou %}
+
+                                <a
+                                    href="{{ perfil.link_curta_participou }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="producao-link"
+                                >
+
+                                    <i class="bi bi-youtube"></i>
+
+                                    ASSISTIR NO YOUTUBE
+
+                                </a>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                        <!-- FOTO -->
+
+                        {% if perfil.foto_curta_participou %}
+
+                            <div class="producao-imagem">
+
+                                <img
+                                    src="{{ perfil.foto_curta_participou.url }}"
+                                    alt="Imagem do curta"
+                                >
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </section>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 CURTAS FAVORITOS
+            ================================================= -->
+
+            <section class="perfil-secao favoritos-secao">
+
+
+                <div class="perfil-secao-titulo">
+
+                    <h2>
+                       Favoritos
+                    </h2>
+
+                </div>
+
+
+                {% if perfil.curtas_favoritos.exists %}
+
+
+                    <div class="curtas-favoritos">
+
+
+                        {% for curta in perfil.curtas_favoritos.all|slice:":4" %}
+
+
+                            <a
+                                href="{{ curta.link_youtube }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="curta-favorito"
+                                style="
+                                    --cor-borda-1: {{ curta.cor_borda_1 }};
+                                    --cor-borda-2: {{ curta.cor_borda_2 }};
+                                "
+                            >
+
+
+                                <div class="curta-favorito-cartaz">
+
+
+                                    {% if curta.cartaz %}
+
+                                        <img
+                                            src="{{ curta.cartaz.url }}"
+                                            alt="{{ curta.nome }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="curta-sem-imagem">
+
+                                            <i class="bi bi-film"></i>
+
+                                        </div>
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                                <div class="curta-favorito-info">
+
+                                    <h3>
+                                        {{ curta.nome }}
+                                    </h3>
+
+
+                                    {% if curta.grupo %}
+
+                                        <p>
+                                            {{ curta.grupo }}
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                            </a>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="favoritos-vazio">
+
+                        <i class="bi bi-film"></i>
+
+                        <p>
+                            Você ainda não escolheu nenhum curta favorito.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </section>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
