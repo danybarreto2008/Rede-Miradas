@@ -22,7 +22,22 @@ body {
     overflow: hidden;
 }
 
-
+.carrossel::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(4, 5, 8, 0.4) 45%,
+        #040508 100%
+    );
+    z-index: 3;
+    pointer-events: none;
+}
 /* Slide */
 .slide {
     position: absolute;
@@ -255,45 +270,86 @@ body {
 }
 
 
-/* Setas */
+/* ===== Setas do carrossel ===== */
+
 .carrossel-anterior,
 .carrossel-proximo {
     position: absolute;
-
     top: 50%;
-
     transform: translateY(-50%);
 
     z-index: 10;
 
-    border: none;
+    width: 42px;
+    height: 42px;
 
-    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
 
-    color: white;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(5px);
 
-    font-size: 30px;
+    color: rgba(255, 255, 255, 0.85);
 
-    width: 45px;
-
-    height: 60px;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1;
 
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease,
+        color 0.3s ease;
 }
 
 
-/* Seta esquerda */
+/* Posição */
+
 .carrossel-anterior {
-    left: 15px;
+    left: 25px;
 }
 
-
-/* Seta direita */
 .carrossel-proximo {
-    right: 15px;
+    right: 25px;
 }
 
 
+/* Animação ao passar o mouse */
+
+.carrossel-anterior:hover,
+.carrossel-proximo:hover {
+    background: rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #ffffff;
+}
+
+
+/* Movimento da seta esquerda */
+
+.carrossel-anterior:hover {
+    transform: translateY(-50%) translateX(-3px);
+}
+
+
+/* Movimento da seta direita */
+
+.carrossel-proximo:hover {
+    transform: translateY(-50%) translateX(3px);
+}
+
+
+/* Quando clicar */
+
+.carrossel-anterior:active,
+.carrossel-proximo:active {
+    transform: translateY(-50%) scale(0.92);
+}
 /* Quando não existir nenhum destaque */
 .sem-destaques {
     height: 100%;
@@ -730,6 +786,21 @@ html, body {
     font-size: 14px;
     margin: 0;
 }
+.slide {
+    position: absolute;
+    inset: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(30px);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+}
 
 .slide-conteudo h1,
 .slide-conteudo p {
@@ -737,7 +808,38 @@ html, body {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+@media (max-width: 600px) {
 
+    .carrossel {
+        height: auto;
+        aspect-ratio: 16 / 9;
+        min-height: 0;
+    }
+
+    .slide {
+        background-size: contain;
+        background-position: center;
+    }
+
+    /* Esconde as setas no celular */
+    .carrossel-anterior,
+    .carrossel-proximo {
+        display: none;
+    }
+
+    /* Ajusta o conteúdo para o espaço menor */
+    .slide-conteudo {
+        padding: 20px;
+    }
+
+    .slide h1 {
+        font-size: 26px;
+    }
+
+    .slide p {
+        font-size: 14px;
+    }
+}
 @media (max-width: 600px) {
     .slide h1 {
         font-size: 26px;

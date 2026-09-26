@@ -1,0 +1,281 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Entrar | Rede Miradas</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'rede_miradas/css/base.css' %}"
+    >
+
+    <link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/login.css' %}"
+    >
+
+</head>
+
+<body class="pagina-autenticacao">
+
+    <main class="autenticacao">
+
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="logo-autenticacao">
+
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                alt="Logo Rede Miradas"
+            >
+
+            <span>
+                REDE <strong>MIRADAS</strong>
+            </span>
+
+        </a>
+
+
+        <!-- Card -->
+        <section class="card-autenticacao">
+
+            <div class="cabecalho-autenticacao">
+
+                <span class="etiqueta-autenticacao">
+                    REDE MIRADAS
+                </span>
+
+                <h1>
+                    Entrar
+                </h1>
+
+                <p>
+                    Acesse sua conta para continuar.
+                </p>
+
+            </div>
+
+
+            <!-- Erros gerais -->
+            {% if form.non_field_errors %}
+
+                <div class="erros-autenticacao">
+
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <form method="post" action="{% url 'account_login' %}">
+
+                {% csrf_token %}
+
+
+                <!-- E-mail -->
+                <div class="campo-autenticacao">
+
+                    <label for="id_login">
+                        E-mail
+                    </label>
+
+                    <div class="campo-com-icone">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input
+                            type="email"
+                            name="login"
+                            id="id_login"
+                            placeholder="seu@email.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                    {% if form.login.errors %}
+
+                        <div class="erro-campo">
+
+                            {% for error in form.login.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Senha -->
+                <div class="campo-autenticacao">
+
+                    <div class="label-senha">
+
+                        <label for="id_password">
+                            Senha
+                        </label>
+
+                        <a href="{% url 'account_reset_password' %}">
+                            Esqueci minha senha
+                        </a>
+
+                    </div>
+
+
+                    <div class="campo-com-icone">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="id_password"
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
+
+                    {% if form.password.errors %}
+
+                        <div class="erro-campo">
+
+                            {% for error in form.password.errors %}
+                                {{ error }}
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Lembrar -->
+                <div class="lembrar-conta">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                        >
+
+                        <span>
+                            Lembrar de mim
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- Botão entrar -->
+                <button
+                    type="submit"
+                    class="btn-autenticacao"
+                >
+                    ENTRAR
+                </button>
+
+
+                <!-- Redirecionamento -->
+                {% if redirect_field_value %}
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{{ redirect_field_value }}"
+                    >
+                {% endif %}
+
+            </form>
+
+
+            <!-- Separador -->
+            <div class="separador">
+
+                <span>OU</span>
+
+            </div>
+
+
+            <!-- SUAP -->
+            <a
+                href="{% provider_login_url 'suap' %}"
+                class="btn-suap"
+            >
+
+                <i class="bi bi-building"></i>
+
+                <span>
+                    ENTRAR COM SUAP
+                </span>
+
+            </a>
+            <a
+                href="{% provider_login_url 'google' %}"
+                class="btn-google"
+            >
+
+                <i class="bi bi-google"></i>
+
+                <span>
+                    ENTRAR COM GOOGLE
+                </span>
+
+            </a>
+
+
+            <!-- Cadastro -->
+            <div class="alternativa-autenticacao">
+
+                <span>
+                    Ainda não tem uma conta?
+                </span>
+
+                <a href="{% url 'account_signup' %}">
+                    CADASTRAR-SE
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- Voltar -->
+        <a href="{% url 'home' %}" class="voltar-site">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Voltar para o site
+
+        </a>
+
+    </main>
+
+</body>
+
+</html>

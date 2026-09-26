@@ -1,0 +1,117 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<link rel="stylesheet" href="{% static 'rede_miradas/css/votacao.css' %}?v=1">
+
+<div class="container py-5">
+
+    <h2 class="text-center text-white fw-bold mb-2">Vote no seu curta favorito</h2>
+
+    {% if voto_usuario %}
+
+        <p class="text-center text-secondary mb-5">
+            Você já votou em <strong class="text-white">{{ voto_usuario.curta.titulo }}</strong>. Obrigado por participar!
+        </p>
+
+    {% else %}
+
+        <p class="text-center text-secondary mb-5">
+            Escolha o curta que mais gostou. Você só pode votar uma vez.
+        </p>
+
+    {% endif %}
+
+    <div class="row g-4 justify-content-center">
+
+        {% for curta in curtas %}
+
+            <div class="col-6 col-md-4 col-lg-3">
+
+                <div class="voto-card">
+
+                    <div class="voto-card-inner">
+                        <img src="{{ curta.cartaz.url }}" alt="{{ curta.titulo }}" class="voto-imagem">
+                    </div>
+
+                    <div class="voto-info">
+
+                        <p class="voto-titulo">{{ curta.titulo }}</p>
+                        <p class="voto-detalhes">{{ curta.grupo }} · {{ curta.turma }}</p>
+
+                        {% if voto_usuario %}
+
+                            <button class="btn-votar" disabled>
+                                {% if voto_usuario.curta_id == curta.id %}Seu voto ✓{% else %}Votar{% endif %}
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                class="btn-votar"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalConfirmarVoto"
+                                data-curta-id="{{ curta.id }}"
+                                data-curta-nome="{{ curta.titulo }}"
+                            >
+                                Votar
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-center text-secondary">Nenhum curta disponível para votação no momento.</p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="modalConfirmarVoto" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content bg-black text-white">
+
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Confirmar voto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post" action="{% url 'votacao' %}">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="curta_id" id="inputCurtaId">
+
+                <div class="modal-body">
+                    Você está votando em <strong id="nomeCurtaModal"></strong>. Esse voto não pode ser desfeito.
+                </div>
+
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-neon">Confirmar voto</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'rede_miradas/js/votacao.js' %}?v=1"></script>
+
+{% endblock %}

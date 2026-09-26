@@ -1,33 +1,82 @@
 from django.db import models
 from django.contrib.auth.models import User
-# pyrefly: ignore [missing-import]
 from django_ckeditor_5.fields import CKEditor5Field
+from django.contrib.auth.models import User
 
 
-# Código que a coordenação distribui pros professores usarem no cadastro
-class CodigoProfessor(models.Model):
+# Curta que participa da votação do júri popular
+class CurtaVotacao(models.Model):
 
-    codigo = models.CharField(
-        max_length=50,
-        default='PROFESSOR2026'
+    cartaz = models.ImageField(
+        upload_to='votacao/'
+    )
+
+    titulo = models.CharField(
+        max_length=200
+    )
+
+    grupo = models.CharField(
+        max_length=150,
+        verbose_name='Nome do grupo'
+    )
+
+    turma = models.CharField(
+        max_length=100
+    )
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
     )
 
     class Meta:
-        verbose_name = 'Código de acesso do professor'
-        verbose_name_plural = 'Código de acesso do professor'
+        verbose_name = 'Curta em votação'
+        verbose_name_plural = 'Curtas em votação'
+        ordering = ['ordem']
 
     def __str__(self):
-        return self.codigo
+        return self.titulo
 
-# Diz se o usuário é Aluno ou Professor
+
+# Voto de um usuário — só pode ter UM voto no total (OneToOneField garante isso)
+class Voto(models.Model):
+
+    usuario = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    curta = models.ForeignKey(
+        CurtaVotacao,
+        on_delete=models.CASCADE,
+        related_name='votos'
+    )
+
+    data_voto = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = 'Voto'
+        verbose_name_plural = 'Votos'
+
+    def __str__(self):
+        return f'{self.usuario} → {self.curta}'
+    
+# Diz se o usuário é Aluno ou Professor, ou comum
 class Perfil(models.Model):
 
     ALUNO = 'aluno'
     PROFESSOR = 'professor'
+    COMUM = 'comum'
 
     TIPO_CHOICES = [
         (ALUNO, 'Aluno'),
         (PROFESSOR, 'Professor'),
+        (COMUM, 'Usuário comum'),
     ]
 
     usuario = models.OneToOneField(
@@ -38,6 +87,72 @@ class Perfil(models.Model):
     tipo = models.CharField(
         max_length=20,
         choices=TIPO_CHOICES
+    )
+
+    foto = models.ImageField(
+        upload_to='perfis/',
+        blank=True,
+        null=True
+    )
+
+    bio = models.TextField(
+        max_length=300,
+        blank=True
+    )
+
+    escola = models.CharField(
+        max_length=150,
+        blank=True
+    )
+
+    grupo = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name='Grupo/equipe'
+    )
+
+    nome_curta_participou = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name='Curta que participei'
+    )
+
+    logo_grupo = models.ImageField(
+    upload_to='logos_grupos/',
+    blank=True,
+    null=True
+    )
+
+    foto_curta_participou = models.ImageField(
+        upload_to='curtas_usuarios/',
+        blank=True,
+        null=True
+    )
+
+    banner = models.ImageField(
+    upload_to='banners_perfil/',
+    blank=True,
+    null=True
+    )
+
+    link_curta_participou = models.URLField(
+        blank=True,
+        verbose_name='Link do YouTube do meu curta'
+    )
+
+    instagram = models.URLField(
+        blank=True
+    )
+
+    link_outra_rede = models.URLField(
+        blank=True,
+        verbose_name='Outra rede social / portfólio'
+    )
+
+    curtas_favoritos = models.ManyToManyField(
+        'Curta',
+        blank=True,
+        related_name='favoritado_por'
     )
 
     class Meta:
@@ -262,6 +377,17 @@ class SecaoCurtas(models.Model):
 
 class Curta(models.Model):
 
+    nome = models.CharField(
+        max_length=200,
+        default='Sem nome'
+    )
+
+    grupo = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name='Nome do grupo'
+    )
+
     cartaz = models.ImageField(
         upload_to='curtas/'
     )
@@ -277,6 +403,7 @@ class Curta(models.Model):
         max_length=7,
         default='#06B6D4'
     )
+
     ativo = models.BooleanField(
         default=True
     )
@@ -291,10 +418,15 @@ class Curta(models.Model):
         ordering = ['ordem']
 
     def __str__(self):
-        return f'Curta {self.id}'
+        return self.nome
 
+    class Meta:
+        verbose_name = 'Curta em destaque'
+        verbose_name_plural = 'Curtas em destaque'
+        ordering = ['ordem']
 
-
+    def __str__(self):
+        return self.nome
 # Modelo do texto da seção final (chamada para ação)
 class SecaoFinal(models.Model):
 

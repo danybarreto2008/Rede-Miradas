@@ -1,14 +1,18 @@
 from pathlib import Path
+import os
+
+from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
-SECRET_KEY = 'MANTENHA_A_SUA_SECRET_KEY_ATUAL_AQUI'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 INSTALLED_APPS = [
@@ -19,8 +23,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'rede_miradas',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth_suap',
+    'allauth.socialaccount.providers.google',
+
+
     'django_ckeditor_5',
 
 ]
@@ -33,6 +46,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -127,7 +141,7 @@ CKEDITOR_5_CONFIGS = {
     },
 }
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -144,17 +158,54 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'account_login'
 
 
-MAILERS = {
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
-    'default': {
+SITE_ID = 1
 
-        'BACKEND':
-            'django.core.mail.backends.console.EmailBackend',
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
+LOGIN_REDIRECT_URL = 'pos_login'
+ACCOUNT_SIGNUP_REDIRECT_URL = 'pos_login'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'suap': {
+        'SUAP_URL': 'https://suap.ifrn.edu.br',
+        'SCOPE': ['identificacao', 'email'],
+        'APP': {
+            'client_id': os.getenv('SUAP_CLIENT_ID'),
+            'secret': os.getenv('SUAP_CLIENT_SECRET'),
+        },
     },
 
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+        },
+    },
 }
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+
+ACCOUNT_SIGNUP_FIELDS = [
+    'email*',
+    'password1*',
+    'password2*',
+]
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'

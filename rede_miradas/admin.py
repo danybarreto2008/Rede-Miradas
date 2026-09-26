@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Destaque, Noticia, BlocoApresentacao, Curta, SecaoCurtas, SecaoFinal, Perfil, CodigoProfessor
+from django.db.models import Count
 from .models import (
     Destaque,
     Noticia,
@@ -8,18 +8,69 @@ from .models import (
     Curta,
     SecaoCurtas,
     SecaoFinal,
+    Perfil,
     TrilhasHero,
     TrilhasFaixaItem,
     TrilhasCard,
-    SubtopicoTrilha
+    SubtopicoTrilha,
+    Voto,
+    CurtaVotacao,
 )
-#login
-@admin.register(CodigoProfessor)
-class CodigoProfessorAdmin(admin.ModelAdmin):
+@admin.register(CurtaVotacao)
+class CurtaVotacaoAdmin(admin.ModelAdmin):
 
     list_display = (
-        'codigo',
+        'titulo',
+        'grupo',
+        'turma',
+        'ordem',
+        'ativo',
+        'quantidade_votos',
     )
+
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+
+    def get_queryset(self, request):
+
+        queryset = super().get_queryset(request)
+
+        return queryset.annotate(
+            quantidade_votos=Count('votos')
+        ).order_by('-quantidade_votos')
+
+    def quantidade_votos(self, obj):
+        return obj.quantidade_votos
+
+    quantidade_votos.short_description = 'Votos'
+    quantidade_votos.admin_order_field = 'quantidade_votos'
+
+
+@admin.register(Voto)
+class VotoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'curta',
+        'usuario',
+        'data_voto',
+    )
+
+    list_filter = (
+        'curta',
+    )
+
+    ordering = (
+        '-data_voto',
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+    
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
 
@@ -172,18 +223,16 @@ class CurtaForm(forms.ModelForm):
 @admin.register(Curta)
 class CurtaAdmin(admin.ModelAdmin):
 
-    form = CurtaForm
-
     list_display = (
-        'id',
-        'link_youtube',
-        'ordem',
+        'nome',
+        'grupo',
         'ativo',
+        'ordem',
     )
 
     list_editable = (
-        'ordem',
         'ativo',
+        'ordem',
     )
 
     ordering = (

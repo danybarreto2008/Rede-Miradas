@@ -1,8 +1,5 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from django.contrib.auth import views as auth_views
-from .views import LoginRedirecionadoView
-
 
 urlpatterns = [
     # Página "Comece por aqui"
@@ -49,14 +46,21 @@ urlpatterns = [
         name='noticia_detalhe'
     ),
     #login
-    path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),
-    path('cadastro/professor/', views.cadastro_professor, name='cadastro_professor'),
+    path('accounts/', include('allauth.urls')),
 
-    path('login/', LoginRedirecionadoView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+    path('pos-login/', views.redirecionar_apos_login, name='pos_login'),
 
     path('login-superadmin/', views.login_superadmin, name='login_superadmin'),
 
     path('painel/aluno/', views.painel_aluno, name='painel_aluno'),
     path('painel/professor/', views.painel_professor, name='painel_professor'),
+
+    path('votacao/', views.votacao, name='votacao'),
+    path('perfil/', views.meu_perfil, name='meu_perfil'),
+
+    path(
+    'perfil/editar/',
+    views.editar_perfil,
+    name='editar_perfil'
+    ),
 ]

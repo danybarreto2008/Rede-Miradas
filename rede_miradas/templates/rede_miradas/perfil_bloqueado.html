@@ -1,0 +1,19 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% block conteudo %}
+
+<div class="container py-5 text-center" style="max-width: 480px;">
+
+    <i class="bi bi-lock text-secondary" style="font-size: 48px;"></i>
+
+    <h2 class="text-white fw-bold mt-3">Perfil disponível só para alunos e professores</h2>
+
+    <p class="text-secondary">
+        Essa área é exclusiva para quem entra com a conta institucional do SUAP. Se você é aluno ou professor do IFRN, entre com sua conta do SUAP para criar seu perfil.
+    </p>
+
+    <a href="{% url 'account_logout' %}" class="btn-neon d-inline-block mt-3">Trocar de conta</a>
+
+</div>
+
+{% endblock %}

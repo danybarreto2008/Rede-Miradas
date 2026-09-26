@@ -1,4 +1,7 @@
-/* Cores principais do projeto */
+/* =========================
+   CORES PRINCIPAIS DO PROJETO
+   ========================= */
+
 :root {
     --bs-body-bg: #000000;
 
@@ -8,7 +11,10 @@
 }
 
 
-/* Texto com gradiente */
+/* =========================
+   TEXTO COM GRADIENTE
+   ========================= */
+
 .gradiente-texto {
     background: linear-gradient(
         90deg,
@@ -24,7 +30,10 @@
 }
 
 
-/* Botão com gradiente */
+/* =========================
+   BOTÃO COM GRADIENTE
+   ========================= */
+
 .btn-neon {
     background: linear-gradient(
         90deg,
@@ -33,7 +42,6 @@
     );
 
     border: none;
-
     color: #fff;
 
     border-radius: 999px;
@@ -63,7 +71,37 @@
 }
 
 
-/* Card escuro */
+/* =========================
+   BOTÕES DA NAVBAR
+   ========================= */
+
+.navbar .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.45);
+
+    color: #ffffff;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.navbar .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: #ffffff;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   CARD ESCURO
+   ========================= */
+
 .card-escuro {
     background: #14102a;
 
@@ -73,7 +111,10 @@
 }
 
 
-/* Bloco de votação */
+/* =========================
+   BLOCO DE VOTAÇÃO
+   ========================= */
+
 .bloco-votacao {
     background: linear-gradient(
         120deg,
@@ -85,7 +126,10 @@
 }
 
 
-/* Fundo do menu lateral */
+/* =========================
+   FUNDO DO MENU LATERAL
+   ========================= */
+
 #menuLateral {
     background: linear-gradient(
         180deg,
@@ -95,7 +139,10 @@
 }
 
 
-/* Links da navbar */
+/* =========================
+   LINKS DA NAVBAR
+   ========================= */
+
 .navbar .nav-link {
     color: #ffffff;
 
@@ -111,22 +158,701 @@
     transform: translateY(-1px);
 }
 
+
+/* =========================
+   ESTRUTURA GERAL
+   ========================= */
+
 html,
 body {
     margin: 0;
     padding: 0;
+
     min-height: 100%;
 }
+
+
+html {
+    scroll-behavior: smooth;
+}
+
 
 body {
     min-height: 100vh;
 }
 
+
 main {
     width: 100%;
 }
 
+
 footer {
     width: 100%;
-    margin-top: 0 !important;
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+.footer {
+    position: relative;
+
+    width: 100%;
+
+    margin-top: 0;
+
+    padding-top: 75px;
+
+    background:
+        radial-gradient(
+            circle at 15% 50%,
+            rgba(139, 47, 247, 0.12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 30%,
+            rgba(34, 211, 238, 0.08),
+            transparent 35%
+        ),
+        #08050f;
+
+    color: #ffffff;
+
+    border-radius: 45px 45px 0 0;
+}
+
+
+/* =========================
+   CONCAVIDADE DO FOOTER
+   ========================= */
+
+.footer::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 150px;
+    height: 55px;
+
+    /*
+       Essa é a cor do fundo que fica
+       atrás do footer.
+    */
+    background: #000000;
+
+    /*
+       Cria a concavidade para baixo.
+    */
+    border-radius: 0 0 75px 75px;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   SETA
+   ========================= */
+
+/* =========================
+   CONCAVIDADE DO FOOTER
+   ========================= */
+
+.footer::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 150px;
+    height: 75px;
+
+    /* mesma cor do fundo do site */
+    background: #040508;
+
+    /*
+       Semicírculo perfeito
+    */
+    border-radius: 0 0 75px 75px;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   SETA
+   ========================= */
+
+.footer-seta {
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 150px;
+    height: 75px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    /*
+       Pequeno ajuste para deixar
+       a seta exatamente no centro
+       visual do semicírculo
+    */
+    padding-bottom: 8px;
+
+    color: var(--azul);
+
+    text-decoration: none;
+
+    z-index: 2;
+}
+
+
+.footer-seta i {
+    font-size: 25px;
+
+    font-weight: bold;
+
+    transition: color 0.3s ease;
+}
+
+
+/* Só muda a cor da seta */
+
+.footer-seta:hover {
+    color: var(--rosa);
+
+    transform: translateX(-50%);
+}
+
+
+.footer-seta:hover i {
+    transform: none;
+}
+
+/* =========================
+   CONTEÚDO DO FOOTER
+   ========================= */
+
+.footer-conteudo {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 0 40px 55px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.7fr
+        1fr
+        1fr
+        1fr;
+
+    gap: 60px;
+}
+
+/* =========================
+   IDENTIDADE
+   ========================= */
+
+.footer-identidade {
+    max-width: 300px;
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+
+.footer-logo {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    font-weight: 400;
+}
+
+
+.footer-logo img {
+    width: 38px;
+
+    height: 38px;
+
+    object-fit: contain;
+}
+
+
+.footer-logo strong {
+    font-weight: 700;
+}
+
+
+.footer-logo:hover {
+    color: #ffffff;
+}
+
+
+/* =========================
+   DESCRIÇÃO
+   ========================= */
+
+.footer-descricao {
+    margin: 0 0 22px;
+
+    color: #aaa0b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   ENDEREÇO
+   ========================= */
+
+.footer-endereco {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.footer-endereco i {
+    color: var(--azul);
+
+    font-size: 16px;
+
+    margin-top: 1px;
+}
+
+
+/* =========================
+   COLUNAS
+   ========================= */
+
+.footer-coluna {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+
+/* =========================
+   TÍTULOS DAS COLUNAS
+   ========================= */
+
+.footer-coluna h3 {
+    margin: 0 0 20px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   DETALHE DOS TÍTULOS
+   ========================= */
+
+.footer-coluna h3::after {
+    content: "";
+
+    display: block;
+
+    width: 28px;
+
+    height: 2px;
+
+    margin-top: 8px;
+
+    background: linear-gradient(
+        90deg,
+        var(--rosa),
+        var(--roxo),
+        var(--azul)
+    );
+
+    border-radius: 5px;
+}
+
+
+/* =========================
+   LINKS DO FOOTER
+   ========================= */
+
+.footer-coluna a {
+    display: block;
+
+    margin-bottom: 13px;
+
+    color: #c8c2cf;
+
+    font-size: 13px;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.footer-coluna a:hover {
+    color: var(--azul);
+
+    transform: translateX(3px);
+}
+
+
+/* =========================
+   PARTE FINAL
+   ========================= */
+
+.footer-final {
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 22px 40px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    color: #777080;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 900px) {
+
+    .footer-conteudo {
+        grid-template-columns:
+            1.5fr
+            1fr
+            1fr;
+
+        gap: 45px;
+    }
+
+
+    .footer-identidade {
+        grid-column: span 3;
+
+        max-width: 400px;
+    }
+
+}
+
+
+/* =========================
+   CELULAR
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .footer {
+        margin-top: 60px;
+
+        border-radius: 30px 30px 0 0;
+    }
+
+
+    .footer-seta {
+        top: -60px;
+
+        width: 120px;
+
+        height: 60px;
+
+        border-radius: 60px 60px 0 0;
+    }
+
+
+    .footer-seta i {
+        font-size: 23px;
+    }
+
+
+    .footer-conteudo {
+        grid-template-columns: 1fr 1fr;
+
+        padding: 50px 25px 40px;
+
+        gap: 40px 30px;
+    }
+
+
+    .footer-identidade {
+        grid-column: span 2;
+
+        max-width: 100%;
+    }
+
+
+    .footer-logo {
+        font-size: 17px;
+    }
+
+
+    .footer-coluna h3 {
+        font-size: 14px;
+    }
+
+
+    .footer-coluna a {
+        font-size: 12px;
+    }
+
+
+    .footer-final {
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 20px 25px;
+    }
+
+}
+
+
+/* =========================
+   CELULAR PEQUENO
+   ========================= */
+
+@media (max-width: 400px) {
+
+    .footer-conteudo {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+
+    .footer-identidade {
+        grid-column: span 1;
+    }
+
+
+    .footer-final {
+        font-size: 10px;
+    }
+
+}
+
+/* =========================
+   MODAL DE SAÍDA
+   ========================= */
+
+.modal-sair {
+    background: #0b0814;
+
+    border: 1px solid rgba(139, 47, 247, 0.35);
+
+    border-radius: 20px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(139, 47, 247, 0.12);
+}
+
+
+/* =========================
+   CABEÇALHO
+   ========================= */
+
+.modal-sair .modal-header {
+    padding: 22px 24px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.modal-sair .modal-title {
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   CORPO
+   ========================= */
+
+.modal-sair .modal-body {
+    padding: 30px 24px;
+
+    text-align: center;
+}
+
+
+.modal-sair-icone {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: rgba(139, 47, 247, 0.12);
+
+    color: var(--azul);
+
+    font-size: 25px;
+}
+
+
+.modal-sair .modal-body p {
+    margin: 0 0 7px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 500;
+}
+
+
+.modal-sair .modal-body span {
+    color: #aaa0b8;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   RODAPÉ DO MODAL
+   ========================= */
+
+.modal-sair .modal-footer {
+    padding: 18px 24px 22px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    gap: 10px;
+}
+
+
+/* =========================
+   CANCELAR
+   ========================= */
+
+.modal-btn-cancelar {
+    padding: 9px 20px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 999px;
+
+    background: transparent;
+
+    color: #ffffff;
+}
+
+
+.modal-btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: rgba(255, 255, 255, 0.35);
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   CONFIRMAR
+   ========================= */
+
+.modal-btn-confirmar {
+    padding: 9px 20px;
+
+    border: none;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
+        90deg,
+        var(--rosa),
+        var(--roxo)
+    );
+
+    color: #ffffff;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.modal-btn-confirmar:hover {
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 18px rgba(255, 47, 214, 0.25);
 }

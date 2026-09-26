@@ -1,0 +1,389 @@
+{% extends 'rede_miradas/base.html' %}
+
+{% load static %}
+
+{% block titulo %}
+    Editar perfil | Rede Miradas
+{% endblock %}
+
+{% block conteudo %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/perfil.css' %}?v=21"
+>
+
+
+<div class="pagina-editar-perfil">
+
+    <div class="editar-container">
+
+
+        <a
+            href="{% url 'meu_perfil' %}"
+            class="voltar-perfil"
+        >
+            <i class="bi bi-arrow-left"></i>
+            VOLTAR PARA O PERFIL
+        </a>
+
+
+
+        <div class="editar-cabecalho">
+
+            <span class="perfil-etiqueta">
+                MEU PERFIL
+            </span>
+
+            <h1>
+                Editar perfil
+            </h1>
+
+            <p>
+                Atualize as informações que aparecem no seu perfil da Rede Miradas.
+            </p>
+
+        </div>
+
+
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            class="formulario-perfil"
+        >
+
+            {% csrf_token %}
+
+
+
+            <!-- FOTO -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    01
+                </span>
+
+                <h2>
+                    Foto de perfil
+                </h2>
+
+                <p>
+                    Escolha uma imagem para representar você.
+                </p>
+
+                {% if perfil.foto %}
+
+                    <img
+                        src="{{ perfil.foto.url }}"
+                        class="preview-imagem-edicao"
+                        alt="Foto atual"
+                    >
+
+                {% endif %}
+
+
+                <div class="campo-formulario">
+
+                    {{ form.foto }}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- BANNER -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    02
+                </span>
+
+                <h2>
+                    Banner do perfil
+                </h2>
+
+                <p>
+                    Escolha a imagem que ficará no fundo do seu perfil.
+                </p>
+
+
+                {% if perfil.banner %}
+
+                    <img
+                        src="{{ perfil.banner.url }}"
+                        class="preview-banner-edicao"
+                        alt="Banner atual"
+                    >
+
+                {% endif %}
+
+
+                <div class="campo-formulario">
+
+                    {{ form.banner }}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- INFORMAÇÕES -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    03
+                </span>
+
+                <h2>
+                    Informações
+                </h2>
+
+
+                <div class="form-grid">
+
+
+                    <div class="campo-formulario">
+
+                        <label>
+                            Escola
+                        </label>
+
+                        {{ form.escola }}
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label>
+                            Grupo / equipe
+                        </label>
+
+                        {{ form.grupo }}
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SOBRE -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    04
+                </span>
+
+                <h2>
+                    Sobre você
+                </h2>
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Bio
+                    </label>
+
+                    {{ form.bio }}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- MINHA PRODUÇÃO -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    05
+                </span>
+
+                <h2>
+                    Minha produção
+                </h2>
+
+                <p>
+                    Mostre um curta do qual você participou.
+                </p>
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Nome do curta
+                    </label>
+
+                    {{ form.nome_curta_participou }}
+
+                </div>
+
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Cartaz ou foto do curta
+                    </label>
+
+
+                    {% if perfil.foto_curta_participou %}
+
+                        <img
+                            src="{{ perfil.foto_curta_participou.url }}"
+                            class="preview-imagem-edicao"
+                            alt="Foto atual do curta"
+                        >
+
+                    {% endif %}
+
+
+                    {{ form.foto_curta_participou }}
+
+                </div>
+
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Link do curta no YouTube
+                    </label>
+
+                    {{ form.link_curta_participou }}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- REDES -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    06
+                </span>
+
+                <h2>
+                    Redes sociais
+                </h2>
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Instagram
+                    </label>
+
+                    {{ form.instagram }}
+
+                </div>
+
+
+
+                <div class="campo-formulario">
+
+                    <label>
+                        Outra rede / portfólio
+                    </label>
+
+                    {{ form.link_outra_rede }}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- FAVORITOS -->
+
+            <section class="editar-bloco">
+
+                <span class="editar-numero">
+                    07
+                </span>
+
+                <h2>
+                    Curtas favoritos
+                </h2>
+
+                <p>
+                    Escolha os curtas que você quer mostrar no seu perfil.
+                </p>
+
+
+                <div class="favoritos-edicao">
+
+                    {% if form.curtas_favoritos.field.queryset.exists %}
+
+                        {{ form.curtas_favoritos }}
+
+                    {% else %}
+
+                        <div class="favoritos-vazio">
+
+                            <i class="bi bi-film"></i>
+
+                            <strong>
+                                Nenhum curta disponível ainda.
+                            </strong>
+
+                            <span>
+                                Quando novos curtas forem publicados na plataforma,
+                                eles aparecerão aqui para você escolher seus favoritos.
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- BOTÕES -->
+
+            <div class="editar-acoes">
+
+                <a
+                    href="{% url 'meu_perfil' %}"
+                    class="botao-cancelar"
+                >
+                    CANCELAR
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="perfil-botao botao-salvar"
+                >
+                    <i class="bi bi-check-lg"></i>
+                    SALVAR ALTERAÇÕES
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
