@@ -38,6 +38,13 @@ urlpatterns = [
         name='trilhas_visao_geral'
     ),
 
+    # Página "Como tudo começou" (história do projeto)
+    path(
+        'como-tudo-comecou/',
+        views.como_tudo_comecou,
+        name='como_tudo_comecou'
+    ),
+
     # Página individual de uma notícia
     # (sempre por último, pois <slug:slug> combina com qualquer texto)
     path(
@@ -45,6 +52,7 @@ urlpatterns = [
         views.noticia_detalhe,
         name='noticia_detalhe'
     ),
+    
     #login
     path('accounts/', include('allauth.urls')),
 

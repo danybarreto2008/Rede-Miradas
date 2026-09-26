@@ -406,3 +406,7 @@ def trilhas_visao_geral(request):
             'cards': cards,
         }
     )
+
+# View da página "Como Tudo Começou" — conteúdo 100% estático, escrito direto no HTML
+def como_tudo_comecou(request):
+    return render(request, 'rede_miradas/como_tudo_comecou.html')
