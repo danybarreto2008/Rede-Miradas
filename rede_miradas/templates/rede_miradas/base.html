@@ -93,6 +93,13 @@
                         NOTÍCIAS
                     </a>
 
+                    <a
+                        class="nav-link"
+                        href="{% url 'como_tudo_comecou' %}"
+                    >
+                        COMO TUDO COMEÇOU
+                    </a>
+
                 </div>
 
 
@@ -282,6 +289,13 @@
                 NOTÍCIAS
             </a>
 
+            <a
+                class="nav-link"
+                href="{% url 'como_tudo_comecou' %}"
+            >
+                COMO TUDO COMEÇOU
+            </a>
+
 
             {% if user.is_authenticated %}
 
@@ -448,7 +462,7 @@
                     Institucional
                 </h3>
 
-                <a href="#">
+                <a href="{% url 'como_tudo_comecou' %}">
                     Sobre o projeto
                 </a>
 

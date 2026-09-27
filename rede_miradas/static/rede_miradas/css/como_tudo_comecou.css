@@ -1,0 +1,291 @@
+/* =========================================================
+   PÁGINA SOBRE — HISTÓRIA DO PROJETO MIRADAS
+   Página 100% estática (sem conteúdo cadastrado pelo admin).
+   Segue a mesma identidade visual do resto do site.
+   ========================================================= */
+
+.pagina-sobre {
+    width: 100%;
+
+    background-color: #03050d;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.sobre-hero {
+    width: 100%;
+    padding: 80px 0 40px;
+
+    background-color: #03050d;
+    background-image: radial-gradient(
+        circle at 50% 0%,
+        rgba(139, 47, 247, 0.22),
+        transparent 60%
+    );
+}
+
+.sobre-selo {
+    display: inline-block;
+
+    padding: 6px 18px;
+
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    border-radius: 999px;
+}
+
+.sobre-hero h1 {
+    font-size: 40px;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sobre-hero-texto {
+    max-width: 640px;
+
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================================================
+   SEÇÕES GERAIS
+   ========================================================= */
+
+.sobre-secao h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.sobre-tag {
+    display: inline-block;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    color: #22d3ee;
+}
+
+.sobre-paragrafo {
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.sobre-card-imagem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 220px;
+    text-align: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* =========================================================
+   MISSÃO (fundo escuro com destaque)
+   ========================================================= */
+
+.sobre-secao-escura {
+    width: 100%;
+
+    background-color: #060815;
+    background-image: radial-gradient(
+        circle at 20% 20%,
+        rgba(34, 211, 238, 0.1),
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 80% 80%,
+        rgba(255, 47, 214, 0.1),
+        transparent 50%
+    );
+
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sobre-secao-escura h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.sobre-pilar {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sobre-pilar:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(124, 58, 237, 0.25);
+}
+
+.sobre-pilar-emoji {
+    font-size: 32px;
+}
+
+
+/* =========================================================
+   CURTAS EM DESTAQUE
+   ========================================================= */
+
+.sobre-curta {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sobre-curta:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(124, 58, 237, 0.25);
+}
+
+.sobre-curta-imagem {
+    width: 100%;
+    height: 200px;
+
+    background: linear-gradient(160deg, #1a1436, #0a0818);
+    position: relative;
+    overflow: hidden;
+}
+
+.sobre-curta-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* =========================================================
+   IMAGENS DE DESTAQUE (Prêmio LED, curta premiado)
+   ========================================================= */
+
+.sobre-premio-imagem {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+
+    background: linear-gradient(160deg, #1a1436, #0a0818);
+    position: relative;
+}
+
+.sobre-premio-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* Enquanto a imagem real não é adicionada, mostra um aviso discreto */
+.sem-imagem img {
+    display: none;
+}
+
+.sem-imagem::after {
+    content: "Foto ainda não adicionada";
+
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* =========================================================
+   NÚMEROS
+   ========================================================= */
+
+.sobre-numero {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   CHAMADA FINAL
+   ========================================================= */
+
+.sobre-cta {
+    width: 100%;
+
+    background-color: #03050d;
+    background-image: radial-gradient(
+        circle at 50% 100%,
+        rgba(255, 47, 214, 0.15),
+        transparent 60%
+    );
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sobre-cta h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .sobre-hero {
+        padding: 60px 0 30px;
+    }
+
+    .sobre-hero h1 {
+        font-size: 26px;
+    }
+
+    .sobre-hero-texto {
+        font-size: 15px;
+    }
+
+    .sobre-secao h2,
+    .sobre-secao-escura h2,
+    .sobre-cta h2 {
+        font-size: 22px;
+    }
+
+    .sobre-numero {
+        font-size: 28px;
+    }
+
+    .sobre-card-imagem {
+        min-height: 160px;
+    }
+}
