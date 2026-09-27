@@ -10,7 +10,7 @@
 
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/perfil.css' %}?v=22"
+    href="{% static 'rede_miradas/css/perfil.css' %}?v=23"
 >
 
 
@@ -262,38 +262,37 @@
 
             </section>
 
+<!-- INSÍGNIAS -->
+        <section class="perfil-card insignias-card">
 
+            <div class="perfil-card-titulo">
+                <i class="bi bi-award"></i>
+                <h2>Insígnias</h2>
+            </div>
 
-            <!-- INSÍGNIAS -->
+            {% if selos_conquistados %}
 
-            <section class="perfil-card insignias-card">
-
-                <div class="perfil-card-titulo">
-
-                    <i class="bi bi-award"></i>
-
-                    <h2>
-                        Insígnias
-                    </h2>
-
+                <div class="insignias-lista">
+                    {% for selo in selos_conquistados %}
+                        <img
+                            src="{% static selo.imagem %}"
+                            alt="{{ selo.nome }}"
+                            title="{{ selo.nome }}"
+                        >
+                    {% endfor %}
                 </div>
 
+            {% else %}
 
                 <div class="insignias-vazio">
-
                     <i class="bi bi-award"></i>
-
-                    <p>
-                        Você ainda não conquistou nenhuma insígnia.
-                    </p>
-
-                    <span>
-                        Continue participando da Rede Miradas!
-                    </span>
-
+                    <p>Você ainda não conquistou nenhuma insígnia.</p>
+                    <span>Continue participando da Rede Miradas!</span>
                 </div>
 
-            </section>
+            {% endif %}
+
+        </section>
 
         </div>
 

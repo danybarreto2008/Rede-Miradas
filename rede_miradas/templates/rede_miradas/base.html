@@ -23,7 +23,7 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'rede_miradas/css/base.css' %}?v=1"
+        href="{% static 'rede_miradas/css/base.css' %}?v=2"
     >
 
 </head>
@@ -36,8 +36,8 @@
         <div class="container-fluid px-4 px-lg-5">
 
             <!-- Logo -->
-            <a
-                class="navbar-brand d-flex align-items-center gap-2"
+            
+                <a class="navbar-brand d-flex align-items-center gap-2"
                 href="{% url 'home' %}"
             >
 
@@ -72,22 +72,22 @@
                 <!-- Links centralizados -->
                 <div class="position-absolute start-50 translate-middle-x d-flex align-items-center gap-4">
 
-                    <a
-                        class="nav-link"
+                    
+                       <a class="nav-link"
                         href="{% url 'home' %}"
                     >
                         COMECE POR AQUI
                     </a>
 
-                    <a
-                        class="nav-link"
+                    
+                       <a class="nav-link"
                         href="{% url 'inicial_trilhas' %}"
                     >
                         TRILHAS DE APRENDIZAGEM
                     </a>
 
-                    <a
-                        class="nav-link"
+                    
+                        <a class="nav-link"
                         href="{% url 'noticias' %}"
                     >
                         NOTÍCIAS
@@ -102,8 +102,8 @@
                     {% if user.is_authenticated %}
 
                         <!-- Meu perfil -->
-                        <a
-                            class="nav-link"
+                        
+                            <a class="nav-link"
                             href="{% url 'meu_perfil' %}"
                         >
                             MEU PERFIL
@@ -133,8 +133,8 @@
                     {% else %}
 
                         <!-- Entrar -->
-                        <a
-                            class="btn btn-outline-light rounded-pill px-3"
+                        
+                           <a class="btn btn-outline-light rounded-pill px-3"
                             href="{% url 'account_login' %}"
                         >
                             ENTRAR
@@ -142,8 +142,8 @@
 
 
                         <!-- Cadastrar -->
-                        <a
-                            class="btn btn-neon rounded-pill px-3"
+                        
+                            <a class="btn btn-neon rounded-pill px-3"
                             href="{% url 'account_signup' %}"
                         >
                             CADASTRAR-SE
@@ -166,8 +166,7 @@
     aria-labelledby="modalSairLabel"
     aria-hidden="true"
 >
-
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered modal-selo-dialog">
 
         <div class="modal-content modal-sair">
 
@@ -262,22 +261,22 @@
 
         <div class="offcanvas-body d-flex flex-column gap-3">
 
-            <a
-                class="nav-link"
+            
+               <a  class="nav-link"
                 href="{% url 'home' %}"
             >
                 COMECE POR AQUI
             </a>
 
-            <a
-                class="nav-link"
+            
+                <a class="nav-link"
                 href="{% url 'inicial_trilhas' %}"
             >
                 TRILHAS DE APRENDIZAGEM
             </a>
 
-            <a
-                class="nav-link"
+            
+               <a class="nav-link"
                 href="{% url 'noticias' %}"
             >
                 NOTÍCIAS
@@ -287,8 +286,8 @@
             {% if user.is_authenticated %}
 
                 <!-- Meu perfil -->
-                <a
-                    class="nav-link"
+                
+                   <a class="nav-link"
                     href="{% url 'meu_perfil' %}"
                 >
                     MEU PERFIL
@@ -317,8 +316,8 @@
             {% else %}
 
                 <!-- Entrar -->
-                <a
-                    class="btn btn-outline-light rounded-pill px-3 w-100"
+                
+                   <a class="btn btn-outline-light rounded-pill px-3 w-100"
                     href="{% url 'account_login' %}"
                 >
                     ENTRAR
@@ -326,8 +325,8 @@
 
 
                 <!-- Cadastrar -->
-                <a
-                    class="btn btn-neon rounded-pill px-3 w-100"
+                
+                    <a class="btn btn-neon rounded-pill px-3 w-100"
                     href="{% url 'account_signup' %}"
                 >
                     CADASTRAR-SE
@@ -353,8 +352,8 @@
     <footer class="footer">
 
         <!-- Aba de voltar ao topo -->
-        <a
-            href="#"
+        
+          <a  href="#"
             class="footer-seta"
             aria-label="Voltar ao topo"
         >
@@ -367,7 +366,7 @@
             <!-- IDENTIDADE -->
             <div class="footer-identidade">
 
-                <a
+                
                     href="{% url 'home' %}"
                     class="footer-logo"
                 >
@@ -486,6 +485,103 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     ></script>
+
+    <!-- Modal do selo conquistado -->
+    {% if selo_pendente %}
+    <div
+        class="modal fade"
+        id="modalSelo"
+        tabindex="-1"
+        aria-labelledby="modalSeloLabel"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content modal-selo">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSeloLabel">
+                        Novo selo conquistado!
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="selo-visual">
+                        <div class="selo-glow"></div>
+                        <img
+                            src="{% static 'rede_miradas/img/selos/estrela.png' %}"
+                            class="selo-estrela"
+                            alt=""
+                        >
+                        <img
+                            src="{% static selo_pendente_info.imagem %}"
+                            alt="{{ selo_pendente_info.nome }}"
+                            class="selo-imagem"
+                        >
+                    </div>
+
+                    <p>
+                        "{{ selo_pendente_info.nome }}"
+                    </p>
+
+                    <span>
+                        {{ selo_pendente_info.descricao }}
+                    </span>
+
+                </div>
+
+                <div class="modal-footer flex-column">
+
+                    
+                       
+                   <a href="{% url 'meu_perfil' %}"
+                    class="btn btn-selo-perfil"
+                    id="link-ver-perfil-selo"
+                    data-id="{{ selo_pendente.id }}"
+                >
+                    VER MEU PERFIL
+                </a>
+
+                    
+                       <a href="{% url 'home' %}"
+                        class="link-voltar-inicio-selo"
+                        id="link-voltar-inicio-selo"
+                        data-id="{{ selo_pendente.id }}">
+                        voltar à página inicial <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalSelo = new bootstrap.Modal(document.getElementById('modalSelo'));
+        modalSelo.show();
+
+        function confirmarSelo(id) {
+            fetch(`/selos/confirmar/${id}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+            });
+        }
+
+        document.getElementById('link-ver-perfil-selo').addEventListener('click', function () {
+            confirmarSelo(this.dataset.id);
+        });
+
+        document.getElementById('link-voltar-inicio-selo').addEventListener('click', function () {
+            confirmarSelo(this.dataset.id);
+        });
+    });
+    </script>
+    {% endif %}
 
 </body>
 

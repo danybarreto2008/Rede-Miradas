@@ -3,7 +3,49 @@ from django.contrib.auth.models import User
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 
+# Registro de quem ganhou qual selo e quando (o conteúdo do selo fica em selos.py)
+class SeloConquistado(models.Model):
 
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='selos_conquistados'
+    )
+
+    selo = models.SlugField(
+        max_length=50,
+        help_text='Identificador do selo, definido em rede_miradas/selos.py'
+    )
+
+    data_conquista = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    visualizado = models.BooleanField(
+        default=False
+    )
+
+    class Meta:
+        verbose_name = 'Selo conquistado'
+        verbose_name_plural = 'Selos conquistados'
+        unique_together = ('usuario', 'selo')
+        ordering = ['-data_conquista']
+
+    def __str__(self):
+        return f'{self.usuario} → {self.selo}'
+
+
+def conceder_selo(usuario, slug):
+    """
+    Concede um selo (pelo slug definido em selos.py) ao usuário, se ele
+    ainda não tiver. Sua amiga usa a mesma função pro selo de trilha:
+    conceder_selo(request.user, 'trilha-concluida')
+    """
+    conquista, criado = SeloConquistado.objects.get_or_create(
+        usuario=usuario,
+        selo=slug
+    )
+    return conquista if criado else None
 # Curta que participa da votação do júri popular
 class CurtaVotacao(models.Model):
 

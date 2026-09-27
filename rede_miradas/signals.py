@@ -2,6 +2,18 @@ from allauth.account.signals import user_signed_up
 from allauth.socialaccount.signals import pre_social_login
 from django.dispatch import receiver
 from .models import Perfil
+from .models import Perfil, conceder_selo
+
+@receiver(user_signed_up)
+def criar_perfil_ao_cadastrar(sender, request, user, **kwargs):
+    sociallogin = kwargs.get('sociallogin')
+    if not sociallogin:
+        return
+    if hasattr(user, 'perfil'):
+        return
+    dados = sociallogin.account.extra_data
+    Perfil.objects.get_or_create(usuario=user, defaults={'tipo': _tipo_por_dados(dados)})
+    conceder_selo(user, 'primeiro-login')
 
 
 def _tipo_por_dados(dados):
