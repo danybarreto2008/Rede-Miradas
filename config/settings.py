@@ -68,11 +68,10 @@ TEMPLATES = [
         'OPTIONS': {
 
             'context_processors': [
-
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
+                'rede_miradas.context_processors.selo_pendente',
             ],
 
         },
@@ -209,3 +208,4 @@ ACCOUNT_SIGNUP_FIELDS = [
 ]
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+

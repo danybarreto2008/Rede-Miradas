@@ -239,42 +239,6 @@ footer {
     transform: translateX(-50%);
 
     width: 150px;
-    height: 55px;
-
-    /*
-       Essa é a cor do fundo que fica
-       atrás do footer.
-    */
-    background: #000000;
-
-    /*
-       Cria a concavidade para baixo.
-    */
-    border-radius: 0 0 75px 75px;
-
-    z-index: 1;
-}
-
-
-/* =========================
-   SETA
-   ========================= */
-
-/* =========================
-   CONCAVIDADE DO FOOTER
-   ========================= */
-
-.footer::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: 150px;
     height: 75px;
 
     /* mesma cor do fundo do site */
@@ -855,4 +819,155 @@ footer {
 
     box-shadow:
         0 0 18px rgba(255, 47, 214, 0.25);
+}
+
+
+/* =========================
+   MODAL DO SELO CONQUISTADO
+   ========================= */
+
+.modal-dialog.modal-dialog-centered {
+    max-width: 320px; /* deixa o card bem estreito */
+}
+
+.modal-selo {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 0;
+    border: 3px solid transparent;
+
+    background-image:
+        linear-gradient(#FFFFFF, #FFFFFF),
+        linear-gradient(135deg, #FFD700, #FF8C00);
+
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+
+    box-shadow: 0 0 10px 0.5px white;
+    overflow: hidden;
+}
+
+/* Cabeçalho */
+.modal-selo .modal-header {
+    border-bottom: none;
+    justify-content: center;
+    padding: 12px 10px 4px;
+}
+
+.modal-selo .modal-title {
+    color: #0B1B3F;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Área do selo */
+.selo-visual {
+    position: relative;
+    width: 220px;
+    height: 180px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selo-glow {
+    position: absolute;
+    width: 135px;
+    height: 135px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.35) 0%, rgba(255, 215, 0, 0) 70%);
+    filter: blur(5px);
+    z-index: 1;
+}
+
+.selo-estrela {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    object-fit: contain;
+    opacity: 0.9;
+    z-index: 2;
+    animation: girar-estrela-selo 14s linear infinite;
+}
+
+.selo-imagem {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    object-fit: contain;
+    z-index: 3;
+}
+
+@keyframes girar-estrela-selo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Texto */
+.modal-selo .modal-body {
+    text-align: center;
+    padding: 0 15px 8px;
+}
+
+.modal-selo .modal-body p {
+    color: #000c29;
+    font-size: 18px;       /* maior e forte */
+    font-weight: 800;
+    margin: 6px 0;
+}
+
+.modal-selo .modal-body span {
+    display: block;
+    color: #000c29;
+    font-size: 18px;
+    line-height: 1.35;
+    margin: 0;
+}
+
+/* Rodapé */
+.modal-selo .modal-footer {
+    border-top: none;
+    justify-content: center;
+    padding: 8px 12px 12px;
+    gap: 4px;
+    flex-direction: column;
+}
+
+/* Botão perfil */
+.btn-selo-perfil {
+    background: #000c29;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 22px;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-selo-perfil:hover {
+    background: #FF8C00;
+    color: #FFFFFF;
+}
+
+/* Link voltar */
+.link-voltar-inicio-selo {
+    margin-top: 3px;
+    font-size: 10px;
+    color: #000c29;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s ease;
+}
+
+.link-voltar-inicio-selo:hover {
+    color: #FF8C00;
+}
+
+.link-voltar-inicio-selo i {
+    font-size: 9px;
 }

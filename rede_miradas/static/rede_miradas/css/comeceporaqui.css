@@ -964,3 +964,147 @@ footer {
     }
 
 }
+
+.aviso-insignia {
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 9999;
+
+    width: 390px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 20px;
+
+    background: #0d0d14;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(139, 47, 247, 0.12);
+}
+
+
+.aviso-insignia-imagem {
+    width: 75px;
+    height: 75px;
+
+    flex-shrink: 0;
+}
+
+
+.aviso-insignia-imagem img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.aviso-insignia-conteudo {
+    flex: 1;
+}
+
+
+.aviso-insignia-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #999;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+
+.aviso-insignia-conteudo h3 {
+    margin: 0 0 7px;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 400;
+
+    line-height: 1.4;
+}
+
+
+.aviso-insignia-conteudo h3 strong {
+    font-weight: 700;
+}
+
+
+.aviso-insignia-conteudo p {
+    margin: 0 0 15px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.aviso-insignia-conteudo button {
+    border: 0;
+
+    padding: 8px 17px;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        90deg,
+        #8b2ff7,
+        #22d3ee
+    );
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.aviso-insignia-conteudo button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 18px rgba(139, 47, 247, 0.35);
+}
+
+@media (max-width: 600px) {
+
+    .aviso-insignia {
+
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+
+        width: auto;
+
+        padding: 16px;
+
+    }
+
+
+    .aviso-insignia-imagem {
+        width: 60px;
+        height: 60px;
+    }
+
+}

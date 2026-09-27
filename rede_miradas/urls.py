@@ -71,4 +71,6 @@ urlpatterns = [
     views.editar_perfil,
     name='editar_perfil'
     ),
+    path('selos/confirmar/<int:conquista_id>/', views.confirmar_selo, name='confirmar_selo'),
+
 ]

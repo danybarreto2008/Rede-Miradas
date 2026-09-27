@@ -2,14 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage
-#imports do login
+from django.views.decorators.http import require_POST
+
+# imports do login
 from django.contrib.auth import login as auth_login, authenticate
-from django.contrib.auth.decorators import login_required
-from .models import Perfil
 from django.contrib.auth.decorators import login_required
 from .forms import PerfilForm
 
+from .selos import SELOS
+
 from .models import (
+    Perfil,
     Destaque,
     Noticia,
     BlocoApresentacao,
@@ -20,10 +23,24 @@ from .models import (
     TrilhasFaixaItem,
     TrilhasCard,
     Voto,
-    CurtaVotacao
+    CurtaVotacao,
+    SeloConquistado,
+    conceder_selo,
 )
 
 POSTS_POR_PAGINA = 6
+
+
+@login_required
+@require_POST
+def confirmar_selo(request, conquista_id):
+    SeloConquistado.objects.filter(
+        id=conquista_id,
+        usuario=request.user
+    ).update(visualizado=True)
+    return HttpResponse(status=204)
+
+
 @login_required
 def meu_perfil(request):
 
@@ -74,6 +91,11 @@ def meu_perfil(request):
             'cor': 'verde'
         })
 
+    selos_conquistados = [
+        SELOS[c.selo] for c in SeloConquistado.objects.filter(usuario=request.user)
+        if c.selo in SELOS
+    ]
+
     return render(
         request,
         'rede_miradas/meu_perfil.html',
@@ -81,9 +103,11 @@ def meu_perfil(request):
             'perfil': perfil,
             'favoritos': favoritos,
             'selos': selos,
+            'selos_conquistados': selos_conquistados,
             'voto': voto,
         }
     )
+
 
 @login_required
 def editar_perfil(request):
@@ -122,6 +146,7 @@ def editar_perfil(request):
         }
     )
 
+
 @login_required
 def votacao(request):
 
@@ -137,13 +162,15 @@ def votacao(request):
         curta = get_object_or_404(CurtaVotacao, id=curta_id)
 
         Voto.objects.create(usuario=request.user, curta=curta)
+        conceder_selo(request.user, 'primeiro-voto')
 
         return redirect('votacao')
 
     return render(request, 'rede_miradas/votacao.html', {
         'curtas': curtas,
         'voto_usuario': voto_usuario,
-})
+    })
+
 
 @login_required
 def redirecionar_apos_login(request):
@@ -157,6 +184,7 @@ def redirecionar_apos_login(request):
         return redirect('painel_aluno')
 
     return redirect('home')
+
 
 def login_superadmin(request):
 
@@ -227,7 +255,6 @@ def pagina_noticias(request):
 
     noticias_publicadas = Noticia.objects.filter(publicada=True)
 
-    # Notícia em destaque principal
     destaque = noticias_publicadas.filter(
         destaque=True
     ).order_by('-data_publicacao', '-id').first()
@@ -236,7 +263,6 @@ def pagina_noticias(request):
     if destaque:
         disponiveis = disponiveis.exclude(id=destaque.id)
 
-    # Destaques secundários
     destaques_secundarios = disponiveis.filter(
         destaque_secundario=True
     ).order_by('-data_publicacao', '-id')
@@ -256,11 +282,9 @@ def pagina_noticias(request):
 
     disponiveis = disponiveis.order_by('-data_publicacao', '-id')
 
-    # As 3 mais recentes vão para a seção "Últimas notícias"
     ids_ultimas = list(disponiveis.values_list('id', flat=True)[:3])
     noticias = disponiveis.filter(id__in=ids_ultimas).order_by('-data_publicacao', '-id')
 
-    # O resto vai para a seção "Outros posts", paginada
     outros = disponiveis.exclude(id__in=ids_ultimas)
 
     paginator = Paginator(outros, POSTS_POR_PAGINA)
@@ -308,7 +332,6 @@ def carregar_mais_noticias(request):
 
     disponiveis = disponiveis.order_by('-data_publicacao', '-id')
 
-    # IDs das 3 notícias que já aparecem em "Últimas notícias"
     ids_ultimas = list(disponiveis.values_list('id', flat=True)[:3])
 
     outros = disponiveis.exclude(id__in=ids_ultimas)
@@ -319,8 +342,6 @@ def carregar_mais_noticias(request):
     try:
         pagina = paginator.page(numero_pagina)
     except EmptyPage:
-        # Não existe mais nenhuma página além dessa —
-        # devolve vazio para o botão "Carregar mais" saber que acabou
         return HttpResponse('')
 
     return render(
@@ -339,7 +360,6 @@ def noticia_detalhe(request, slug):
         publicada=True
     )
 
-    # Primeiro tenta notícias da mesma categoria
     da_mesma_categoria = list(
         Noticia.objects.filter(
             categoria=noticia.categoria,
@@ -349,8 +369,6 @@ def noticia_detalhe(request, slug):
         ).order_by('-data_publicacao', '-id')[:3]
     )
 
-    # Se não tiver 3 da mesma categoria, completa com outras notícias
-    # recentes do site (de qualquer categoria)
     if len(da_mesma_categoria) < 3:
 
         ids_ja_escolhidos = [n.id for n in da_mesma_categoria] + [noticia.id]
