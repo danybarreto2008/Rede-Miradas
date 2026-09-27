@@ -2,147 +2,427 @@
 {% load socialaccount %}
 
 <!DOCTYPE html>
-<html lang="pt-br" data-bs-theme="dark">
+<html lang="pt-br">
 
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Criar conta | Rede Miradas</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{% static 'rede_miradas/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'rede_miradas/css/login.css' %}">
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- CSS do login -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'rede_miradas/css/login-colagem.css' %}?v=3"
+    >
 
 </head>
 
-<body class="pagina-autenticacao">
 
-    <main class="autenticacao">
-
-        <a href="{% url 'home' %}" class="logo-autenticacao">
-
-            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" alt="Logo Rede Miradas">
-
-            <span>REDE <strong>MIRADAS</strong></span>
-
-        </a>
+<body class="pagina-login-split">
 
 
-        <section class="card-autenticacao">
+    <div class="login-split">
 
-            <div class="cabecalho-autenticacao">
 
-                <span class="etiqueta-autenticacao">REDE MIRADAS</span>
+        <!-- =====================================================
+             LADO ESQUERDO — COLAGEM
+             ===================================================== -->
 
-                <h1>Criar conta</h1>
+        <div class="login-colagem">
 
-                <p>Crie sua conta para participar da votação.</p>
+            <img
+                src="{% static 'rede_miradas/img/login/colagem.jpg' %}"
+                alt="Colagem Rede Miradas"
+            >
+
+        </div>
+
+
+
+        <!-- =====================================================
+             LADO DIREITO — CRIAR CONTA
+             ===================================================== -->
+
+        <div class="login-form-lado">
+
+
+            <!-- =================================================
+                 TRIÂNGULOS
+                 ================================================= -->
+
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-superior-esquerdo"
+                alt=""
+            >
+
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-superior-direito"
+                alt=""
+            >
+
+            <img
+                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-inferior"
+                alt=""
+            >
+
+
+
+            <!-- =================================================
+                 CONTEÚDO
+                 ================================================= -->
+
+            <div class="login-form-conteudo">
+
+
+                <!-- LOGO -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="logo-login-split"
+                >
+                    REDE <strong>MIRADAS</strong>
+                </a>
+
+
+
+                <!-- TÍTULO -->
+
+                <h1>
+                    Crie sua conta para participar
+                </h1>
+
+
+
+                <!-- =================================================
+                     ERRO GERAL
+                     ================================================= -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="erros-login-split">
+
+                        {% for error in form.non_field_errors %}
+
+                            <p>
+                                {{ error }}
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     FORMULÁRIO
+                     ================================================= -->
+
+                <form
+                    method="post"
+                    action="{% url 'account_signup' %}"
+                    id="form-criar-conta"
+                >
+
+                    {% csrf_token %}
+
+
+
+                    <!-- =================================================
+                         E-MAIL
+                         ================================================= -->
+
+                    <div class="campo-login-split">
+
+                        <label for="id_email">
+                            E-mail
+                        </label>
+
+                        <div class="campo-com-icone">
+
+                            <i class="bi bi-person icone-campo"></i>
+
+                            <input
+                                type="email"
+                                name="email"
+                                id="id_email"
+                                autocomplete="email"
+                                placeholder="Digite seu e-mail"
+                                required
+                            >
+
+                        </div>
+
+                        {% if form.email.errors %}
+
+                            <div class="erro-campo-login-split">
+
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         SENHA
+                         ================================================= -->
+                    <div class="campo-login-split campo-senha-cadastro">
+
+                        <label for="id_password1">
+                            Senha
+                        </label>
+
+                        <div class="campo-com-icone">
+
+                            <i
+                                class="bi bi-eye icone-campo icone-senha botao-olho-senha"
+                                data-target="id_password1"
+                            ></i>
+
+                            <input
+                                type="password"
+                                name="password1"
+                                id="id_password1"
+                                autocomplete="new-password"
+                                placeholder="Crie uma senha"
+                                required
+                            >
+
+                        </div>
+
+                        {% if form.password1.errors %}
+
+                            <div class="erro-campo-login-split">
+
+                                {% for error in form.password1.errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <div class="campo-login-split campo-senha-cadastro">
+
+                        <label for="id_password2">
+                            Confirmar senha
+                        </label>
+
+                        <div class="campo-com-icone">
+
+                            <i
+                                class="bi bi-eye icone-campo icone-senha botao-olho-senha"
+                                data-target="id_password2"
+                            ></i>
+
+                            <input
+                                type="password"
+                                name="password2"
+                                id="id_password2"
+                                autocomplete="new-password"
+                                placeholder="Confirme sua senha"
+                                required
+                            >
+
+                        </div>
+
+                        {% if form.password2.errors %}
+
+                            <div class="erro-campo-login-split">
+
+                                {% for error in form.password2.errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         BOTÃO CRIAR CONTA
+                         ================================================= -->
+
+                    <button
+                        type="submit"
+                        class="btn-login-split btn-criar-conta"
+                    >
+                        <span>Criar conta</span>
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- =================================================
+                     SEPARADOR
+                     ================================================= -->
+
+                <div class="separador-login-split">
+
+                    <span>
+                        Ou acessar com:
+                    </span>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SUAP
+                     ================================================= -->
+
+                <a
+                    href="{% provider_login_url 'suap' %}"
+                    class="btn-social-login-split btn-suap"
+                >
+
+                    <i class="bi bi-building"></i>
+
+                    <span>
+                        Entrar com SUAP
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     GOOGLE
+                     ================================================= -->
+
+                <a
+                    href="{% provider_login_url 'google' %}"
+                    class="btn-social-login-split btn-google"
+                >
+
+                    <i class="bi bi-google"></i>
+
+                    <span>
+                        Entrar com Google
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     ENTRAR
+                     ================================================= -->
+
+                <div class="alternativa-login-split">
+
+                    <span>
+                        Já tem uma conta?
+                    </span>
+
+                    <a href="{% url 'account_login' %}">
+                        Entrar
+                    </a>
+
+                </div>
+
 
             </div>
 
 
-            {% if form.non_field_errors %}
-
-                <div class="erros-autenticacao">
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-
-            {% endif %}
+        </div>
 
 
-            <form method="post" action="{% url 'account_signup' %}">
-
-                {% csrf_token %}
-
-                <div class="campo-autenticacao">
-
-                    <label for="id_email">E-mail</label>
-
-                    <div class="campo-com-icone">
-                        <i class="bi bi-envelope"></i>
-                        <input type="email" name="email" id="id_email" placeholder="seu@email.com" autocomplete="email" required>
-                    </div>
-
-                    {% if form.email.errors %}
-                        <div class="erro-campo">
-                            {% for error in form.email.errors %}{{ error }}{% endfor %}
-                        </div>
-                    {% endif %}
-
-                </div>
-
-                <div class="campo-autenticacao">
-
-                    <label for="id_password1">Senha</label>
-
-                    <div class="campo-com-icone">
-                        <i class="bi bi-lock"></i>
-                        <input type="password" name="password1" id="id_password1" placeholder="Crie uma senha" autocomplete="new-password" required>
-                    </div>
-
-                    {% if form.password1.errors %}
-                        <div class="erro-campo">
-                            {% for error in form.password1.errors %}{{ error }}{% endfor %}
-                        </div>
-                    {% endif %}
-
-                </div>
-
-                <div class="campo-autenticacao">
-
-                    <label for="id_password2">Confirme a senha</label>
-
-                    <div class="campo-com-icone">
-                        <i class="bi bi-lock"></i>
-                        <input type="password" name="password2" id="id_password2" placeholder="Repita a senha" autocomplete="new-password" required>
-                    </div>
-
-                    {% if form.password2.errors %}
-                        <div class="erro-campo">
-                            {% for error in form.password2.errors %}{{ error }}{% endfor %}
-                        </div>
-                    {% endif %}
-
-                </div>
-
-                <button type="submit" class="btn-autenticacao">CRIAR CONTA</button>
-
-            </form>
-
-
-            <div class="separador"><span>OU</span></div>
-
-
-            <a href="{% provider_login_url 'suap' %}" class="btn-suap">
-                <i class="bi bi-building"></i>
-                <span>ENTRAR COM SUAP</span>
-            </a>
-            <a href="{% provider_login_url 'google' %}" class="btn-google">
-                <i class="bi bi-google"></i>
-                <span>CONTINUAR COM GOOGLE</span>
-            </a>
-
-
-            <div class="alternativa-autenticacao">
-                <span>Já tem uma conta?</span>
-                <a href="{% url 'account_login' %}">ENTRAR</a>
-            </div>
-
-        </section>
-
-
-        <a href="{% url 'home' %}" class="voltar-site">
-            <i class="bi bi-arrow-left"></i>
-            Voltar para o site
-        </a>
-
-    </main>
-
+    </div>
 </body>
+
+<script>
+
+    /* =====================================================
+       OLHO DAS SENHAS
+       ===================================================== */
+
+    const botoesOlhoSenha = document.querySelectorAll(
+        ".botao-olho-senha"
+    );
+
+
+    botoesOlhoSenha.forEach(function(botao) {
+
+        botao.addEventListener("click", function() {
+
+            const idCampo = botao.getAttribute("data-target");
+
+            const campo = document.getElementById(idCampo);
+
+
+            if (campo.type === "password") {
+
+                campo.type = "text";
+
+                botao.classList.remove("bi-eye");
+
+                botao.classList.add("bi-eye-slash");
+
+                botao.setAttribute(
+                    "aria-label",
+                    "Ocultar senha"
+                );
+
+            } else {
+
+                campo.type = "password";
+
+                botao.classList.remove("bi-eye-slash");
+
+                botao.classList.add("bi-eye");
+
+                botao.setAttribute(
+                    "aria-label",
+                    "Mostrar senha"
+                );
+
+            }
+
+        });
+
+    });
+
+</script>
 
 </html>

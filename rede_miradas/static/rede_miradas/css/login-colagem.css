@@ -1,0 +1,1230 @@
+/* =========================================================
+   LOGIN — REDE MIRADAS
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #111111;
+}
+
+
+/* =========================================================
+   ESTRUTURA
+   ========================================================= */
+
+.login-split {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+
+/* =========================================================
+   COLAGEM
+   ========================================================= */
+
+.login-colagem {
+    width: 48%;
+    height: 100vh;
+
+    flex-shrink: 0;
+
+    overflow: visible;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+.login-colagem img {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   LADO DO LOGIN
+   ========================================================= */
+
+.login-form-lado {
+    position: relative;
+
+    width: 52%;
+    height: 100vh;
+
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible;
+
+    z-index: 3;
+}
+
+
+
+/* =========================================================
+   CONTEÚDO DO LOGIN
+   ========================================================= */
+
+.login-form-conteudo {
+    position: relative;
+    z-index: 5;
+
+    width: 390px;
+    max-width: 80%;
+
+    color: #111111;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo-login-split {
+    display: block;
+
+    margin-bottom: 22px;
+
+    text-align: center;
+
+    color: #222222;
+    text-decoration: none;
+
+    font-size: 27px;
+    line-height: 1;
+
+    font-weight: 300;
+}
+
+.logo-login-split strong {
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.login-form-conteudo h1 {
+    margin: 0 0 18px 0;
+
+    text-align: center;
+
+    font-size: 13px;
+    line-height: 1.3;
+
+    font-weight: 400;
+
+    color: #333333;
+}
+
+
+/* =========================================================
+   ERROS
+   ========================================================= */
+
+.erros-login-split {
+    background: #fff0f0;
+
+    border: 1px solid #e5aaaa;
+
+    border-radius: 12px;
+
+    padding: 8px 12px;
+
+    margin-bottom: 14px;
+
+    font-size: 11px;
+
+    color: #a00000;
+}
+
+.erros-login-split p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+
+.campo-login-split {
+    margin-bottom: 10px;
+}
+
+.campo-login-split label {
+    display: none;
+}
+
+.campo-login-split input {
+    width: 100%;
+    height: 38px;
+
+    padding: 8px 18px 8px 40px;
+
+    border: 1px solid #777777;
+
+    border-radius: 999px;
+
+    background-color: #f4f4ee;
+
+    color: #222222;
+
+    font-size: 11px;
+
+    outline: none;
+}
+
+.campo-login-split input:focus {
+    border-color: #30376f;
+
+    box-shadow: 0 0 0 1px #30376f;
+}
+
+
+/* =========================================================
+   ÍCONE DO E-MAIL
+   ========================================================= */
+
+/* =========================================================
+   CAMPOS COM ÍCONES
+   ========================================================= */
+
+.campo-com-icone {
+    position: relative;
+    width: 100%;
+}
+
+
+/* ÍCONE */
+
+.icone-campo {
+    position: absolute;
+
+    left: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 2;
+
+    font-size: 14px;
+
+    color: #111111;
+
+    pointer-events: none;
+}
+
+
+/* OLHO DA SENHA */
+
+.icone-senha {
+    left: 16px;
+    right: auto;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+}
+
+
+/* INPUT */
+
+.campo-com-icone input {
+    width: 100%;
+    height: 46px;
+
+    padding: 8px 18px 8px 42px;
+
+    border: 1px solid #777777;
+    border-radius: 999px;
+
+    background-color: #f7f9ff;
+    color: #222222;
+
+    font-size: 13px;
+    outline: none;
+}
+
+
+/* FOCO */
+
+.campo-com-icone input:focus {
+    border-color: #30376f;
+
+    box-shadow: 0 0 0 1px #30376f;
+}
+
+
+/* PLACEHOLDER */
+
+.campo-com-icone input::placeholder {
+    color: #333333;
+
+    opacity: 1;
+}
+
+/* =========================================================
+   ERRO DE CAMPO
+   ========================================================= */
+
+.erro-campo-login-split {
+    margin-top: 4px;
+
+    font-size: 9px;
+
+    color: #d00000;
+}
+
+
+/* =========================================================
+   ESQUECI SENHA
+   ========================================================= */
+
+.linha-extra-login-split {
+    display: block;
+
+    margin: -2px 0 15px 0;
+
+    text-align: right;
+
+    font-size: 9px;
+}
+
+.linha-extra-login-split a {
+    color: #333333;
+
+    text-decoration: none;
+}
+
+.linha-extra-login-split a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   BOTÃO ACESSAR
+   ========================================================= */
+
+/* =========================================================
+   BOTÃO ACESSAR
+   ========================================================= */
+
+.btn-login-split {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 40px;
+
+    padding: 0;
+
+    border: 1px solid #171d58;
+    border-radius: 999px;
+
+    background: linear-gradient(
+        90deg,
+        #252b70 0%,
+        #5960a5 50%,
+        #252b70 100%
+    );
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    isolation: isolate;
+}
+
+
+/* Texto fica por cima da animação */
+
+.btn-login-split {
+    position: relative;
+}
+
+
+/* =========================================================
+   ÁREA BRANCA — COMEÇA NO CENTRO
+   ========================================================= */
+
+.btn-login-split::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #ffffff;
+
+    border-radius: 999px;
+
+    z-index: 1;
+
+    transform: scaleX(0);
+
+    transform-origin: center;
+
+    transition: transform 0.45s ease;
+}
+
+
+/* =========================================================
+   TEXTO DO BOTÃO
+   ========================================================= */
+
+.btn-login-split {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+   ========================================================= */
+
+.btn-login-split.animando::before {
+    transform: scaleX(1);
+}
+
+
+/* Texto fica acima do branco */
+
+.btn-login-split {
+    z-index: 1;
+}
+
+.btn-login-split::after {
+    content: "Acessar";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+
+    color: #111111;
+
+    opacity: 0;
+
+    transition: opacity 0.1s ease 0.25s;
+}
+/* =========================================================
+   CAMPOS DE SENHA — CADASTRO
+   ========================================================= */
+
+.campo-senha-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.campo-senha-wrapper input {
+    padding-right: 42px;
+}
+
+
+/* Botão do olho */
+
+/* =========================================================
+   CAMPOS COM ÍCONES
+   ========================================================= */
+
+.campo-com-icone {
+    position: relative;
+    width: 100%;
+}
+
+.icone-campo {
+    position: absolute;
+
+    left: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 5;
+
+    font-size: 14px;
+
+    color: #111111;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   OLHO DA SENHA — LADO ESQUERDO
+   ========================================================= */
+
+.icone-senha {
+    left: 16px;
+    right: auto;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.campo-com-icone input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 8px 18px 8px 42px;
+
+    border: 1px solid #777777;
+
+    border-radius: 999px;
+
+    background-color: #f7f9ff;
+
+    color: #222222;
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+
+.campo-com-icone input:focus {
+    border-color: #30376f;
+
+    box-shadow: 0 0 0 1px #30376f;
+}
+
+
+.campo-com-icone input::placeholder {
+    color: #333333;
+    opacity: 1;
+}
+/* =========================================================
+   CONFIRMAÇÃO DE LOGIN
+   ========================================================= */
+
+.mensagem-confirmacao-login {
+    margin: 0 auto 20px auto;
+
+    max-width: 320px;
+
+    text-align: center;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #444444;
+}
+
+
+/* =========================================================
+   BOTÃO DE CONFIRMAR LOGIN
+   ========================================================= */
+
+.btn-confirmar-login {
+    text-decoration: none;
+
+    gap: 7px;
+}
+
+
+.btn-confirmar-login i {
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 14px;
+}
+
+
+.btn-confirmar-login span {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   VOLTAR PARA O SITE
+   ========================================================= */
+
+.voltar-site {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    margin-top: 17px;
+
+    color: #333333;
+
+    font-size: 9px;
+
+    text-decoration: none;
+}
+
+
+.voltar-site:hover {
+    text-decoration: underline;
+}
+
+
+.voltar-site i {
+    font-size: 11px;
+}
+
+.btn-login-split.animando::after {
+    opacity: 1;
+}
+
+/* =========================================================
+   SEPARADOR
+   ========================================================= */
+
+.separador-login-split {
+    margin: 17px 0;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #444444;
+}
+
+.separador-login-split::before,
+.separador-login-split::after {
+    display: none;
+}
+
+
+/* =========================================================
+   BOTÕES SUAP E GOOGLE
+   ========================================================= */
+
+.btn-social-login-split {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 39px;
+
+    margin-bottom: 10px;
+
+    border: none;
+    border-radius: 999px;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    isolation: isolate;
+}
+
+
+/* =========================================================
+   CONTEÚDO DO BOTÃO
+   ========================================================= */
+
+.btn-social-login-split i,
+.btn-social-login-split span {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   SUAP
+   ========================================================= */
+
+.btn-suap {
+    background: linear-gradient(
+        90deg,
+        #20a820 0%,
+        #7bd36b 50%,
+        #20a820 100%
+    );
+
+    color: #111111;
+}
+
+
+/* =========================================================
+   GOOGLE
+   ========================================================= */
+
+.btn-google {
+    background: linear-gradient(
+        90deg,
+        #171b68 0%,
+        #696bb1 50%,
+        #171b68 100%
+    );
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   ÁREA BRANCA DA ANIMAÇÃO
+   ========================================================= */
+
+/* =========================================================
+   ANIMAÇÃO BRANCA — DO CENTRO PARA OS DOIS LADOS
+   ========================================================= */
+
+.btn-social-login-split::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #ffffff;
+
+    border-radius: 999px;
+
+    z-index: 1;
+
+    transform: scaleX(0);
+
+    transform-origin: center;
+
+    transition: transform 0.45s ease;
+}
+
+
+.btn-social-login-split.animando::before {
+    transform: scaleX(1);
+}
+
+
+/* =========================================================
+   AO CLICAR
+   ========================================================= */
+
+.btn-social-login-split.animando::before {
+    width: 100%;
+}
+
+
+/* =========================================================
+   MUDANÇA DA COR DO TEXTO DURANTE A ANIMAÇÃO
+   ========================================================= */
+
+.btn-social-login-split.animando {
+    color: #111111;
+}
+
+
+/* =========================================================
+   ÍCONE
+   ========================================================= */
+
+.btn-social-login-split i {
+    margin-right: 7px;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   CADASTRO
+   ========================================================= */
+
+.alternativa-login-split {
+    margin-top: 9px;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #333333;
+}
+
+.alternativa-login-split a {
+    margin-left: 4px;
+
+    color: #111111;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.alternativa-login-split a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    html,
+    body {
+        overflow: auto;
+    }
+
+    .login-split {
+        flex-direction: column;
+
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .login-colagem {
+        width: 100%;
+        height: 260px;
+    }
+
+    .login-form-lado {
+        width: 100%;
+        min-height: calc(100vh - 260px);
+
+        height: auto;
+
+        padding: 60px 20px;
+    }
+
+    .login-form-conteudo {
+        width: 390px;
+        max-width: 90%;
+    }
+
+    .triangulo-login {
+        width: 220px;
+    }
+}
+
+.triangulo-login {
+    position: absolute;
+
+    width: 350px;
+    height: auto;
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+
+/* Superior esquerdo */
+
+.triangulo-superior-esquerdo {
+
+    top: -200px;
+    left: -150px;
+
+    transform: rotate(170deg);
+}
+
+
+/* Superior direito */
+
+.triangulo-superior-direito {
+
+    top: -95px;
+    right: -150px;
+
+    transform: rotate(880deg);
+}
+
+
+/* Inferior */
+
+.triangulo-inferior {
+
+    bottom: -210px;
+    right: 180px;
+
+    transform: rotate(210deg);
+}
+
+/* =========================================================
+   ANIMAÇÃO DOS TRIÂNGULOS
+   ========================================================= */
+
+.triangulo-login {
+    animation-duration: 1.2s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+}
+
+
+/* =========================================================
+   SUPERIOR ESQUERDO
+   ========================================================= */
+
+.triangulo-superior-esquerdo {
+    animation-name: entradaTrianguloEsquerdo;
+}
+
+
+/* =========================================================
+   SUPERIOR DIREITO
+   ========================================================= */
+
+.triangulo-superior-direito {
+    animation-name: entradaTrianguloDireito;
+    animation-delay: 0.15s;
+}
+
+
+/* =========================================================
+   INFERIOR
+   ========================================================= */
+
+.triangulo-inferior {
+    animation-name: entradaTrianguloInferior;
+    animation-delay: 0.3s;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO ESQUERDA
+   ========================================================= */
+
+@keyframes entradaTrianguloEsquerdo {
+
+    from {
+        opacity: 0;
+        translate: -350px 0;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DIREITA
+   ========================================================= */
+
+@keyframes entradaTrianguloDireito {
+
+    from {
+        opacity: 0;
+        translate: 350px 0;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO INFERIOR
+   ========================================================= */
+
+@keyframes entradaTrianguloInferior {
+
+    from {
+        opacity: 0;
+        translate: 350px 250px;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+}
+/* =========================================================
+   TRIÂNGULOS — CONFIRMAR LOGIN
+   Sem animação nesta página
+   ========================================================= */
+
+.pagina-confirmar-login .triangulo-login {
+    animation: none;
+    opacity: 1;
+}
+/* =========================================================
+   VERIFICAR E-MAIL
+   ========================================================= */
+
+.pagina-verificar-email .triangulo-login {
+    animation: none;
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ÍCONE DE E-MAIL
+   ========================================================= */
+
+.icone-verificar-email {
+    display: block;
+
+    margin: 0 auto 14px auto;
+
+    text-align: center;
+
+    font-size: 38px;
+
+    color: #30376f;
+}
+
+
+/* =========================================================
+   MENSAGEM
+   ========================================================= */
+
+.mensagem-verificar-email {
+    max-width: 340px;
+
+    margin: 0 auto 10px auto;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #444444;
+}
+
+
+.mensagem-secundaria {
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   CONFIRMAR E-MAIL
+   ========================================================= */
+
+.pagina-confirmar-email .triangulo-login {
+    animation: none;
+    opacity: 1;
+}
+
+
+/* ÍCONE */
+
+.icone-confirmar-email {
+    display: block;
+
+    margin: 0 auto 14px auto;
+
+    text-align: center;
+
+    font-size: 38px;
+
+    color: #30376f;
+}
+
+
+/* MENSAGEM */
+
+.mensagem-confirmar-email {
+    max-width: 340px;
+
+    margin: 0 auto 20px auto;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #444444;
+}
+
+.mensagem-confirmar-email strong {
+    font-weight: 600;
+}
+
+.mensagem-confirmar-email a {
+    color: #30376f;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.mensagem-confirmar-email a:hover {
+    text-decoration: underline;
+}
+
+
+/* BOTÃO */
+
+.btn-confirmar-email {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+}
+
+.btn-confirmar-email i,
+.btn-confirmar-email span {
+    position: relative;
+
+    z-index: 2;
+}
+.pagina-confirmar-email .triangulo-login {
+    animation: none;
+    opacity: 1;
+}
+
+.icone-confirmar-email {
+    display: block;
+    margin: 0 auto 14px auto;
+    text-align: center;
+    font-size: 38px;
+    color: #30376f;
+}
+
+.mensagem-confirmar-email {
+    max-width: 340px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #444444;
+}
+
+.mensagem-confirmar-email strong {
+    font-weight: 600;
+}
+
+.mensagem-confirmar-email a {
+    color: #30376f;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.mensagem-confirmar-email a:hover {
+    text-decoration: underline;
+}
+
+.btn-confirmar-email {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-decoration: none;
+}
+
+.btn-confirmar-email i,
+.btn-confirmar-email span {
+    position: relative;
+    z-index: 2;
+}
+/* =========================================================
+   REDEFINIR SENHA
+   ========================================================= */
+
+.pagina-reset-senha .triangulo-login {
+    animation: none;
+    opacity: 1;
+}
+
+.icone-reset-senha {
+    display: block;
+
+    margin: 0 auto 14px auto;
+
+    text-align: center;
+
+    font-size: 38px;
+
+    color: #30376f;
+}
+
+.mensagem-reset-senha {
+    max-width: 340px;
+
+    margin: 0 auto 20px auto;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #444444;
+}
+
+.btn-reset-senha {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+}
+
+.btn-reset-senha i,
+.btn-reset-senha span {
+    position: relative;
+
+    z-index: 2;
+}

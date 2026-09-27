@@ -2,280 +2,437 @@
 {% load socialaccount %}
 
 <!DOCTYPE html>
-<html lang="pt-br" data-bs-theme="dark">
+<html lang="pt-br">
 
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Entrar | Rede Miradas</title>
+
+
+    <!-- Bootstrap -->
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
+
+    <!-- Bootstrap Icons -->
+
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
-    <link
-        rel="stylesheet"
-        href="{% static 'rede_miradas/css/base.css' %}"
-    >
+
+    <!-- CSS do login -->
 
     <link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/login.css' %}"
+        rel="stylesheet"
+        href="{% static 'rede_miradas/css/login-colagem.css' %}?v=3"
     >
 
 </head>
 
-<body class="pagina-autenticacao">
 
-    <main class="autenticacao">
+<body class="pagina-login-split">
 
-        <!-- Logo -->
-        <a href="{% url 'home' %}" class="logo-autenticacao">
+
+    <div class="login-split">
+
+
+        <!-- =====================================================
+             COLAGEM
+             ===================================================== -->
+
+        <div class="login-colagem">
 
             <img
-                src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
-                alt="Logo Rede Miradas"
+                src="{% static 'rede_miradas/img/login/colagem.jpg' %}"
+                alt="Colagem Rede Miradas"
             >
 
-            <span>
-                REDE <strong>MIRADAS</strong>
-            </span>
-
-        </a>
+        </div>
 
 
-        <!-- Card -->
-        <section class="card-autenticacao">
 
-            <div class="cabecalho-autenticacao">
+        <!-- =====================================================
+             LADO DO LOGIN
+             ===================================================== -->
 
-                <span class="etiqueta-autenticacao">
-                    REDE MIRADAS
-                </span>
+        <div class="login-form-lado">
+
+
+            <!-- =================================================
+                 TRIÂNGULO SUPERIOR ESQUERDO
+                 ================================================= -->
+
+            <img
+                src="{% static 'rede_miradas/img/login/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-superior-esquerdo"
+                alt=""
+            >
+
+
+            <!-- =================================================
+                 TRIÂNGULO SUPERIOR DIREITO
+                 ================================================= -->
+
+            <img
+                src="{% static 'rede_miradas/img/login/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-superior-direito"
+                alt=""
+            >
+
+
+            <!-- =================================================
+                 TRIÂNGULO INFERIOR
+                 ================================================= -->
+
+            <img
+                src="{% static 'rede_miradas/img/login/triangulomiradas.png' %}"
+                class="triangulo-login triangulo-inferior"
+                alt=""
+            >
+
+
+
+            <!-- =================================================
+                 CONTEÚDO DO LOGIN
+                 ================================================= -->
+
+            <div class="login-form-conteudo">
+
+
+                <!-- LOGO -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="logo-login-split"
+                >
+                    REDE <strong>MIRADAS</strong>
+                </a>
+
+
+
+                <!-- TEXTO -->
 
                 <h1>
-                    Entrar
+                    Faça login para continuar
                 </h1>
 
-                <p>
-                    Acesse sua conta para continuar.
-                </p>
-
-            </div>
 
 
-            <!-- Erros gerais -->
-            {% if form.non_field_errors %}
+                <!-- =================================================
+                     ERRO GERAL
+                     ================================================= -->
 
-                <div class="erros-autenticacao">
+                {% if form.non_field_errors %}
 
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
+                    <div class="erros-login-split">
 
-                </div>
+                        {% for error in form.non_field_errors %}
 
-            {% endif %}
+                            <p>
+                                {{ error }}
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
 
 
-            <form method="post" action="{% url 'account_login' %}">
 
-                {% csrf_token %}
+                <!-- =================================================
+                     FORMULÁRIO
+                     ================================================= -->
+
+                <form
+                    method="post"
+                    action="{% url 'account_login' %}"
+                >
+
+                    {% csrf_token %}
 
 
-                <!-- E-mail -->
-                <div class="campo-autenticacao">
 
-                    <label for="id_login">
-                        E-mail
+                    <!-- E-MAIL -->
+
+                    <div class="campo-login-split">
+
+                        <label for="id_login">
+                            E-mail
+                        </label>
+
+                        <div class="campo-com-icone">
+
+                            <i class="bi bi-person icone-campo"></i>
+
+                            <input
+                                type="email"
+                                name="login"
+                                id="id_login"
+                                autocomplete="email"
+                                placeholder="Digite seu e-mail"
+                                required
+                            >
+
+                        </div>
+
+                        {% if form.login.errors %}
+                            <div class="erro-campo-login-split">
+
+                                {% for error in form.login.errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+
+                   <div class="campo-login-split">
+
+                    <label for="id_password">
+                        Senha
                     </label>
 
                     <div class="campo-com-icone">
 
-                        <i class="bi bi-envelope"></i>
-
-                        <input
-                            type="email"
-                            name="login"
-                            id="id_login"
-                            placeholder="seu@email.com"
-                            autocomplete="email"
-                            required
-                        >
-
-                    </div>
-
-                    {% if form.login.errors %}
-
-                        <div class="erro-campo">
-
-                            {% for error in form.login.errors %}
-                                {{ error }}
-                            {% endfor %}
-
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- Senha -->
-                <div class="campo-autenticacao">
-
-                    <div class="label-senha">
-
-                        <label for="id_password">
-                            Senha
-                        </label>
-
-                        <a href="{% url 'account_reset_password' %}">
-                            Esqueci minha senha
-                        </a>
-
-                    </div>
-
-
-                    <div class="campo-com-icone">
-
-                        <i class="bi bi-lock"></i>
+                        <i class="bi bi-eye icone-campo icone-senha"
+                        id="icone-senha"></i>
 
                         <input
                             type="password"
                             name="password"
                             id="id_password"
-                            placeholder="Digite sua senha"
                             autocomplete="current-password"
+                            placeholder="Digite sua senha"
                             required
                         >
 
                     </div>
 
                     {% if form.password.errors %}
-
-                        <div class="erro-campo">
+                        <div class="erro-campo-login-split">
 
                             {% for error in form.password.errors %}
                                 {{ error }}
+
                             {% endfor %}
 
                         </div>
-
                     {% endif %}
 
                 </div>
 
 
-                <!-- Lembrar -->
-                <div class="lembrar-conta">
+                    <!-- ESQUECI SENHA -->
 
-                    <label>
+                    <div class="linha-extra-login-split">
+
+                        <a
+                            href="{% url 'account_reset_password' %}"
+                        >
+                            Esqueci minha senha?
+                        </a>
+
+                    </div>
+
+
+
+                    <!-- REDIRECIONAMENTO -->
+
+                    {% if redirect_field_value %}
 
                         <input
-                            type="checkbox"
-                            name="remember"
+                            type="hidden"
+                            name="next"
+                            value="{{ redirect_field_value }}"
                         >
 
-                        <span>
-                            Lembrar de mim
-                        </span>
+                    {% endif %}
 
-                    </label>
+
+
+                    <!-- BOTÃO ACESSAR -->
+                    <button
+                        type="submit"
+                        class="btn-login-split"
+                    >
+                        <span>Acessar</span>
+                    </button>
+
+
+
+                <!-- =================================================
+                     SEPARADOR
+                     ================================================= -->
+
+                <div class="separador-login-split">
+
+                    <span>
+                        Ou acessar com:
+                    </span>
 
                 </div>
 
 
-                <!-- Botão entrar -->
-                <button
-                    type="submit"
-                    class="btn-autenticacao"
-                >
-                    ENTRAR
-                </button>
 
+                <!-- SUAP -->
 
-                <!-- Redirecionamento -->
-                {% if redirect_field_value %}
-                    <input
-                        type="hidden"
-                        name="next"
-                        value="{{ redirect_field_value }}"
+                    <a
+                        href="{% provider_login_url 'suap' %}"
+                        class="btn-social-login-split btn-suap"
                     >
-                {% endif %}
+                        <i class="bi bi-building"></i>
 
-            </form>
+                        <span>
+                            Entrar com SUAP
+                        </span>
+                    </a>
 
 
-            <!-- Separador -->
-            <div class="separador">
+                    <!-- GOOGLE -->
 
-                <span>OU</span>
+                    <a
+                        href="{% provider_login_url 'google' %}"
+                        class="btn-social-login-split btn-google"
+                    >
+                        <i class="bi bi-google"></i>
+
+                        <span>
+                            Entrar com Google
+                        </span>
+                    </a>
+
+
+
+                <!-- =================================================
+                     CADASTRO
+                     ================================================= -->
+
+                <div class="alternativa-login-split">
+
+                    <span>
+                        Ainda não tem uma conta?
+                    </span>
+
+                    <a
+                        href="{% url 'account_signup' %}"
+                    >
+                        Cadastrar-se
+                    </a>
+
+                </div>
+
 
             </div>
 
 
-            <!-- SUAP -->
-            <a
-                href="{% provider_login_url 'suap' %}"
-                class="btn-suap"
-            >
-
-                <i class="bi bi-building"></i>
-
-                <span>
-                    ENTRAR COM SUAP
-                </span>
-
-            </a>
-            <a
-                href="{% provider_login_url 'google' %}"
-                class="btn-google"
-            >
-
-                <i class="bi bi-google"></i>
-
-                <span>
-                    ENTRAR COM GOOGLE
-                </span>
-
-            </a>
+        </div>
 
 
-            <!-- Cadastro -->
-            <div class="alternativa-autenticacao">
+    </div>
 
-                <span>
-                    Ainda não tem uma conta?
-                </span>
-
-                <a href="{% url 'account_signup' %}">
-                    CADASTRAR-SE
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- Voltar -->
-        <a href="{% url 'home' %}" class="voltar-site">
-
-            <i class="bi bi-arrow-left"></i>
-
-            Voltar para o site
-
-        </a>
-
-    </main>
 
 </body>
+<script>
 
+    const senha = document.getElementById("id_password");
+    const iconeSenha = document.getElementById("icone-senha");
+
+
+    iconeSenha.addEventListener("click", function () {
+
+        if (senha.type === "password") {
+
+            senha.type = "text";
+
+            iconeSenha.classList.remove("bi-eye");
+
+            iconeSenha.classList.add("bi-eye-slash");
+
+        } else {
+
+            senha.type = "password";
+
+            iconeSenha.classList.remove("bi-eye-slash");
+
+            iconeSenha.classList.add("bi-eye");
+
+        }
+
+    });
+
+</script>
+<script>
+
+    const botoesSocial = document.querySelectorAll(".btn-social-login-split");
+
+
+    botoesSocial.forEach(function(botao) {
+
+        botao.addEventListener("click", function(event) {
+
+            event.preventDefault();
+
+
+            const destino = botao.href;
+
+
+            /* Começa a animação */
+
+            botao.classList.add("animando");
+
+
+            /* Espera a animação terminar */
+
+            setTimeout(function() {
+
+                window.location.href = destino;
+
+            }, 450);
+
+        });
+
+    });
+
+</script>
+<script>
+
+    const formularioLogin = document.querySelector(
+        '.login-form-conteudo form'
+    );
+
+    const botaoAcessar = document.querySelector(
+        '.btn-login-split'
+    );
+
+
+    formularioLogin.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        botaoAcessar.classList.add("animando");
+
+
+        setTimeout(function() {
+
+            formularioLogin.submit();
+
+        }, 450);
+
+    });
+
+</script>
 </html>
