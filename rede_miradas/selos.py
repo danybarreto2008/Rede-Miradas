@@ -9,10 +9,4 @@ SELOS = {
         'descricao': 'Você votou no júri popular pela primeira vez.',
         'imagem': 'rede_miradas/img/selos/juri-popular.png',
     },
-    # sua amiga adiciona a entrada da trilha aqui quando fizer essa parte:
-    # 'trilha-concluida': {
-    #     'nome': '...',
-    #     'descricao': '...',
-    #     'imagem': 'rede_miradas/img/selos/trilha-concluida.png',
-    # },
 }
