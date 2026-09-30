@@ -682,9 +682,24 @@ class TrilhasCard(models.Model):
         help_text='Ex: INSCRIÇÃO DAS EQUIPES'
     )
 
+    slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True,
+        help_text='Identificador único da URL da trilha, ex: inscricao-das-equipes'
+    )
+
     titulo = models.CharField(
         max_length=250,
         help_text='Ex: Toda grande produção começa com uma boa equipe.'
+    )
+
+    titulo_detalhe = models.CharField(
+        max_length=250,
+        blank=True,
+        default='',
+        help_text='Título exibido no topo da página de detalhes (ex: INSCRIÇÃO DAS EQUIPES: IDENTIDADE VISUAL)'
     )
 
     descricao = models.TextField(
@@ -786,6 +801,18 @@ class TrilhasCard(models.Model):
         help_text='Cor do texto do botão'
     )
 
+    cor_sidebar = models.CharField(
+        max_length=7,
+        default='#8F3D4E',
+        help_text='Cor de fundo da barra lateral na página de detalhes'
+    )
+
+    cor_sidebar_topo = models.CharField(
+        max_length=7,
+        default='#BA586C',
+        help_text='Cor de fundo do box superior da barra lateral'
+    )
+
     # Formatação de fontes
     tag_negrito = models.BooleanField(
         default=True
@@ -869,4 +896,76 @@ class SubtopicoTrilha(models.Model):
 
     def __str__(self):
         return f'{self.trilha.titulo} - {self.titulo}'
+
+
+class UnidadeTrilha(models.Model):
+
+    trilha = models.ForeignKey(
+        TrilhasCard,
+        on_delete=models.CASCADE,
+        related_name='unidades'
+    )
+
+    numero = models.PositiveIntegerField(
+        default=1,
+        verbose_name='Número da Unidade (ex: 1, 2, 3...)'
+    )
+
+    titulo = models.CharField(
+        max_length=200,
+        help_text='Nome da unidade (ex: Identidade Visual ou Conto e Crônica)'
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Trilhas - Unidade da Trilha'
+        verbose_name_plural = 'Trilhas - Unidades das Trilhas'
+        ordering = ['ordem', 'numero']
+
+    def __str__(self):
+        return f'{self.trilha.tag or self.trilha.titulo} - Unidade {self.numero}: {self.titulo}'
+
+
+class TopicoUnidadeTrilha(models.Model):
+
+    unidade = models.ForeignKey(
+        UnidadeTrilha,
+        on_delete=models.CASCADE,
+        related_name='topicos'
+    )
+
+    titulo = models.CharField(
+        max_length=250,
+        help_text='Título do tópico/subtópico (ex: Identidade visual da equipe: como fazer?)'
+    )
+
+    conteudo = CKEditor5Field(
+        'Conteúdo (Texto / Formatação)',
+        config_name='default',
+        blank=True
+    )
+
+    ordem = models.PositiveIntegerField(
+        default=0
+    )
+
+    ativo = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+        verbose_name = 'Trilhas - Tópico / Conteúdo da Unidade'
+        verbose_name_plural = 'Trilhas - Tópicos / Conteúdos das Unidades'
+        ordering = ['ordem']
+
+    def __str__(self):
+        return f'Unidade {self.unidade.numero} - {self.titulo}'
+
 
