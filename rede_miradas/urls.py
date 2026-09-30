@@ -38,6 +38,20 @@ urlpatterns = [
         name='trilhas_visao_geral'
     ),
 
+    # Página da 1ª trilha (Inscrição das equipes)
+    path(
+        'trilhas/inscricao-das-equipes/',
+        views.trilha_inscricao_equipes,
+        name='trilha_inscricao_equipes'
+    ),
+
+    # Página individual/detalhe de uma trilha por slug
+    path(
+        'trilhas/<slug:slug>/',
+        views.trilha_detalhe,
+        name='trilha_detalhe'
+    ),
+
     # Página "Como tudo começou" (história do projeto)
     path(
         'como-tudo-comecou/',

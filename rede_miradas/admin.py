@@ -13,6 +13,8 @@ from .models import (
     TrilhasFaixaItem,
     TrilhasCard,
     SubtopicoTrilha,
+    UnidadeTrilha,
+    TopicoUnidadeTrilha,
     Voto,
     CurtaVotacao,
 )
@@ -366,16 +368,25 @@ class TrilhasCardForm(forms.ModelForm):
             'cor_descricao': forms.TextInput(attrs={'type': 'color'}),
             'cor_fundo_botao': forms.TextInput(attrs={'type': 'color'}),
             'cor_texto_botao': forms.TextInput(attrs={'type': 'color'}),
+            'cor_sidebar': forms.TextInput(attrs={'type': 'color'}),
+            'cor_sidebar_topo': forms.TextInput(attrs={'type': 'color'}),
         }
+
+
+class UnidadeTrilhaInline(admin.TabularInline):
+    model = UnidadeTrilha
+    extra = 1
+    fields = ('numero', 'titulo', 'ordem', 'ativo')
 
 
 @admin.register(TrilhasCard)
 class TrilhasCardAdmin(admin.ModelAdmin):
     form = TrilhasCardForm
-    inlines = [SubtopicoTrilhaInline]
+    inlines = [UnidadeTrilhaInline, SubtopicoTrilhaInline]
     list_display = (
         'tag',
         'titulo',
+        'slug',
         'ordem',
         'ativo',
     )
@@ -383,12 +394,15 @@ class TrilhasCardAdmin(admin.ModelAdmin):
         'ordem',
         'ativo',
     )
+    prepopulated_fields = {
+        'slug': ('titulo',)
+    }
     ordering = (
         'ordem',
     )
     fieldsets = (
         ('Conteúdo da Trilha', {
-            'fields': ('tag', 'titulo', 'descricao', 'imagem_capa')
+            'fields': ('tag', 'slug', 'titulo', 'titulo_detalhe', 'descricao', 'imagem_capa')
         }),
         ('Botão de Ação', {
             'fields': ('mostrar_botao', 'texto_botao', 'link_botao')
@@ -404,6 +418,8 @@ class TrilhasCardAdmin(admin.ModelAdmin):
                 'cor_descricao',
                 'cor_fundo_botao',
                 'cor_texto_botao',
+                'cor_sidebar',
+                'cor_sidebar_topo',
             ),
             'classes': ('collapse',),
         }),
@@ -448,4 +464,71 @@ class SubtopicoTrilhaAdmin(admin.ModelAdmin):
         'trilha',
         'ordem',
     )
+
+
+class TopicoUnidadeTrilhaInline(admin.StackedInline):
+    model = TopicoUnidadeTrilha
+    extra = 1
+    fields = ('ordem', 'titulo', 'conteudo', 'ativo')
+
+
+@admin.register(UnidadeTrilha)
+class UnidadeTrilhaAdmin(admin.ModelAdmin):
+    inlines = [TopicoUnidadeTrilhaInline]
+    list_display = (
+        'numero',
+        'titulo',
+        'trilha',
+        'ordem',
+        'ativo',
+    )
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+    list_filter = (
+        'trilha',
+        'ativo',
+    )
+    search_fields = (
+        'titulo',
+        'trilha__titulo',
+        'trilha__tag',
+    )
+    ordering = (
+        'trilha',
+        'ordem',
+        'numero',
+    )
+
+
+@admin.register(TopicoUnidadeTrilha)
+class TopicoUnidadeTrilhaAdmin(admin.ModelAdmin):
+    list_display = (
+        'titulo',
+        'unidade',
+        'ordem',
+        'ativo',
+    )
+    list_editable = (
+        'ordem',
+        'ativo',
+    )
+    list_filter = (
+        'unidade__trilha',
+        'unidade',
+        'ativo',
+    )
+    search_fields = (
+        'titulo',
+        'conteudo',
+        'unidade__titulo',
+        'unidade__trilha__titulo',
+    )
+    ordering = (
+        'unidade__trilha',
+        'unidade',
+        'ordem',
+    )
+
 

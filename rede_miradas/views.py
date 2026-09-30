@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_POST
 
@@ -22,6 +22,9 @@ from .models import (
     TrilhasHero,
     TrilhasFaixaItem,
     TrilhasCard,
+    SubtopicoTrilha,
+    UnidadeTrilha,
+    TopicoUnidadeTrilha,
     Voto,
     CurtaVotacao,
     SeloConquistado,
@@ -424,6 +427,46 @@ def trilhas_visao_geral(request):
             'cards': cards,
         }
     )
+
+
+# View da página de detalhes de uma trilha (Unidades e Conteúdos)
+def trilha_detalhe(request, slug=None):
+    if not slug:
+        trilha = TrilhasCard.objects.filter(
+            Q(slug='inscricao-das-equipes') | Q(titulo__icontains='inscrição') | Q(tag__icontains='inscrição')
+        ).first()
+        if not trilha:
+            trilha = TrilhasCard.objects.filter(ativo=True).order_by('ordem').first()
+    else:
+        trilha = get_object_or_404(TrilhasCard, slug=slug, ativo=True)
+
+    if not trilha:
+        return redirect('trilhas_visao_geral')
+
+    unidades = trilha.unidades.filter(ativo=True).prefetch_related(
+        Prefetch('topicos', queryset=TopicoUnidadeTrilha.objects.filter(ativo=True).order_by('ordem'))
+    ).order_by('ordem', 'numero')
+
+    proxima_trilha = TrilhasCard.objects.filter(
+        ativo=True,
+        ordem__gt=trilha.ordem
+    ).order_by('ordem').first()
+
+    return render(
+        request,
+        "rede_miradas/trilha_detalhe.html",
+        {
+            'trilha': trilha,
+            'unidades': unidades,
+            'total_unidades': unidades.count(),
+            'proxima_trilha': proxima_trilha,
+        }
+    )
+
+
+def trilha_inscricao_equipes(request):
+    return trilha_detalhe(request, slug='inscricao-das-equipes')
+
 
 # View da página "Como Tudo Começou" — conteúdo 100% estático, escrito direto no HTML
 def como_tudo_comecou(request):

@@ -1,0 +1,178 @@
+{% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}{{ trilha.titulo }} | Rede Miradas{% endblock %}
+
+{% block conteudo %}
+<link
+    rel="stylesheet"
+    href="{% static 'rede_miradas/css/trilha_detalhe.css' %}?v=1.0"
+>
+
+<div
+    class="trilha-detalhe-page"
+    style="--trilha-sidebar-bg: {{ trilha.cor_sidebar|default:'#8f3d4e' }}; --trilha-sidebar-top: {{ trilha.cor_sidebar_topo|default:'#ba586c' }};"
+>
+
+    <!-- BARRA LATERAL (UNIDADES DA TRILHA) -->
+    <aside class="trilha-sidebar" aria-label="Navegação das Unidades">
+
+        <!-- Topo da Sidebar: Nome da Etapa / Quantidade de Unidades -->
+        <div class="trilha-sidebar-header-box">
+            <span class="trilha-sidebar-tag">
+                {{ trilha.tag|default:"INSCRIÇÃO DAS EQUIPES"|upper }}
+            </span>
+            <span class="trilha-sidebar-units-count">
+                {{ total_unidades|default_if_none:0 }} UNIDADE{% if total_unidades != 1 %}S{% endif %}
+            </span>
+        </div>
+
+        <!-- Lista de Unidades -->
+        <nav class="trilha-sidebar-units-list">
+            {% for un in unidades %}
+                <a
+                    href="#unidade-{{ un.numero }}"
+                    class="trilha-sidebar-unit-item {% if forloop.first %}active{% endif %}"
+                    data-unit-target="unidade-{{ un.numero }}"
+                >
+                    <span class="sidebar-unit-label">
+                        UNIDADE {{ un.numero }}
+                    </span>
+                    <span class="sidebar-unit-title">
+                        {{ un.titulo }}
+                    </span>
+                </a>
+
+                {% if not forloop.last %}
+                    <div class="sidebar-unit-divider" aria-hidden="true"></div>
+                {% endif %}
+            {% endfor %}
+        </nav>
+
+        <!-- Rodapé da Sidebar -->
+        <div class="trilha-sidebar-footer">
+            <a href="{% url 'trilhas_visao_geral' %}" class="btn-sidebar-back">
+                <i class="bi bi-arrow-left"></i> Voltar para as Trilhas
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL (DIREITA) -->
+    <main class="trilha-main-content">
+
+        <!-- Título Principal da Página -->
+        <header class="trilha-main-header">
+            <div class="trilha-header-glow" aria-hidden="true"></div>
+            <h1 class="trilha-main-title">
+                {{ trilha.titulo_detalhe|default:trilha.titulo|upper }}
+            </h1>
+        </header>
+
+        <!-- Lista de Cards das Unidades -->
+        <div class="trilha-units-container">
+
+            {% for un in unidades %}
+
+                <article class="trilha-unit-card" id="unidade-{{ un.numero }}">
+
+                    <!-- Cabeçalho da Unidade -->
+                    <div class="unit-card-header">
+                        <h2 class="unit-card-title">
+                            <i class="bi bi-bookmark-fill text-danger me-2" style="font-size: 1.1rem;"></i>
+                            Unidade {{ un.numero }}: {{ un.titulo }}
+                        </h2>
+                    </div>
+
+                    <!-- Conteúdo dos Tópicos / Subtópicos -->
+                    <div class="unit-card-body">
+
+                        {% for topico in un.topicos.all %}
+
+                            <section class="unit-topic-block">
+
+                                {% if topico.titulo %}
+                                    <h3 class="unit-topic-title">
+                                        {{ topico.titulo }}
+                                    </h3>
+                                {% endif %}
+
+                                <div class="topic-rich-content ck-content">
+                                    {{ topico.conteudo|safe }}
+                                </div>
+
+                            </section>
+
+                        {% endfor %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- Navegação Inferior -->
+        <nav class="trilha-bottom-nav">
+            <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-outline">
+                <i class="bi bi-grid-fill"></i> Ver todas as Trilhas
+            </a>
+
+            {% if proxima_trilha %}
+                <a href="{% if proxima_trilha.slug %}{% url 'trilha_detalhe' slug=proxima_trilha.slug %}{% else %}{% url 'trilhas_visao_geral' %}{% endif %}" class="btn-trilha-nav btn-trilha-nav-primary">
+                    Próxima Trilha: {{ proxima_trilha.titulo }} <i class="bi bi-arrow-right"></i>
+                </a>
+            {% else %}
+                <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-primary">
+                    <i class="bi bi-check-circle-fill"></i> Concluir Etapa
+                </a>
+            {% endif %}
+        </nav>
+
+    </main>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Scrollspy simples para marcar unidade ativa na sidebar
+    const unitCards = document.querySelectorAll('.trilha-unit-card');
+    const navLinks = document.querySelectorAll('.trilha-sidebar-unit-item');
+
+    if (unitCards.length && navLinks.length) {
+        window.addEventListener('scroll', function () {
+            let current = '';
+            unitCards.forEach(card => {
+                const cardTop = card.offsetTop - 120;
+                if (window.pageYOffset >= cardTop) {
+                    current = card.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    }
+
+    // Scroll suave ao clicar nos links da sidebar
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (targetId && targetId.startsWith('#')) {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}
