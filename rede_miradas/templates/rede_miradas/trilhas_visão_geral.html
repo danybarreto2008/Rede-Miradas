@@ -54,58 +54,60 @@
 
                 <article class="trilha-card-container" id="trilha-{{ card.id }}">
 
-                    <!-- Imagem de Capa com Título Central -->
-                    <div class="trilha-card-header">
-                        {% if card.imagem_capa %}
-                            <img
-                                src="{{ card.imagem_capa.url }}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% elif forloop.counter == 1 %}
-                            <img
-                                src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% elif forloop.counter == 2 %}
-                            <img
-                                src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% elif forloop.counter == 3 %}
-                            <img
-                                src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% elif forloop.counter == 4 %}
-                            <img
-                                src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% else %}
-                            <img
-                                src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}"
-                                alt="{{ card.titulo }}"
-                                class="trilha-card-cover-img"
-                                loading="lazy"
-                            >
-                        {% endif %}
+                    <!-- Imagem de Capa com Título Central (Clicável) -->
+                    <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="trilha-card-header-link" title="Acessar {{ card.titulo }}">
+                        <div class="trilha-card-header">
+                            {% if card.imagem_capa %}
+                                <img
+                                    src="{{ card.imagem_capa.url }}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% elif forloop.counter == 1 %}
+                                <img
+                                    src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% elif forloop.counter == 2 %}
+                                <img
+                                    src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% elif forloop.counter == 3 %}
+                                <img
+                                    src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% elif forloop.counter == 4 %}
+                                <img
+                                    src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% else %}
+                                <img
+                                    src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}"
+                                    alt="{{ card.titulo }}"
+                                    class="trilha-card-cover-img"
+                                    loading="lazy"
+                                >
+                            {% endif %}
 
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">
-                                {{ card.titulo }}
-                            </h2>
+                            <div class="trilha-card-overlay">
+                                <h2 class="trilha-card-title">
+                                    {{ card.titulo }}
+                                </h2>
+                            </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Corpo do Card com Subtópicos e Ações -->
                     <div class="trilha-card-body">
@@ -117,13 +119,13 @@
                                 <li class="trilha-subtopico-item">
                                     <div class="subtopico-left">
                                         <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
-                                        <a href="{{ subtopico.link|default:card.link_botao|default:'#' }}" class="subtopico-text">
+                                        <a href="{% if subtopico.link %}{{ subtopico.link }}{% elif card.slug %}{% url 'trilha_detalhe' slug=card.slug %}#unidade-{{ forloop.counter }}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="subtopico-text">
                                             {{ subtopico.titulo }}
                                         </a>
                                     </div>
 
                                     {% if subtopico.mostrar_botao_comecar or forloop.first %}
-                                        <a href="{{ subtopico.link|default:card.link_botao|default:'#' }}" class="btn-comecar-subtopico">
+                                        <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="btn-comecar-subtopico">
                                             {{ card.texto_botao|default:"Começar" }}
                                         </a>
                                     {% endif %}

@@ -12,7 +12,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()]
+if DEBUG and 'testserver' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('testserver')
 
 
 INSTALLED_APPS = [
@@ -150,7 +152,7 @@ USE_TZ = True
 
 
 # Arquivos CSS, JavaScript e imagens do projeto
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 
 # Arquivos enviados pelo usuário
