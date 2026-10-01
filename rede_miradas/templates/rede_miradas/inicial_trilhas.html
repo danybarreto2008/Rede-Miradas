@@ -257,7 +257,7 @@
                                 {% if card.mostrar_botao %}
                                     <div>
                                         <a
-                                            href="{{ card.link_botao|default:'/trilhas/visao-geral/' }}"
+                                            href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% else %}{{ card.link_botao|default:'/trilhas/visao-geral/' }}{% endif %}"
                                             class="btn-explorar-trilha"
                                         >
                                             {{ card.texto_botao }}
