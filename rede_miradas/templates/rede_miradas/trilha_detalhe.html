@@ -115,19 +115,28 @@
 
         <!-- Navegação Inferior -->
         <nav class="trilha-bottom-nav">
-            <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-outline">
-                <i class="bi bi-grid-fill"></i> Ver todas as Trilhas
-            </a>
+            <div class="trilha-nav-group-left">
+                {% if trilha_anterior %}
+                    <a href="{% if trilha_anterior.slug %}{% url 'trilha_detalhe' slug=trilha_anterior.slug %}{% else %}{% url 'trilhas_visao_geral' %}{% endif %}" class="btn-trilha-nav btn-trilha-nav-prev" title="Voltar para {{ trilha_anterior.titulo }}">
+                        <i class="bi bi-arrow-left"></i> Trilha Anterior: {{ trilha_anterior.titulo }}
+                    </a>
+                {% endif %}
+                <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-outline" title="Ver todas as trilhas">
+                    <i class="bi bi-grid-fill"></i> Ver todas as Trilhas
+                </a>
+            </div>
 
-            {% if proxima_trilha %}
-                <a href="{% if proxima_trilha.slug %}{% url 'trilha_detalhe' slug=proxima_trilha.slug %}{% else %}{% url 'trilhas_visao_geral' %}{% endif %}" class="btn-trilha-nav btn-trilha-nav-primary">
-                    Próxima Trilha: {{ proxima_trilha.titulo }} <i class="bi bi-arrow-right"></i>
-                </a>
-            {% else %}
-                <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-primary">
-                    <i class="bi bi-check-circle-fill"></i> Concluir Etapa
-                </a>
-            {% endif %}
+            <div class="trilha-nav-group-right">
+                {% if proxima_trilha %}
+                    <a href="{% if proxima_trilha.slug %}{% url 'trilha_detalhe' slug=proxima_trilha.slug %}{% else %}{% url 'trilhas_visao_geral' %}{% endif %}" class="btn-trilha-nav btn-trilha-nav-primary" title="Avançar para {{ proxima_trilha.titulo }}">
+                        Próxima Trilha: {{ proxima_trilha.titulo }} <i class="bi bi-arrow-right"></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'trilhas_visao_geral' %}" class="btn-trilha-nav btn-trilha-nav-primary">
+                        <i class="bi bi-check-circle-fill"></i> Concluir Etapa
+                    </a>
+                {% endif %}
+            </div>
         </nav>
 
     </main>
