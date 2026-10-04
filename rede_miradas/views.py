@@ -452,6 +452,11 @@ def trilha_detalhe(request, slug=None):
         ordem__gt=trilha.ordem
     ).order_by('ordem').first()
 
+    trilha_anterior = TrilhasCard.objects.filter(
+        ativo=True,
+        ordem__lt=trilha.ordem
+    ).order_by('-ordem').first()
+
     return render(
         request,
         "rede_miradas/trilha_detalhe.html",
@@ -459,6 +464,7 @@ def trilha_detalhe(request, slug=None):
             'trilha': trilha,
             'unidades': unidades,
             'total_unidades': unidades.count(),
+            'trilha_anterior': trilha_anterior,
             'proxima_trilha': proxima_trilha,
         }
     )
