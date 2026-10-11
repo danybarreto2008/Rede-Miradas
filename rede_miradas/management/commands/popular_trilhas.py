@@ -1,219 +1,339 @@
-import os
+# flake8: noqa
+# ruff: noqa: RUF012, RUF100
+# type: ignore
+# pyright: reportAttributeAccessIssue=none, reportGeneralTypeIssues=none, reportMissingTypeStubs=none
 import shutil
 from pathlib import Path
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from rede_miradas.models import (
-    TrilhasCard, SubtopicoTrilha, TrilhasHero, TrilhasFaixaItem,
-    UnidadeTrilha, TopicoUnidadeTrilha
+    SubtopicoTrilha,
+    TopicoUnidadeTrilha,
+    TrilhasCard,
+    TrilhasFaixaItem,
+    TrilhasHero,
+    UnidadeTrilha,
 )
 
 
 class Command(BaseCommand):
-    help = 'Popula as 5 Trilhas de Aprendizagem, subtópicos, unidades, Hero e Faixa informativa'
+    help = "Popula as 5 Trilhas de Aprendizagem, subtópicos, unidades, Hero e Faixa informativa"
 
     def handle(self, *args, **options):
         # 1. Popula Seção Hero se não existir
         if not TrilhasHero.objects.exists():
             TrilhasHero.objects.create(
-                titulo='Bem-Vindo(a)',
-                subtitulo='Aprenda produção audiovisual em módulos práticos e criativos.',
+                titulo="Bem-Vindo(a)",
+                subtitulo="Aprenda produção audiovisual em módulos práticos e criativos.",
                 mostrar_botao=True,
-                texto_botao='Conheça as trilhas',
-                link_botao='/trilhas/visao-geral/',
-                cor_titulo='#FFFFFF',
-                cor_subtitulo='#FFFFFF',
-                cor_fundo_botao='#FFFFFF',
-                cor_texto_botao='#0B0C10',
-                cor_glow_1='#7C3AED',
-                cor_glow_2='#22D3EE',
+                texto_botao="Conheça as trilhas",
+                link_botao="/trilhas/visao-geral/",
+                cor_titulo="#FFFFFF",
+                cor_subtitulo="#FFFFFF",
+                cor_fundo_botao="#FFFFFF",
+                cor_texto_botao="#0B0C10",
+                cor_glow_1="#7C3AED",
+                cor_glow_2="#22D3EE",
                 titulo_negrito=True,
             )
-            self.stdout.write(self.style.SUCCESS('Hero das Trilhas cadastrado.'))
+            self.stdout.write(
+                self.style.SUCCESS("Hero das Trilhas cadastrado.")
+            )
 
         # 2. Popula Itens da Faixa Informativa se não existirem
         if not TrilhasFaixaItem.objects.exists():
             itens_faixa = [
-                '5 ETAPAS',
-                'DEZENAS DE MATERIAIS',
-                'EXERCÍCIOS',
-                'EXEMPLOS REAIS',
+                "5 ETAPAS",
+                "DEZENAS DE MATERIAIS",
+                "EXERCÍCIOS",
+                "EXEMPLOS REAIS",
             ]
             for idx, txt in enumerate(itens_faixa, start=1):
-                TrilhasFaixaItem.objects.create(texto=txt, ordem=idx, ativo=True)
-            self.stdout.write(self.style.SUCCESS('Itens da Faixa informativa cadastrados.'))
+                TrilhasFaixaItem.objects.create(
+                    texto=txt, ordem=idx, ativo=True
+                )
+            self.stdout.write(
+                self.style.SUCCESS("Itens da Faixa informativa cadastrados.")
+            )
 
         # 3. Popula os 5 Cards de Trilhas e Subtópicos
         dados_trilhas = [
             {
-                'tag': 'Etapa 1',
-                'slug': 'inscricao-das-equipes',
-                'titulo': 'Inscrição das equipes',
-                'descricao': 'Apresentação dos participantes, formação dos grupos e identidade visual do projeto.',
-                'imagem_capa': 'trilhas/capas/capa_equipes.jpg',
-                'tipo_icone': 'equipes',
-                'ordem': 1,
-                'cor_fundo_card': '#0c102a',
-                'cor_borda_card': '#f97316',
-                'cor_glow': '#ea580c',
-                'cor_tag': '#fdba74',
-                'cor_sidebar': '#8F3D4E',
-                'cor_sidebar_topo': '#BA586C',
-                'link_botao': '/trilhas/inscricao-das-equipes/',
-                'subtopicos': [
-                    ('Identidade visual', '/trilhas/inscricao-das-equipes/#unidade-1', True),
-                    ('Ficha de inscrição', '/trilhas/inscricao-das-equipes/#unidade-2', False),
-                ]
+                "tag": "Etapa 1",
+                "slug": "inscricao-das-equipes",
+                "titulo": "Inscrição das equipes",
+                "descricao": "Apresentação dos participantes, formação dos grupos e identidade visual do projeto.",
+                "imagem_capa": "trilhas/capas/capa_equipes.jpg",
+                "tipo_icone": "equipes",
+                "ordem": 1,
+                "cor_fundo_card": "#0c102a",
+                "cor_borda_card": "#f97316",
+                "cor_glow": "#ea580c",
+                "cor_tag": "#fdba74",
+                "cor_sidebar": "#8F3D4E",
+                "cor_sidebar_topo": "#BA586C",
+                "link_botao": "/trilhas/inscricao-das-equipes/",
+                "subtopicos": [
+                    (
+                        "Identidade visual",
+                        "/trilhas/inscricao-das-equipes/#unidade-1",
+                        True,
+                    ),
+                    (
+                        "Ficha de inscrição",
+                        "/trilhas/inscricao-das-equipes/#unidade-2",
+                        False,
+                    ),
+                ],
             },
             {
-                'tag': 'Etapa 2',
-                'slug': 'texto-autoral',
-                'titulo': 'Texto autoral',
-                'descricao': 'Da leitura à criação: conto, crônica e narrativa autoral para o curta.',
-                'imagem_capa': 'trilhas/capas/capa_texto_autoral.jpg',
-                'tipo_icone': 'texto',
-                'ordem': 2,
-                'cor_fundo_card': '#0c102a',
-                'cor_borda_card': '#8b5cf6',
-                'cor_glow': '#7c3aed',
-                'cor_tag': '#c4b5fd',
-                'link_botao': '/trilhas/texto-autoral/',
-                'subtopicos': [
-                    ('CONTO e CRÔNICA: como diferenciar?', '/trilhas/texto-autoral/#unidade-1', True),
-                    ('Crônicas finalistas da Olimpíada Nacional de Língua Portuguesa', '/trilhas/texto-autoral/#unidade-2', False),
-                    ('Lá na minha terra', '/trilhas/texto-autoral/#unidade-3', False),
-                    ('Quebra-molas', '/trilhas/texto-autoral/#unidade-4', False),
-                    ('A perca', '/trilhas/texto-autoral/#unidade-5', False),
-                    ('Crônicas de Paris', '/trilhas/texto-autoral/#unidade-6', False),
-                    ('Isso é ser brasileiro!', '/trilhas/texto-autoral/#unidade-7', False),
-                    ('Varal de Sonhos', '/trilhas/texto-autoral/#unidade-8', False),
-                ]
+                "tag": "Etapa 2",
+                "slug": "texto-autoral",
+                "titulo": "Texto autoral",
+                "descricao": "Da leitura à criação: conto, crônica e narrativa autoral para o curta.",
+                "imagem_capa": "trilhas/capas/capa_texto_autoral.jpg",
+                "tipo_icone": "texto",
+                "ordem": 2,
+                "cor_fundo_card": "#0c102a",
+                "cor_borda_card": "#8b5cf6",
+                "cor_glow": "#7c3aed",
+                "cor_tag": "#c4b5fd",
+                "link_botao": "/trilhas/texto-autoral/",
+                "subtopicos": [
+                    (
+                        "CONTO e CRÔNICA: como diferenciar?",
+                        "/trilhas/texto-autoral/#unidade-1",
+                        True,
+                    ),
+                    (
+                        "Crônicas finalistas da Olimpíada Nacional de Língua Portuguesa",
+                        "/trilhas/texto-autoral/#unidade-2",
+                        False,
+                    ),
+                    (
+                        "Lá na minha terra",
+                        "/trilhas/texto-autoral/#unidade-3",
+                        False,
+                    ),
+                    (
+                        "Quebra-molas",
+                        "/trilhas/texto-autoral/#unidade-4",
+                        False,
+                    ),
+                    ("A perca", "/trilhas/texto-autoral/#unidade-5", False),
+                    (
+                        "Crônicas de Paris",
+                        "/trilhas/texto-autoral/#unidade-6",
+                        False,
+                    ),
+                    (
+                        "Isso é ser brasileiro!",
+                        "/trilhas/texto-autoral/#unidade-7",
+                        False,
+                    ),
+                    (
+                        "Varal de Sonhos",
+                        "/trilhas/texto-autoral/#unidade-8",
+                        False,
+                    ),
+                ],
             },
             {
-                'tag': 'Etapa 3',
-                'slug': 'roteiro',
-                'titulo': 'Roteiro',
-                'descricao': 'Transforme suas ideias e textos em roteiro cinematográfico com cenas e diálogos.',
-                'imagem_capa': 'trilhas/capas/capa_roteiro.jpg',
-                'tipo_icone': 'roteiro',
-                'ordem': 3,
-                'cor_fundo_card': '#0c102a',
-                'cor_borda_card': '#0ea5e9',
-                'cor_glow': '#0284c7',
-                'cor_tag': '#7dd3fc',
-                'link_botao': '/trilhas/roteiro/',
-                'subtopicos': [
-                    ('O que é um roteiro audiovisual e estrutura narrativa', '/trilhas/roteiro/#unidade-1', True),
-                    ('Da ideia à escaleta: organizando os acontecimentos', '/trilhas/roteiro/#unidade-2', False),
-                    ('Formatação padrão de roteiro e cabeçalho de cena', '/trilhas/roteiro/#unidade-3', False),
-                    ('Construção de personagens e diálogos naturais', '/trilhas/roteiro/#unidade-4', False),
-                    ('Decupagem do roteiro: preparando o plano de filmagem', '/trilhas/roteiro/#unidade-5', False),
-                ]
+                "tag": "Etapa 3",
+                "slug": "roteiro",
+                "titulo": "Roteiro",
+                "descricao": "Transforme suas ideias e textos em roteiro cinematográfico com cenas e diálogos.",
+                "imagem_capa": "trilhas/capas/capa_roteiro.jpg",
+                "tipo_icone": "roteiro",
+                "ordem": 3,
+                "cor_fundo_card": "#0c102a",
+                "cor_borda_card": "#0ea5e9",
+                "cor_glow": "#0284c7",
+                "cor_tag": "#7dd3fc",
+                "link_botao": "/trilhas/roteiro/",
+                "subtopicos": [
+                    (
+                        "O que é um roteiro audiovisual e estrutura narrativa",
+                        "/trilhas/roteiro/#unidade-1",
+                        True,
+                    ),
+                    (
+                        "Da ideia à escaleta: organizando os acontecimentos",
+                        "/trilhas/roteiro/#unidade-2",
+                        False,
+                    ),
+                    (
+                        "Formatação padrão de roteiro e cabeçalho de cena",
+                        "/trilhas/roteiro/#unidade-3",
+                        False,
+                    ),
+                    (
+                        "Construção de personagens e diálogos naturais",
+                        "/trilhas/roteiro/#unidade-4",
+                        False,
+                    ),
+                    (
+                        "Decupagem do roteiro: preparando o plano de filmagem",
+                        "/trilhas/roteiro/#unidade-5",
+                        False,
+                    ),
+                ],
             },
             {
-                'tag': 'Etapa 4',
-                'slug': 'producao-e-gravacao',
-                'titulo': 'Produção e Gravação',
-                'descricao': 'Técnicas práticas de filmagem, planos de câmera, áudio e iluminação no set.',
-                'imagem_capa': 'trilhas/capas/capa_producao_gravacao.jpg',
-                'tipo_icone': 'producao',
-                'ordem': 4,
-                'cor_fundo_card': '#0c102a',
-                'cor_borda_card': '#10b981',
-                'cor_glow': '#059669',
-                'cor_tag': '#6ee7b7',
-                'link_botao': '/trilhas/producao-e-gravacao/',
-                'subtopicos': [
-                    ('Planejamento de filmagem e lista de necessidades', '/trilhas/producao-e-gravacao/#unidade-1', True),
-                    ('Planos, enquadramentos e movimentos de câmera', '/trilhas/producao-e-gravacao/#unidade-2', False),
-                    ('Iluminação básica: 3 pontos e luz natural', '/trilhas/producao-e-gravacao/#unidade-3', False),
-                    ('Captação de áudio limpo no set de gravação', '/trilhas/producao-e-gravacao/#unidade-4', False),
-                    ('Direção de atores e condução das gravações', '/trilhas/producao-e-gravacao/#unidade-5', False),
-                ]
+                "tag": "Etapa 4",
+                "slug": "producao-e-gravacao",
+                "titulo": "Produção e Gravação",
+                "descricao": "Técnicas práticas de filmagem, planos de câmera, áudio e iluminação no set.",
+                "imagem_capa": "trilhas/capas/capa_producao_gravacao.jpg",
+                "tipo_icone": "producao",
+                "ordem": 4,
+                "cor_fundo_card": "#0c102a",
+                "cor_borda_card": "#10b981",
+                "cor_glow": "#059669",
+                "cor_tag": "#6ee7b7",
+                "link_botao": "/trilhas/producao-e-gravacao/",
+                "subtopicos": [
+                    (
+                        "Planejamento de filmagem e lista de necessidades",
+                        "/trilhas/producao-e-gravacao/#unidade-1",
+                        True,
+                    ),
+                    (
+                        "Planos, enquadramentos e movimentos de câmera",
+                        "/trilhas/producao-e-gravacao/#unidade-2",
+                        False,
+                    ),
+                    (
+                        "Iluminação básica: 3 pontos e luz natural",
+                        "/trilhas/producao-e-gravacao/#unidade-3",
+                        False,
+                    ),
+                    (
+                        "Captação de áudio limpo no set de gravação",
+                        "/trilhas/producao-e-gravacao/#unidade-4",
+                        False,
+                    ),
+                    (
+                        "Direção de atores e condução das gravações",
+                        "/trilhas/producao-e-gravacao/#unidade-5",
+                        False,
+                    ),
+                ],
             },
             {
-                'tag': 'Etapa 5',
-                'slug': 'edicao-e-finalizacao',
-                'titulo': 'Edição e Finalização',
-                'descricao': 'Montagem, ritmo de corte, trilha sonora, efeitos e exportação para a grande tela.',
-                'imagem_capa': 'trilhas/capas/capa_edicao_finalizacao.jpg',
-                'tipo_icone': 'edicao',
-                'ordem': 5,
-                'cor_fundo_card': '#0c102a',
-                'cor_borda_card': '#f43f5e',
-                'cor_glow': '#e11d48',
-                'cor_tag': '#fda4af',
-                'link_botao': '/trilhas/edicao-e-finalizacao/',
-                'subtopicos': [
-                    ('Organização do material bruto e seleção dos melhores takes', '/trilhas/edicao-e-finalizacao/#unidade-1', True),
-                    ('Montagem no editor de vídeo: ritmo, continuidade e cortes', '/trilhas/edicao-e-finalizacao/#unidade-2', False),
-                    ('Trilha sonora, efeitos de som e mixagem de áudio', '/trilhas/edicao-e-finalizacao/#unidade-3', False),
-                    ('Correção de cor e efeitos visuais', '/trilhas/edicao-e-finalizacao/#unidade-4', False),
-                    ('Exportação final e exibição do curta-metragem', '/trilhas/edicao-e-finalizacao/#unidade-5', False),
-                ]
+                "tag": "Etapa 5",
+                "slug": "edicao-e-finalizacao",
+                "titulo": "Edição e Finalização",
+                "descricao": "Montagem, ritmo de corte, trilha sonora, efeitos e exportação para a grande tela.",
+                "imagem_capa": "trilhas/capas/capa_edicao_finalizacao.jpg",
+                "tipo_icone": "edicao",
+                "ordem": 5,
+                "cor_fundo_card": "#0c102a",
+                "cor_borda_card": "#f43f5e",
+                "cor_glow": "#e11d48",
+                "cor_tag": "#fda4af",
+                "link_botao": "/trilhas/edicao-e-finalizacao/",
+                "subtopicos": [
+                    (
+                        "Organização do material bruto e seleção dos melhores takes",
+                        "/trilhas/edicao-e-finalizacao/#unidade-1",
+                        True,
+                    ),
+                    (
+                        "Montagem no editor de vídeo: ritmo, continuidade e cortes",
+                        "/trilhas/edicao-e-finalizacao/#unidade-2",
+                        False,
+                    ),
+                    (
+                        "Trilha sonora, efeitos de som e mixagem de áudio",
+                        "/trilhas/edicao-e-finalizacao/#unidade-3",
+                        False,
+                    ),
+                    (
+                        "Correção de cor e efeitos visuais",
+                        "/trilhas/edicao-e-finalizacao/#unidade-4",
+                        False,
+                    ),
+                    (
+                        "Exportação final e exibição do curta-metragem",
+                        "/trilhas/edicao-e-finalizacao/#unidade-5",
+                        False,
+                    ),
+                ],
             },
         ]
 
         # Garante que as imagens de capa padrão de static sejam copiadas para a pasta media/ se necessário
-        static_trilhas_dir = Path(settings.BASE_DIR) / 'rede_miradas' / 'static' / 'rede_miradas' / 'img' / 'trilhas'
-        media_capas_dir = Path(settings.MEDIA_ROOT) / 'trilhas' / 'capas'
+        static_trilhas_dir = (
+            Path(settings.BASE_DIR)
+            / "rede_miradas/static/rede_miradas/img/trilhas"
+        )
+        media_capas_dir = Path(settings.MEDIA_ROOT) / "trilhas" / "capas"
         media_capas_dir.mkdir(parents=True, exist_ok=True)
 
         TrilhasCard.objects.all().delete()
 
         for dados in dados_trilhas:
-            img_rel = dados.get('imagem_capa')
+            img_rel = str(dados.get("imagem_capa") or "")
             if img_rel:
                 nome_arquivo = Path(img_rel).name
                 src_img = static_trilhas_dir / nome_arquivo
                 dest_img = Path(settings.MEDIA_ROOT) / img_rel
                 if src_img.exists() and not dest_img.exists():
                     shutil.copy2(src_img, dest_img)
-                    self.stdout.write(self.style.SUCCESS(f'Capa copiada para mídia: {nome_arquivo}'))
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Capa copiada para mídia: {nome_arquivo}"
+                        )
+                    )
 
-            subtopicos = dados.pop('subtopicos')
+            subtopicos = list(dados.pop("subtopicos"))
             card = TrilhasCard.objects.create(
-                tag=dados['tag'],
-                slug=dados['slug'],
-                titulo=dados['titulo'],
-                descricao=dados['descricao'],
-                imagem_capa=dados['imagem_capa'],
-                tipo_icone=dados['tipo_icone'],
-                ordem=dados['ordem'],
-                cor_fundo_card=dados['cor_fundo_card'],
-                cor_borda_card=dados['cor_borda_card'],
-                estilo_borda='solid',
-                cor_glow=dados['cor_glow'],
-                cor_tag=dados['cor_tag'],
-                cor_sidebar=dados.get('cor_sidebar', '#8F3D4E'),
-                cor_sidebar_topo=dados.get('cor_sidebar_topo', '#BA586C'),
-                cor_titulo='#FFFFFF',
-                cor_descricao='#CBD5E1',
-                cor_fundo_botao='#B94B61',
-                cor_texto_botao='#FFFFFF',
-                texto_botao='Começar',
-                link_botao=dados['link_botao'],
-                ativo=True
+                tag=dados["tag"],
+                slug=dados["slug"],
+                titulo=dados["titulo"],
+                descricao=dados["descricao"],
+                imagem_capa=dados["imagem_capa"],
+                tipo_icone=dados["tipo_icone"],
+                ordem=dados["ordem"],
+                cor_fundo_card=dados["cor_fundo_card"],
+                cor_borda_card=dados["cor_borda_card"],
+                estilo_borda="solid",
+                cor_glow=dados["cor_glow"],
+                cor_tag=dados["cor_tag"],
+                cor_sidebar=dados.get("cor_sidebar", "#8F3D4E"),
+                cor_sidebar_topo=dados.get("cor_sidebar_topo", "#BA586C"),
+                cor_titulo="#FFFFFF",
+                cor_descricao="#CBD5E1",
+                cor_fundo_botao="#B94B61",
+                cor_texto_botao="#FFFFFF",
+                texto_botao="Começar",
+                link_botao=dados["link_botao"],
+                ativo=True,
             )
 
-            for idx, (sub_titulo, sub_link, mostrar_btn) in enumerate(subtopicos, start=1):
+            for idx, (sub_titulo, sub_link, mostrar_btn) in enumerate(
+                subtopicos, start=1
+            ):
                 SubtopicoTrilha.objects.create(
                     trilha=card,
                     titulo=sub_titulo,
                     link=sub_link,
                     mostrar_botao_comecar=mostrar_btn,
                     ordem=idx,
-                    ativo=True
+                    ativo=True,
                 )
 
             # Cadastra as Unidades e Tópicos da 1ª Trilha (Inscrição das equipes)
-            if card.slug == 'inscricao-das-equipes':
+            if card.slug == "inscricao-das-equipes":
                 un1 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=1,
-                    titulo='Identidade Visual',
+                    titulo="Identidade Visual",
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un1 = """<p>O logotipo deveria ser o princípio de todo grande projeto: pode parecer banal, mas a identidade visual é como uma bandeira que une a equipe no mesmo propósito. A seguir deixei alguns links com dicas para construir uma boa logo, porém não é obrigatório começar do zero se você não tem talento pra desenho ou recursos tecnológicos para criar. O último link leva você direto para o Canva e sua seção de criação de logos: escolha uma que represente os sentimentos que a equipe quer expressar e personalize o que for possível.</p>
@@ -272,39 +392,39 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un1,
-                    titulo='Identidade visual da equipe: como fazer?',
+                    titulo="Identidade visual da equipe: como fazer?",
                     conteudo=conteudo_un1,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 un2 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=2,
-                    titulo='Ficha de Inscrição',
+                    titulo="Ficha de Inscrição",
                     ordem=2,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un2 = """<p>A inscrição da equipe deverá ser realizada por meio do formulário disponibilizado pela instituição durante o período do festival. Cada equipe deverá preencher apenas uma ficha de inscrição, contendo todas as informações solicitadas.</p>"""
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un2,
-                    titulo='Ficha de Inscrição',
+                    titulo="Ficha de Inscrição",
                     conteudo=conteudo_un2,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
             # Cadastra as Unidades e Tópicos da 2ª Trilha (Texto autoral)
-            if card.slug == 'texto-autoral':
+            if card.slug == "texto-autoral":
                 # Unidade 1
                 un1 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=1,
-                    titulo='CONTO e CRÔNICA: como diferenciar?',
+                    titulo="CONTO e CRÔNICA: como diferenciar?",
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un1 = """<p>Nesta edição, os curtas-metragens serão produzidos a partir de uma crônica ou de um conto autorais da equipe. Por isso, é necessário entender como funcionam os dois gêneros.</p>
@@ -438,19 +558,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un1,
-                    titulo='Conto e Crônica: como diferenciar?',
+                    titulo="Conto e Crônica: como diferenciar?",
                     conteudo=conteudo_un1,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 2
                 un2 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=2,
-                    titulo='Crônicas finalistas da Olimpíada Nacional de Língua Portuguesa',
+                    titulo="Crônicas finalistas da Olimpíada Nacional de Língua Portuguesa",
                     ordem=2,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un2 = """<p>A tradicional Olimpíada Nacional de Língua Portuguesa <em>Escrevendo o Futuro</em> movimentou estudantes do país inteiro até o ano de 2024, quando foi encerrada. Existiam categorias de acordo com os anos e níveis do ensino básico: poema, memórias literárias, crônica, artigo de opinião e videodocumentário.</p>
@@ -477,19 +597,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un2,
-                    titulo='Olimpíada Nacional de Língua Portuguesa 2019',
+                    titulo="Olimpíada Nacional de Língua Portuguesa 2019",
                     conteudo=conteudo_un2,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 3
                 un3 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=3,
-                    titulo='Lá na minha terra',
+                    titulo="Lá na minha terra",
                     ordem=3,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un3 = """<p>A crônica a seguir foi finalista da Olimpíada Nacional de Língua Portuguesa em 2019, cujo tema era <em>"O lugar onde vivo"</em>.</p>
@@ -537,19 +657,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un3,
-                    titulo='Crônica: Lá na minha terra',
+                    titulo="Crônica: Lá na minha terra",
                     conteudo=conteudo_un3,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 4
                 un4 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=4,
-                    titulo='Quebra-molas',
+                    titulo="Quebra-molas",
                     ordem=4,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un4 = """<p>A crônica a seguir foi escrita por Raíssa Julião, aluna do campus IFRN São Paulo do Potengi. O texto participou da prova de crônicas da Semadec 2024.</p>
@@ -572,19 +692,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un4,
-                    titulo='Crônica: Quebra-molas',
+                    titulo="Crônica: Quebra-molas",
                     conteudo=conteudo_un4,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 5
                 un5 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=5,
-                    titulo='A perca',
+                    titulo="A perca",
                     ordem=5,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un5 = """<p>Uma das maiores cronistas brasileiras da atualidade, Martha Medeiros é a autora de <em>"A perca"</em>. Aproveite a leitura!</p>
@@ -620,19 +740,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un5,
-                    titulo='Crônica: A perca',
+                    titulo="Crônica: A perca",
                     conteudo=conteudo_un5,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 6
                 un6 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=6,
-                    titulo='Crônicas de Paris',
+                    titulo="Crônicas de Paris",
                     ordem=6,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un6 = """<p>Mais uma crônica em vídeo para o acervo. Nas edições do <em>Jornal Hoje</em>, na Globo, é muito comum que os jornalistas correspondentes da emissora em várias partes do mundo produzam crônicas de viagem. No YouTube é possível encontrar vídeos de Nova York, Jerusalém, Lisboa, Tóquio ou, no caso a seguir, em Paris.</p>
@@ -659,19 +779,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un6,
-                    titulo='Videocrônica: Crônicas de Paris',
+                    titulo="Videocrônica: Crônicas de Paris",
                     conteudo=conteudo_un6,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 7
                 un7 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=7,
-                    titulo='Isso é ser brasileiro!',
+                    titulo="Isso é ser brasileiro!",
                     ordem=7,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un7 = """<p>As crônicas fazem parte do dia a dia do jornalismo e você assiste a muitas, mesmo sem perceber. A seguir, veja uma crônica esportiva de Fernanda Gentil refletindo a partir de acontecimentos das Olimpíadas.</p>
@@ -697,19 +817,19 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un7,
-                    titulo='Videocrônica: Isso é ser brasileiro!',
+                    titulo="Videocrônica: Isso é ser brasileiro!",
                     conteudo=conteudo_un7,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
                 # Unidade 8
                 un8 = UnidadeTrilha.objects.create(
                     trilha=card,
                     numero=8,
-                    titulo='Varal de Sonhos',
+                    titulo="Varal de Sonhos",
                     ordem=8,
-                    ativo=True
+                    ativo=True,
                 )
 
                 conteudo_un8 = """<p>A crônica a seguir foi escrita pela estudante do IFRN Ozilane Chagas, na época aluna do curso técnico de Informática no campus João Câmara. O texto foi produzido para uma prova de crônicas dentro da Semadec do IFRN-JC no ano de 2019 e obteve o primeiro lugar.</p>
@@ -733,11 +853,14 @@ class Command(BaseCommand):
 
                 TopicoUnidadeTrilha.objects.create(
                     unidade=un8,
-                    titulo='Crônica: Varal de Sonhos',
+                    titulo="Crônica: Varal de Sonhos",
                     conteudo=conteudo_un8,
                     ordem=1,
-                    ativo=True
+                    ativo=True,
                 )
 
-        self.stdout.write(self.style.SUCCESS('Trilhas, subtópicos, unidades e tópicos cadastrados com sucesso!'))
-
+        self.stdout.write(
+            self.style.SUCCESS(
+                "Trilhas, subtópicos, unidades e tópicos cadastrados com sucesso!"
+            )
+        )

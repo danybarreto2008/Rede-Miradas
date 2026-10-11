@@ -1,0 +1,186 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}Apuração da Votação Popular{% endblock %}
+{% block topo_icone %}<i class="bi bi-trophy-fill text-warning"></i>{% endblock %}
+{% block topo_titulo %}Apuração da Votação do Júri Popular{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Votação do Júri Popular</span>
+</div>
+
+<!-- PLACAR DE APURAÇÃO -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="admin-kpi-card">
+            <div class="admin-kpi-glow" style="background: var(--adm-roxo);"></div>
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="admin-kpi-label">Total de Votos Computados</div>
+                    <div class="admin-kpi-value text-white">{{ total_geral_votos }}</div>
+                    <div class="admin-kpi-sub">
+                        <span class="text-success"><i class="bi bi-shield-check"></i> Votos únicos auditados</span>
+                    </div>
+                </div>
+                <div class="admin-kpi-icon" style="background: rgba(139, 47, 247, 0.15); color: var(--adm-roxo);">
+                    <i class="bi bi-check2-all"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="admin-kpi-card">
+            <div class="admin-kpi-glow" style="background: var(--adm-azul);"></div>
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="admin-kpi-label">Curtas Concorrentes</div>
+                    <div class="admin-kpi-value text-white">{{ total_curtas }}</div>
+                    <div class="admin-kpi-sub">
+                        <span>Em disputa pelo troféu do público</span>
+                    </div>
+                </div>
+                <div class="admin-kpi-icon" style="background: rgba(34, 211, 238, 0.15); color: var(--adm-azul);">
+                    <i class="bi bi-film"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-0">Classificação dos Curtas</h2>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'votacao' %}" target="_blank" class="btn btn-adm-outline">
+            <i class="bi bi-box-arrow-up-right"></i> Ver Página de Votação
+        </a>
+        <a href="{% url 'admin_curta_votacao_novo' %}" class="btn btn-adm-primary">
+            <i class="bi bi-plus-lg"></i> Novo Curta na Disputa
+        </a>
+    </div>
+</div>
+
+<!-- TABELA DE CLASSIFICAÇÃO -->
+<div class="admin-card mb-4">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">Posição</th>
+                    <th style="width: 70px;">Cartaz</th>
+                    <th>Título da Obra</th>
+                    <th>Grupo / Turma</th>
+                    <th style="min-width: 200px;">Votos e Porcentagem</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 120px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in curtas %}
+                <tr>
+                    <td>
+                        {% if forloop.counter == 1 %}
+                        <span class="badge bg-warning text-dark fw-bold px-2 py-1"><i class="bi bi-trophy-fill"></i> 1º</span>
+                        {% elif forloop.counter == 2 %}
+                        <span class="badge bg-secondary text-light fw-bold px-2 py-1">2º</span>
+                        {% elif forloop.counter == 3 %}
+                        <span class="badge bg-dark border border-secondary text-light fw-bold px-2 py-1">3º</span>
+                        {% else %}
+                        <span class="text-secondary small ms-2">{{ forloop.counter }}º</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.obj.cartaz %}
+                        <img src="{{ item.obj.cartaz.url }}" alt="{{ item.obj.titulo }}" class="rounded-2 object-fit-cover shadow-sm" style="width: 60px; height: 42px;">
+                        {% else %}
+                        <div class="bg-dark rounded-2 d-flex align-items-center justify-content-center text-secondary" style="width: 60px; height: 42px;">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="fw-bold text-white">{{ item.obj.titulo }}</div>
+                    </td>
+                    <td class="text-secondary small">
+                        {{ item.obj.grupo }} <span class="text-light">({{ item.obj.turma }})</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="fw-bold text-white">{{ item.votos }} votos</span>
+                            <span class="badge bg-purple text-light" style="font-size: 11px;">{{ item.porcentagem }}%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <div class="admin-progress-fill" style="width: {{ item.porcentagem }}%;"></div>
+                        </div>
+                    </td>
+                    <td><span class="badge bg-dark border border-secondary text-light">{{ item.obj.ordem }}</span></td>
+                    <td>
+                        {% if item.obj.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativo</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_curta_votacao_toggle' item.obj.id %}" class="btn-adm-action {% if item.obj.ativo %}toggle-on{% else %}toggle-off{% endif %}" title="Alternar status">
+                                <i class="bi {% if item.obj.ativo %}bi-toggle-on fs-5{% else %}bi-toggle-off fs-5{% endif %}"></i>
+                            </a>
+                            <a href="{% url 'admin_curta_votacao_editar' item.obj.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_curta_votacao_excluir' item.obj.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-secondary">
+                        Nenhum curta cadastrado na votação até agora.
+                        <a href="{% url 'admin_curta_votacao_novo' %}" class="d-block mt-2 text-warning fw-bold">+ Cadastrar Primeiro Curta</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- AUDITORIA: ÚLTIMOS VOTOS REGISTRADOS -->
+{% if ultimos_votos %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title"><i class="bi bi-clock-history text-secondary"></i> Últimos Votos Registrados (Auditoria)</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Usuário Votante</th>
+                    <th>Curta Escolhido</th>
+                    <th>Data e Hora do Voto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ultimos_votos %}
+                <tr>
+                    <td>
+                        <i class="bi bi-person-fill text-secondary me-1"></i>
+                        <span class="text-white">{{ v.usuario.get_full_name|default:v.usuario.username }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-dark border border-secondary text-info">{{ v.curta.titulo }}</span>
+                    </td>
+                    <td class="text-secondary small">{{ v.data_voto|date:"d/m/Y H:i:s" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,8 +1,7 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +11,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()]
+_hosts_raw = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost')
+ALLOWED_HOSTS = [h.strip() for h in _hosts_raw.split(',') if h.strip()]
 if DEBUG and 'testserver' not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append('testserver')
 
@@ -100,27 +100,30 @@ DATABASES = {
 
 
 AUTH_PASSWORD_VALIDATORS = [
-
     {
-        'NAME':
-            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
-
     {
-        'NAME':
-            'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
-
     {
-        'NAME':
-            'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
-
     {
-        'NAME':
-            'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
-
 ]
 
 CKEDITOR_5_CONFIGS = {
@@ -134,9 +137,23 @@ CKEDITOR_5_CONFIGS = {
         ],
         'heading': {
             'options': [
-                {'model': 'paragraph', 'title': 'Parágrafo', 'class': 'ck-heading_paragraph'},
-                {'model': 'heading2', 'view': 'h2', 'title': 'Título 2', 'class': 'ck-heading_heading2'},
-                {'model': 'heading3', 'view': 'h3', 'title': 'Título 3', 'class': 'ck-heading_heading3'},
+                {
+                    'model': 'paragraph',
+                    'title': 'Parágrafo',
+                    'class': 'ck-heading_paragraph',
+                },
+                {
+                    'model': 'heading2',
+                    'view': 'h2',
+                    'title': 'Título 2',
+                    'class': 'ck-heading_heading2',
+                },
+                {
+                    'model': 'heading3',
+                    'view': 'h3',
+                    'title': 'Título 3',
+                    'class': 'ck-heading_heading3',
+                },
             ]
         },
     },
@@ -164,7 +181,7 @@ LOGIN_URL = 'account_login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
@@ -211,8 +228,8 @@ ACCOUNT_SIGNUP_FIELDS = [
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-# Permite conectar automaticamente a conta social (SUAP/Google) se o e-mail já existir no banco
+# Permite conectar automaticamente a conta social (SUAP/Google)
+# se o e-mail já existir no banco
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
-

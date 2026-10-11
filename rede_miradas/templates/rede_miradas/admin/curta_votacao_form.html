@@ -1,0 +1,76 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}{{ titulo_acao }}{% endblock %}
+{% block topo_icone %}<i class="bi bi-trophy-fill text-warning"></i>{% endblock %}
+{% block topo_titulo %}{{ titulo_acao }}{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_votacao' %}">Votação do Júri</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">{{ titulo_acao }}</span>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Dados do Curta para Votação</h2>
+            </div>
+            <div class="admin-card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo.id_for_label }}">Título do Curta-Metragem</label>
+                        {{ form.titulo }}
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.grupo.id_for_label }}">Nome do Grupo / Equipe</label>
+                            {{ form.grupo }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.turma.id_for_label }}">Turma / Ano</label>
+                            {{ form.turma }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.cartaz.id_for_label }}">Cartaz Oficial</label>
+                        {{ form.cartaz }}
+                        {% if curta.cartaz %}
+                        <div class="mt-2 small text-secondary">
+                            Cartaz atual: <a href="{{ curta.cartaz.url }}" target="_blank" class="text-info">{{ curta.cartaz.name }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.ordem.id_for_label }}">Ordem na Cédula de Votação</label>
+                            {{ form.ordem }}
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center pt-3">
+                            <div class="form-check form-switch">
+                                {{ form.ativo }}
+                                <label class="form-check-label fw-bold text-white" for="{{ form.ativo.id_for_label }}">Disponível para Votos</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-adm-primary px-4">
+                            <i class="bi bi-check2"></i> Salvar Curta
+                        </button>
+                        <a href="{% url 'admin_votacao' %}" class="btn btn-adm-outline">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

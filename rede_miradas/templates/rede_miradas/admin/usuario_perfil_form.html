@@ -1,0 +1,91 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Editar Perfil do Usuário{% endblock %}
+{% block topo_icone %}<i class="bi bi-person-gear text-success"></i>{% endblock %}
+{% block topo_titulo %}Editar Perfil: {{ usuario.username }}{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_usuarios_lista' %}">Usuários</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Editar Perfil de {{ usuario.username }}</span>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="bi bi-person-badge"></i>
+                    Informações do Usuário: {{ usuario.get_full_name|default:usuario.username }}
+                </h2>
+            </div>
+            <div class="admin-card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.tipo.id_for_label }}">Tipo de Conta / Perfil</label>
+                        {{ form.tipo }}
+                        <div class="admin-form-hint">Aluno, Professor ou Usuário comum.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.bio.id_for_label }}">Biografia / Descrição</label>
+                        {{ form.bio }}
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.escola.id_for_label }}">Escola / Instituição</label>
+                            {{ form.escola }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.grupo.id_for_label }}">Grupo / Equipe Audiovisual</label>
+                            {{ form.grupo }}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.nome_curta_participou.id_for_label }}">Curta que participou</label>
+                            {{ form.nome_curta_participou }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.link_curta_participou.id_for_label }}">Link do curta no YouTube</label>
+                            {{ form.link_curta_participou }}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.instagram.id_for_label }}">Instagram</label>
+                            {{ form.instagram }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.link_outra_rede.id_for_label }}">Outra Rede / Portfólio</label>
+                            {{ form.link_outra_rede }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-adm-primary px-4">
+                                <i class="bi bi-check2"></i> Salvar Perfil
+                            </button>
+                            <a href="{% url 'admin_usuarios_lista' %}" class="btn btn-adm-outline">Cancelar</a>
+                        </div>
+                        {% if usuario.id != request.user.id %}
+                        <a href="{% url 'admin_usuario_excluir' usuario.id %}" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash3"></i> Excluir Usuário
+                        </a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

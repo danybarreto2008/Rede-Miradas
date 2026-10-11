@@ -1,0 +1,8 @@
+exclude = [
+    ".git",
+    "venv",
+    "**/migrations/**",
+]
+
+[lint]
+ignore = ["E501"]

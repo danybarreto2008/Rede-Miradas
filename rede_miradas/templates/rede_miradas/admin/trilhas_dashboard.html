@@ -1,0 +1,157 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}Painel das Trilhas de Aprendizagem{% endblock %}
+{% block topo_icone %}<i class="bi bi-signpost-split-fill text-warning"></i>{% endblock %}
+{% block topo_titulo %}Trilhas de Aprendizagem{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Trilhas de Aprendizagem</span>
+</div>
+
+<!-- SUBMENU / ABAS DAS TRILHAS -->
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'admin_trilhas_dashboard' %}" class="btn btn-adm-primary"><i class="bi bi-grid-fill"></i> Painel Geral</a>
+    <a href="{% url 'admin_trilhas_hero' %}" class="btn btn-adm-outline"><i class="bi bi-palette-fill text-danger"></i> Cores & Topo da Trilha</a>
+    <a href="{% url 'admin_trilhas_cards_lista' %}" class="btn btn-adm-outline"><i class="bi bi-card-checklist text-info"></i> Trilhas de Aprendizagem ({{ total_trilhas }})</a>
+    <a href="{% url 'admin_unidades_lista' %}" class="btn btn-adm-outline"><i class="bi bi-journals text-primary"></i> Módulos / Unidades ({{ total_unidades }})</a>
+    <a href="{% url 'admin_topicos_lista' %}" class="btn btn-adm-outline"><i class="bi bi-file-earmark-text text-warning"></i> Aulas e Textos ({{ total_topicos }})</a>
+    <a href="{% url 'admin_trilhas_faixa_lista' %}" class="btn btn-adm-outline"><i class="bi bi-badge-ad text-success"></i> Letreiro de Destaques</a>
+</div>
+
+<!-- CARDS DE RESUMO -->
+<div class="row g-4 mb-4">
+    <!-- HERO RESUMO -->
+    <div class="col-lg-6">
+        <div class="admin-card h-100">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title"><i class="bi bi-stars text-danger"></i> Banner Principal & Efeito Neon</h2>
+                <a href="{% url 'admin_trilhas_hero' %}" class="btn btn-sm btn-adm-outline">Editar Cores</a>
+            </div>
+            <div class="admin-card-body">
+                {% if hero %}
+                <div class="p-3 rounded-4 mb-3" style="background: radial-gradient(circle at center, {{ hero.cor_glow_1 }}22 0%, {{ hero.cor_glow_2 }}15 50%, #0c0f1f 100%); border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 class="h5 fw-bold mb-1" style="color: {{ hero.cor_titulo }};">{{ hero.titulo }}</h3>
+                    <p class="small mb-3" style="color: {{ hero.cor_subtitulo }};">{{ hero.subtitulo }}</p>
+                    {% if hero.mostrar_botao %}
+                    <span class="badge rounded-pill px-3 py-2" style="background-color: {{ hero.cor_fundo_botao }}; color: {{ hero.cor_texto_botao }}; font-size: 11px;">
+                        {{ hero.texto_botao }}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center gap-3 small text-secondary">
+                    <span>Brilho Neon 1: <strong class="font-monospace text-light">{{ hero.cor_glow_1 }}</strong></span>
+                    <span>•</span>
+                    <span>Brilho Neon 2: <strong class="font-monospace text-light">{{ hero.cor_glow_2 }}</strong></span>
+                </div>
+                {% else %}
+                <p class="text-secondary">O topo das trilhas ainda não foi configurado.</p>
+                <a href="{% url 'admin_trilhas_hero' %}" class="btn btn-adm-primary btn-sm">Configurar Topo</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- FAIXA INFORMATIVA RESUMO -->
+    <div class="col-lg-6">
+        <div class="admin-card h-100">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title"><i class="bi bi-badge-ad text-success"></i> Letreiro de Destaques (Faixa)</h2>
+                <a href="{% url 'admin_trilhas_faixa_lista' %}" class="btn btn-sm btn-adm-outline">Gerenciar Itens</a>
+            </div>
+            <div class="admin-card-body">
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    {% for item in faixa_itens %}
+                    <span class="badge bg-dark border border-secondary p-2 px-3 fs-6 {% if not item.ativo %}opacity-50 text-decoration-line-through{% endif %}">
+                        {{ item.texto }}
+                    </span>
+                    {% empty %}
+                    <span class="text-secondary small">Nenhum item cadastrado no letreiro.</span>
+                    {% endfor %}
+                </div>
+                <div class="small text-secondary">
+                    Essas frases aparecem no topo das trilhas, informando a estrutura e diferenciais do curso.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LISTA DE CARDS DE TRILHAS CADASTRADOS -->
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title"><i class="bi bi-card-checklist text-info"></i> Trilhas de Aprendizagem Cadastradas</h2>
+        <a href="{% url 'admin_trilha_card_novo' %}" class="btn btn-adm-primary btn-sm"><i class="bi bi-plus-lg"></i> Nova Trilha</a>
+    </div>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Etapa / Tag</th>
+                    <th>Título da Trilha</th>
+                    <th>Link da Trilha (URL)</th>
+                    <th>Cores & Glow</th>
+                    <th>Módulos</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for card in cards %}
+                <tr>
+                    <td>
+                        <span class="badge" style="background-color: {{ card.cor_fundo_card }}; color: {{ card.cor_tag }}; border: 1px solid {{ card.cor_borda_card }};">
+                            {{ card.tag }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-white">{{ card.titulo }}</div>
+                        <div class="small text-secondary text-truncate" style="max-width: 250px;">{{ card.descricao }}</div>
+                    </td>
+                    <td class="font-monospace small text-secondary">{{ card.slug }}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-1">
+                            <span title="Fundo Card" class="border border-secondary rounded-circle" style="width: 16px; height: 16px; background-color: {{ card.cor_fundo_card }};"></span>
+                            <span title="Borda Card" class="border border-secondary rounded-circle" style="width: 16px; height: 16px; background-color: {{ card.cor_borda_card }};"></span>
+                            <span title="Glow Neon" class="border border-secondary rounded-circle" style="width: 16px; height: 16px; background-color: {{ card.cor_glow }};"></span>
+                            <span title="Sidebar" class="border border-secondary rounded-circle" style="width: 16px; height: 16px; background-color: {{ card.cor_sidebar }};"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_unidades_lista' %}?trilha={{ card.id }}" class="admin-badge admin-badge-cyan text-decoration-none" title="Gerenciar Unidades">
+                            <i class="bi bi-journals"></i> {{ card.total_unidades }} unidades
+                        </a>
+                    </td>
+                    <td><span class="badge bg-dark border border-secondary text-light">{{ card.ordem }}</span></td>
+                    <td>
+                        {% if card.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativa</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativa</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_unidades_lista' %}?trilha={{ card.id }}" class="btn-adm-action" title="Acessar Unidades"><i class="bi bi-journals"></i></a>
+                            <a href="{% url 'admin_trilha_card_editar' card.id %}" class="btn-adm-action edit" title="Editar Trilha"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_trilha_card_excluir' card.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-secondary">
+                        Nenhuma trilha cadastrada ainda.
+                        <a href="{% url 'admin_trilha_card_novo' %}" class="d-block mt-2 text-info">+ Cadastrar Trilha</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

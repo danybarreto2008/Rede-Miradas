@@ -1,0 +1,186 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Textos das Seções da Tela Inicial{% endblock %}
+{% block topo_icone %}<i class="bi bi-card-heading text-warning"></i>{% endblock %}
+{% block topo_titulo %}Textos das Seções da Tela Inicial{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Textos das Seções</span>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="row g-4">
+        <!-- SEÇÃO CURTAS EM DESTAQUE -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-film text-info"></i>
+                        Seção: Curtas em Destaque
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    <p class="small text-secondary mb-3">
+                        Configura o cabeçalho exibido acima da galeria de curtas-metragens da tela inicial.
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form_curtas.titulo.id_for_label }}">Título Principal da Seção</label>
+                        {{ form_curtas.titulo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form_curtas.subtitulo.id_for_label }}">Subtítulo / Descrição</label>
+                        {{ form_curtas.subtitulo }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO FINAL (CTA) -->
+        <div class="col-lg-6">
+            <div class="admin-card h-100">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-megaphone-fill text-danger"></i>
+                        Seção Final (Chamada para Ação)
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    <p class="small text-secondary mb-3">
+                        Configura a caixa de convite final no rodapé da página inicial (convite para começar).
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form_final.titulo.id_for_label }}">Título da Chamada</label>
+                        {{ form_final.titulo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form_final.subtitulo.id_for_label }}">Texto Explicativo</label>
+                        {{ form_final.subtitulo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form_final.texto_botao.id_for_label }}">Texto do Botão</label>
+                        {{ form_final.texto_botao }}
+                        <div class="form-text text-secondary small mt-1">Exemplo: "Conheça as trilhas", "Comece agora", "Participe".</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label">
+                            <i class="bi bi-compass text-info me-1"></i> Para onde o botão vai levar o visitante?
+                        </label>
+                        <select id="seletor_destino_final" class="form-select bg-dark text-white border-secondary">
+                            <option value="/trilhas/">🎓 Página de Trilhas de Aprendizagem (Padrão)</option>
+                            <option value="/trilhas/visao-geral/">🗺️ Visão Geral das Trilhas</option>
+                            <option value="/noticias/">📰 Notícias e Novidades</option>
+                            <option value="/votacao/">🏆 Votação do Júri Popular</option>
+                            <option value="/login/">👤 Página de Cadastro / Entrar</option>
+                            <option value="/">🏠 Início da Página Inicial (Topo)</option>
+                            <option value="custom">🌐 Outro endereço ou link externo (digitar manualmente)...</option>
+                        </select>
+
+                        <!-- Campo real sincronizado / customizado -->
+                        <div id="campo_custom_destino" class="mt-2" style="display: none;">
+                            <label class="admin-form-label small text-info mb-1" for="{{ form_final.link_botao.id_for_label }}">
+                                <i class="bi bi-link-45deg"></i> Digite ou cole o link do site externo:
+                            </label>
+                            {{ form_final.link_botao }}
+                            <div class="form-text text-secondary small">
+                                Cole o link completo, por exemplo: <code>https://instagram.com/redemiradas</code> ou link de formulário Google.
+                            </div>
+                        </div>
+
+                        <!-- Card de confirmação visual amigável -->
+                        <div id="preview_destino_final" class="mt-2 p-2 rounded bg-dark bg-opacity-75 border border-info border-opacity-25 small text-light d-flex align-items-center gap-2">
+                            <i class="bi bi-box-arrow-up-right text-info fs-6"></i>
+                            <span id="preview_destino_texto">Ao clicar, o visitante será levado para: <strong>Página de Trilhas de Aprendizagem</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-adm-primary btn-lg px-4">
+            <i class="bi bi-check2-circle"></i> Salvar Textos das Seções
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const inputLink = document.getElementById("{{ form_final.link_botao.id_for_label }}");
+    const seletor = document.getElementById("seletor_destino_final");
+    const campoCustom = document.getElementById("campo_custom_destino");
+    const previewTexto = document.getElementById("preview_destino_texto");
+
+    if (!inputLink || !seletor) return;
+
+    const rotulos = {
+        "/trilhas/": "Página de Trilhas de Aprendizagem (/trilhas/)",
+        "/trilhas/visao-geral/": "Visão Geral das Trilhas (/trilhas/visao-geral/)",
+        "/noticias/": "Página de Notícias (/noticias/)",
+        "/votacao/": "Votação do Júri Popular (/votacao/)",
+        "/login/": "Página de Cadastro / Entrar (/login/)",
+        "/": "Início da Página Inicial (/)"
+    };
+
+    function atualizarEstado(valorAtual) {
+        valorAtual = (valorAtual || "").trim();
+        if (rotulos[valorAtual]) {
+            seletor.value = valorAtual;
+            campoCustom.style.display = "none";
+            previewTexto.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulos[valorAtual] + "</strong>";
+        } else if (valorAtual === "") {
+            seletor.value = "/trilhas/";
+            inputLink.value = "/trilhas/";
+            campoCustom.style.display = "none";
+            previewTexto.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulos["/trilhas/"] + "</strong>";
+        } else {
+            seletor.value = "custom";
+            campoCustom.style.display = "block";
+            previewTexto.innerHTML = "Ao clicar, o visitante será levado para o link externo: <strong>" + valorAtual + "</strong>";
+        }
+    }
+
+    // Inicializa com o valor atual
+    atualizarEstado(inputLink.value);
+
+    // Quando o usuário escolhe uma opção no menu amigável
+    seletor.addEventListener("change", function () {
+        if (this.value === "custom") {
+            campoCustom.style.display = "block";
+            inputLink.focus();
+            const val = inputLink.value.trim();
+            previewTexto.innerHTML = val
+                ? "Ao clicar, o visitante será levado para o link externo: <strong>" + val + "</strong>"
+                : "Digite acima o endereço para onde o botão deve direcionar.";
+        } else {
+            campoCustom.style.display = "none";
+            inputLink.value = this.value;
+            previewTexto.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulos[this.value] + "</strong>";
+        }
+    });
+
+    // Quando o usuário digita um link personalizado
+    inputLink.addEventListener("input", function () {
+        if (seletor.value === "custom") {
+            const val = this.value.trim();
+            previewTexto.innerHTML = val
+                ? "Ao clicar, o visitante será levado para o link externo: <strong>" + val + "</strong>"
+                : "Digite acima o endereço para onde o botão deve direcionar.";
+        }
+    });
+});
+</script>
+{% endblock %}
