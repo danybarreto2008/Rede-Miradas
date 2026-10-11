@@ -1,0 +1,311 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Hero e Iluminação Neon das Trilhas{% endblock %}
+{% block topo_icone %}<i class="bi bi-palette-fill text-danger"></i>{% endblock %}
+{% block topo_titulo %}Seção Hero & Brilho Neon das Trilhas{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas de Aprendizagem</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Hero & Iluminação Neon</span>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="heroForm">
+    {% csrf_token %}
+
+    <div class="row g-4">
+        <!-- FORMULÁRIO -->
+        <div class="col-lg-7">
+            <!-- 1. TEXTOS E CONTEÚDO -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-type text-info"></i> 1. Textos de Boas-Vindas</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo.id_for_label }}">Título Principal</label>
+                        {{ form.titulo }}
+                        <div class="d-flex gap-3 mt-2">
+                            <div class="form-check">{{ form.titulo_negrito }} <label class="form-check-label small" for="{{ form.titulo_negrito.id_for_label }}"><strong>Negrito</strong></label></div>
+                            <div class="form-check">{{ form.titulo_italico }} <label class="form-check-label small" for="{{ form.titulo_italico.id_for_label }}"><em>Itálico</em></label></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.subtitulo.id_for_label }}">Subtítulo / Texto Explicativo</label>
+                        {{ form.subtitulo }}
+                        <div class="d-flex gap-3 mt-2">
+                            <div class="form-check">{{ form.subtitulo_negrito }} <label class="form-check-label small" for="{{ form.subtitulo_negrito.id_for_label }}"><strong>Negrito</strong></label></div>
+                            <div class="form-check">{{ form.subtitulo_italico }} <label class="form-check-label small" for="{{ form.subtitulo_italico.id_for_label }}"><em>Itálico</em></label></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.imagem_fundo.id_for_label }}">Imagem de Fundo Opcional</label>
+                        {{ form.imagem_fundo }}
+                        <div class="admin-form-hint">Se não enviada, mantém o fundo escuro com a iluminação neon central.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ILUMINAÇÃO NEON GLOW -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-magic text-danger"></i> 2. Iluminação Neon Central (Degradê de Glow)</h2>
+                </div>
+                <div class="admin-card-body">
+                    <p class="small text-secondary mb-3">
+                        Define as duas cores do halo de luz que ilumina o centro da página inicial de Trilhas.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor Neon 1 (Primária)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_glow_1 }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_glow_1">{{ form.cor_glow_1.value|default:'#7C3AED' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor Neon 2 (Secundária)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_glow_2 }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_glow_2">{{ form.cor_glow_2.value|default:'#22D3EE' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. CORES DOS TEXTOS E BOTÃO -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-cursor-fill text-warning"></i> 3. Botão e Cores de Texto</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor do Título</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_titulo }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_titulo">{{ form.cor_titulo.value|default:'#FFFFFF' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor do Subtítulo</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_subtitulo }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_subtitulo">{{ form.cor_subtitulo.value|default:'#FFFFFF' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+                        {{ form.mostrar_botao }}
+                        <label class="form-check-label fw-bold text-white" for="{{ form.mostrar_botao.id_for_label }}">Exibir botão no topo da página</label>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-5">
+                            <label class="admin-form-label" for="{{ form.texto_botao.id_for_label }}">Texto do Botão</label>
+                            {{ form.texto_botao }}
+                            <div class="form-text text-secondary small mt-1">Exemplo: "Comece Por Aqui", "Ver Trilhas".</div>
+                        </div>
+                        <div class="col-md-7">
+                            <label class="admin-form-label">
+                                <i class="bi bi-compass text-info me-1"></i> Para onde o botão vai levar o visitante?
+                            </label>
+                            <select id="seletor_destino_hero" class="form-select bg-dark text-white border-secondary">
+                                <option value="/trilhas/visao-geral/">🗺️ Visão Geral das Trilhas (Padrão)</option>
+                                <option value="/trilhas/">🎓 Início das Trilhas</option>
+                                <option value="/noticias/">📰 Notícias e Blog</option>
+                                <option value="/votacao/">🏆 Votação do Júri Popular</option>
+                                <option value="/login/">👤 Página de Cadastro / Entrar</option>
+                                <option value="/">🏠 Início da Página Inicial</option>
+                                <option value="custom">🌐 Outro endereço ou link externo (digitar manualmente)...</option>
+                            </select>
+
+                            <div id="campo_custom_destino_hero" class="mt-2" style="display: none;">
+                                <label class="admin-form-label small text-info mb-1" for="{{ form.link_botao.id_for_label }}">
+                                    <i class="bi bi-link-45deg"></i> Digite ou cole o link:
+                                </label>
+                                {{ form.link_botao }}
+                                <div class="form-text text-secondary small">Cole o link completo.</div>
+                            </div>
+
+                            <div id="preview_destino_hero" class="mt-2 p-2 rounded bg-dark bg-opacity-75 border border-info border-opacity-25 small text-light d-flex align-items-center gap-2">
+                                <i class="bi bi-box-arrow-up-right text-info fs-6"></i>
+                                <span id="preview_destino_texto_hero">Ao clicar, o visitante será levado para: <strong>Visão Geral das Trilhas</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor de Fundo do Botão</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_fundo_botao }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_fundo_botao">{{ form.cor_fundo_botao.value|default:'#FFFFFF' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor do Texto do Botão</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_texto_botao }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_texto_botao">{{ form.cor_texto_botao.value|default:'#0B0C10' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-5">
+                <button type="submit" class="btn btn-adm-primary btn-lg px-4">
+                    <i class="bi bi-check2-circle"></i> Salvar Configurações do Hero
+                </button>
+                <a href="{% url 'admin_trilhas_dashboard' %}" class="btn btn-adm-outline btn-lg">Voltar</a>
+            </div>
+        </div>
+
+        <!-- PRÉVIA EM TEMPO REAL -->
+        <div class="col-lg-5">
+            <div class="admin-live-preview-card">
+                <h3 class="h6 fw-bold text-white mb-3"><i class="bi bi-eye text-info"></i> Prévia da Iluminação e Textos</h3>
+                <div id="heroPreviewBox" class="p-4 rounded-4 text-center position-relative overflow-hidden d-flex flex-column align-items-center justify-content-center" style="min-height: 280px; background-color: #0b0c10; border: 1px solid rgba(255,255,255,0.15);">
+                    <!-- Halos de Glow -->
+                    <div id="haloGlow1" class="position-absolute" style="width: 220px; height: 220px; border-radius: 50%; filter: blur(40px); opacity: 0.35; background-color: {{ form.cor_glow_1.value|default:'#7C3AED' }}; pointer-events: none;"></div>
+                    <div id="haloGlow2" class="position-absolute" style="width: 180px; height: 180px; border-radius: 50%; filter: blur(35px); opacity: 0.30; background-color: {{ form.cor_glow_2.value|default:'#22D3EE' }}; pointer-events: none;"></div>
+
+                    <div class="position-relative z-2">
+                        <h4 id="heroPrevTitulo" class="fw-bold mb-2" style="color: {{ form.cor_titulo.value|default:'#FFFFFF' }};">
+                            {{ form.titulo.value|default:'Bem-Vindo(a)' }}
+                        </h4>
+                        <p id="heroPrevSub" class="small mb-3" style="color: {{ form.cor_subtitulo.value|default:'#FFFFFF' }};">
+                            {{ form.subtitulo.value|default:'Aprenda produção audiovisual em módulos práticos e criativos.' }}
+                        </p>
+                        <button type="button" id="heroPrevBtn" class="btn btn-sm rounded-pill px-4 fw-bold" style="background-color: {{ form.cor_fundo_botao.value|default:'#FFFFFF' }}; color: {{ form.cor_texto_botao.value|default:'#0B0C10' }};">
+                            {{ form.texto_botao.value|default:'Conheça as trilhas' }}
+                        </button>
+                    </div>
+                </div>
+                <div class="small text-secondary mt-3">
+                    Os dois halos neon combinados formam a iluminação atmosférica no centro da página de trilhas.
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const titInput = document.getElementById('{{ form.titulo.id_for_label }}');
+    const subInput = document.getElementById('{{ form.subtitulo.id_for_label }}');
+    const btnTextInput = document.getElementById('{{ form.texto_botao.id_for_label }}');
+
+    const corTitInput = document.getElementById('{{ form.cor_titulo.id_for_label }}');
+    const corSubInput = document.getElementById('{{ form.cor_subtitulo.id_for_label }}');
+    const corFundoBtnInput = document.getElementById('{{ form.cor_fundo_botao.id_for_label }}');
+    const corTxtBtnInput = document.getElementById('{{ form.cor_texto_botao.id_for_label }}');
+    const corGlow1Input = document.getElementById('{{ form.cor_glow_1.id_for_label }}');
+    const corGlow2Input = document.getElementById('{{ form.cor_glow_2.id_for_label }}');
+
+    const heroPrevTitulo = document.getElementById('heroPrevTitulo');
+    const heroPrevSub = document.getElementById('heroPrevSub');
+    const heroPrevBtn = document.getElementById('heroPrevBtn');
+    const haloGlow1 = document.getElementById('haloGlow1');
+    const haloGlow2 = document.getElementById('haloGlow2');
+
+    if (titInput) titInput.addEventListener('input', e => heroPrevTitulo.textContent = e.target.value || 'Bem-Vindo(a)');
+    if (subInput) subInput.addEventListener('input', e => heroPrevSub.textContent = e.target.value || 'Subtítulo...');
+    if (btnTextInput) btnTextInput.addEventListener('input', e => heroPrevBtn.textContent = e.target.value || 'Botão');
+
+    if (corTitInput) corTitInput.addEventListener('input', e => {
+        heroPrevTitulo.style.color = e.target.value;
+        document.getElementById('hex_cor_titulo').textContent = e.target.value.toUpperCase();
+    });
+    if (corSubInput) corSubInput.addEventListener('input', e => {
+        heroPrevSub.style.color = e.target.value;
+        document.getElementById('hex_cor_subtitulo').textContent = e.target.value.toUpperCase();
+    });
+    if (corFundoBtnInput) corFundoBtnInput.addEventListener('input', e => {
+        heroPrevBtn.style.backgroundColor = e.target.value;
+        document.getElementById('hex_cor_fundo_botao').textContent = e.target.value.toUpperCase();
+    });
+    if (corTxtBtnInput) corTxtBtnInput.addEventListener('input', e => {
+        heroPrevBtn.style.color = e.target.value;
+        document.getElementById('hex_cor_texto_botao').textContent = e.target.value.toUpperCase();
+    });
+    if (corGlow1Input) corGlow1Input.addEventListener('input', e => {
+        haloGlow1.style.backgroundColor = e.target.value;
+        document.getElementById('hex_cor_glow_1').textContent = e.target.value.toUpperCase();
+    });
+    if (corGlow2Input) corGlow2Input.addEventListener('input', e => {
+        haloGlow2.style.backgroundColor = e.target.value;
+        document.getElementById('hex_cor_glow_2').textContent = e.target.value.toUpperCase();
+    });
+
+    // Sincronização do Destino Amigável do Botão
+    const inputLinkHero = document.getElementById('{{ form.link_botao.id_for_label }}');
+    const seletorHero = document.getElementById('seletor_destino_hero');
+    const campoCustomHero = document.getElementById('campo_custom_destino_hero');
+    const previewTextoHero = document.getElementById('preview_destino_texto_hero');
+
+    if (inputLinkHero && seletorHero) {
+        const rotulosHero = {
+            "/trilhas/visao-geral/": "Visão Geral das Trilhas (/trilhas/visao-geral/)",
+            "/trilhas/": "Início das Trilhas (/trilhas/)",
+            "/noticias/": "Página de Notícias (/noticias/)",
+            "/votacao/": "Votação do Júri Popular (/votacao/)",
+            "/login/": "Página de Cadastro / Entrar (/login/)",
+            "/": "Início da Página Inicial (/)"
+        };
+
+        function atualizarDestinoHero(valor) {
+            valor = (valor || "").trim();
+            if (rotulosHero[valor]) {
+                seletorHero.value = valor;
+                campoCustomHero.style.display = "none";
+                previewTextoHero.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulosHero[valor] + "</strong>";
+            } else if (valor === "") {
+                seletorHero.value = "/trilhas/visao-geral/";
+                inputLinkHero.value = "/trilhas/visao-geral/";
+                campoCustomHero.style.display = "none";
+                previewTextoHero.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulosHero["/trilhas/visao-geral/"] + "</strong>";
+            } else {
+                seletorHero.value = "custom";
+                campoCustomHero.style.display = "block";
+                previewTextoHero.innerHTML = "Ao clicar, o visitante será levado para o link externo: <strong>" + valor + "</strong>";
+            }
+        }
+
+        atualizarDestinoHero(inputLinkHero.value);
+
+        seletorHero.addEventListener("change", function () {
+            if (this.value === "custom") {
+                campoCustomHero.style.display = "block";
+                inputLinkHero.focus();
+                const val = inputLinkHero.value.trim();
+                previewTextoHero.innerHTML = val
+                    ? "Ao clicar, o visitante será levado para o link externo: <strong>" + val + "</strong>"
+                    : "Digite acima o endereço do link.";
+            } else {
+                campoCustomHero.style.display = "none";
+                inputLinkHero.value = this.value;
+                previewTextoHero.innerHTML = "Ao clicar, o visitante será levado para: <strong>" + rotulosHero[this.value] + "</strong>";
+            }
+        });
+
+        inputLinkHero.addEventListener("input", function () {
+            if (seletorHero.value === "custom") {
+                const val = this.value.trim();
+                previewTextoHero.innerHTML = val
+                    ? "Ao clicar, o visitante será levado para o link externo: <strong>" + val + "</strong>"
+                    : "Digite acima o endereço do link.";
+            }
+        });
+    }
+</script>
+{% endblock %}

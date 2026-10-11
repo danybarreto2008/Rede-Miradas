@@ -1,0 +1,86 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}{{ titulo_acao }}{% endblock %}
+{% block topo_icone %}<i class="bi bi-file-earmark-text text-warning"></i>{% endblock %}
+{% block topo_titulo %}{{ titulo_acao }}{% endblock %}
+
+{% block extra_head %}
+    {{ form.media }}
+    <style>
+        .ck.ck-editor__main>.ck-editor__editable {
+            background-color: #0d1124 !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            min-height: 320px;
+        }
+        .ck.ck-toolbar {
+            background-color: #12162d !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .ck.ck-button {
+            color: #e2e8f0 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_topicos_lista' %}">Tópicos e Aulas</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">{{ titulo_acao }}</span>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">Conteúdo Didático da Aula</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.unidade.id_for_label }}">Unidade de Aprendizagem</label>
+                        {{ form.unidade }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo.id_for_label }}">Título da Aula / Tópico</label>
+                        {{ form.titulo }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="admin-form-label">Conteúdo Completo (Texto, Imagens, Vídeos formatados)</label>
+                        {{ form.conteudo }}
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.ordem.id_for_label }}">Ordem de Exibição na Unidade</label>
+                            {{ form.ordem }}
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center pt-3">
+                            <div class="form-check form-switch">
+                                {{ form.ativo }}
+                                <label class="form-check-label fw-bold text-white" for="{{ form.ativo.id_for_label }}">Tópico Ativo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-adm-primary btn-lg px-4">
+                            <i class="bi bi-check2"></i> Salvar Conteúdo
+                        </button>
+                        <a href="{% url 'admin_topicos_lista' %}" class="btn btn-adm-outline btn-lg">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

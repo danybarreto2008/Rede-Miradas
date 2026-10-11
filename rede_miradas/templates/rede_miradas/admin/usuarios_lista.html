@@ -1,0 +1,147 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Usuários & Perfis da Comunidade{% endblock %}
+{% block topo_icone %}<i class="bi bi-people-fill text-success"></i>{% endblock %}
+{% block topo_titulo %}Usuários & Comunidade{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Usuários</span>
+</div>
+
+<!-- FILTROS -->
+<div class="admin-card mb-4">
+    <div class="admin-card-body p-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="q" value="{{ busca }}" class="form-control" placeholder="Buscar por nome, username, e-mail, grupo ou escola...">
+            </div>
+            <div class="col-md-3">
+                <select name="tipo" class="form-select">
+                    <option value="">Todos os Tipos</option>
+                    {% for val, label in tipos_choices %}
+                    <option value="{{ val }}" {% if tipo_selecionado == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-adm-outline w-100">Filtrar</button>
+            </div>
+            <div class="col-md-2">
+                {% if busca or tipo_selecionado %}
+                <a href="{% url 'admin_usuarios_lista' %}" class="btn btn-outline-secondary w-100">Limpar</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>E-mail</th>
+                    <th>Tipo de Perfil</th>
+                    <th>Escola / Grupo</th>
+                    <th>Selos</th>
+                    <th>Cadastro</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in pagina_usuarios %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="admin-user-avatar" style="width: 32px; height: 32px; font-size: 12px;">
+                                {{ u.first_name|default:u.username|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <div class="fw-bold text-white">{{ u.get_full_name|default:u.username }}</div>
+                                <div class="small text-secondary font-monospace">@{{ u.username }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-secondary small">{{ u.email|default:"Não informado" }}</td>
+                    <td>
+                        {% if u.perfil %}
+                            {% if u.perfil.tipo == 'aluno' %}
+                            <span class="admin-badge admin-badge-cyan">Aluno</span>
+                            {% elif u.perfil.tipo == 'professor' %}
+                            <span class="admin-badge admin-badge-warning">Professor</span>
+                            {% else %}
+                            <span class="admin-badge admin-badge-secondary">Comum</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="badge bg-danger bg-opacity-25 text-danger border-0">Sem Perfil</span>
+                        {% endif %}
+                        {% if u.is_superuser %}
+                        <span class="badge bg-purple text-light ms-1" style="font-size: 10px;">Superadmin</span>
+                        {% endif %}
+                    </td>
+                    <td class="small text-secondary">
+                        {% if u.perfil %}
+                            {{ u.perfil.escola|default:"-" }} / {{ u.perfil.grupo|default:"-" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-dark border border-secondary text-info">
+                            <i class="bi bi-award-fill"></i> {{ u.selos_conquistados.count }}
+                        </span>
+                    </td>
+                    <td class="small text-secondary">{{ u.date_joined|date:"d/m/Y" }}</td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-1">
+                            <a href="{% url 'admin_perfil_editar' u.id %}" class="btn-adm-action edit" title="Editar Perfil">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            {% if u.id != request.user.id %}
+                            <a href="{% url 'admin_usuario_excluir' u.id %}" class="btn-adm-action delete" title="Excluir Usuário">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-secondary">
+                        Nenhum usuário encontrado.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGINAÇÃO -->
+    {% if pagina_usuarios.paginator.num_pages > 1 %}
+    <div class="admin-card-header bg-transparent border-top py-3 d-flex justify-content-between align-items-center">
+        <span class="small text-secondary">
+            Página {{ pagina_usuarios.number }} de {{ pagina_usuarios.paginator.num_pages }}
+        </span>
+        <ul class="pagination pagination-sm m-0">
+            {% if pagina_usuarios.has_previous %}
+            <li class="page-item"><a class="page-link bg-dark border-secondary text-light" href="?pagina={{ pagina_usuarios.previous_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if tipo_selecionado %}&tipo={{ tipo_selecionado }}{% endif %}">&laquo;</a></li>
+            {% endif %}
+            {% for p in pagina_usuarios.paginator.page_range %}
+                {% if p == pagina_usuarios.number %}
+                <li class="page-item active"><span class="page-link bg-purple border-purple text-white">{{ p }}</span></li>
+                {% elif p >= pagina_usuarios.number|add:"-2" and p <= pagina_usuarios.number|add:"2" %}
+                <li class="page-item"><a class="page-link bg-dark border-secondary text-light" href="?pagina={{ p }}{% if busca %}&q={{ busca }}{% endif %}{% if tipo_selecionado %}&tipo={{ tipo_selecionado }}{% endif %}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagina_usuarios.has_next %}
+            <li class="page-item"><a class="page-link bg-dark border-secondary text-light" href="?pagina={{ pagina_usuarios.next_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if tipo_selecionado %}&tipo={{ tipo_selecionado }}{% endif %}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

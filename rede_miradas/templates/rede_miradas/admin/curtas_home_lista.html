@@ -1,0 +1,100 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}Curtas em Destaque na Tela Inicial{% endblock %}
+{% block topo_icone %}<i class="bi bi-film text-info"></i>{% endblock %}
+{% block topo_titulo %}Curtas em Destaque na Tela Inicial{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Curtas na Tela Inicial</span>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-1">Curtas em Exibição na Tela Inicial</h2>
+        <p class="text-secondary small mb-0">Gerencie os curtas-metragens destacados na seção de cinema da tela inicial, cartazes e links do YouTube.</p>
+    </div>
+    <a href="{% url 'admin_curta_home_novo' %}" class="btn btn-adm-primary">
+        <i class="bi bi-plus-lg"></i> Novo Curta na Tela Inicial
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Cartaz</th>
+                    <th>Título da Obra</th>
+                    <th>Grupo Produtor</th>
+                    <th>Degradê da Moldura</th>
+                    <th>Vídeo YouTube</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 130px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in curtas %}
+                <tr>
+                    <td>
+                        {% if c.cartaz %}
+                        <img src="{{ c.cartaz.url }}" alt="{{ c.nome }}" class="rounded-2 object-fit-cover shadow-sm" style="width: 60px; height: 42px;">
+                        {% else %}
+                        <div class="bg-dark rounded-2 d-flex align-items-center justify-content-center text-secondary" style="width: 60px; height: 42px;">
+                            <i class="bi bi-film"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="fw-bold text-white">{{ c.nome }}</div>
+                    </td>
+                    <td class="text-secondary small">{{ c.grupo|default:"Não informado" }}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="border border-secondary rounded-circle d-inline-block" style="width: 18px; height: 18px; background-color: {{ c.cor_borda_1 }};" title="Borda 1: {{ c.cor_borda_1 }}"></span>
+                            <span class="border border-secondary rounded-circle d-inline-block" style="width: 18px; height: 18px; background-color: {{ c.cor_borda_2 }};" title="Borda 2: {{ c.cor_borda_2 }}"></span>
+                            <span class="small font-monospace text-secondary">{{ c.cor_borda_1 }} / {{ c.cor_borda_2 }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{{ c.link_youtube }}" target="_blank" class="small text-info text-decoration-none">
+                            <i class="bi bi-youtube text-danger me-1"></i> Abrir vídeo
+                        </a>
+                    </td>
+                    <td>
+                        <span class="badge bg-dark border border-secondary text-light fw-bold">{{ c.ordem }}</span>
+                    </td>
+                    <td>
+                        {% if c.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativo</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_curta_home_toggle' c.id %}" class="btn-adm-action {% if c.ativo %}toggle-on{% else %}toggle-off{% endif %}" title="{% if c.ativo %}Desativar{% else %}Ativar{% endif %}">
+                                <i class="bi {% if c.ativo %}bi-toggle-on fs-5{% else %}bi-toggle-off fs-5{% endif %}"></i>
+                            </a>
+                            <a href="{% url 'admin_curta_home_editar' c.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_curta_home_excluir' c.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-secondary">
+                        Nenhum curta em destaque cadastrado para a página inicial.
+                        <a href="{% url 'admin_curta_home_novo' %}" class="d-block mt-2 text-info">+ Adicionar Primeiro Curta</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

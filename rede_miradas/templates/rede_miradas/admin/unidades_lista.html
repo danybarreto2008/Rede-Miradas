@@ -1,0 +1,108 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Unidades das Trilhas{% endblock %}
+{% block topo_icone %}<i class="bi bi-journals text-primary"></i>{% endblock %}
+{% block topo_titulo %}Unidades de Aprendizagem (Módulos){% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Unidades</span>
+</div>
+
+<!-- FILTRO POR TRILHA -->
+<div class="admin-card mb-4">
+    <div class="admin-card-body p-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <select name="trilha" class="form-select" onchange="this.form.submit()">
+                    <option value="">Todas as Trilhas</option>
+                    {% for t in trilhas %}
+                    <option value="{{ t.id }}" {% if trilha_selecionada == t.id %}selected{% endif %}>{{ t.tag }} - {{ t.titulo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                {% if trilha_selecionada %}
+                <a href="{% url 'admin_unidades_lista' %}" class="btn btn-outline-secondary w-100">Ver Todas</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-0">Unidades Cadastradas</h2>
+    </div>
+    <a href="{% url 'admin_unidade_nova' %}{% if trilha_selecionada %}?trilha={{ trilha_selecionada }}{% endif %}" class="btn btn-adm-primary">
+        <i class="bi bi-plus-lg"></i> Nova Unidade
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Trilha Pertencente</th>
+                    <th>Nº</th>
+                    <th>Título da Unidade</th>
+                    <th>Tópicos / Aulas</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 140px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in unidades %}
+                <tr>
+                    <td>
+                        <span class="badge" style="background-color: {{ u.trilha.cor_fundo_card }}; color: {{ u.trilha.cor_tag }}; border: 1px solid {{ u.trilha.cor_borda_card }};">
+                            {{ u.trilha.tag }}
+                        </span>
+                        <span class="small text-white ms-1">{{ u.trilha.titulo|truncatechars:30 }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-purple text-light fw-bold">Unidade {{ u.numero }}</span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-white">{{ u.titulo }}</div>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_topicos_lista' %}?unidade={{ u.id }}" class="admin-badge admin-badge-cyan text-decoration-none">
+                            <i class="bi bi-file-earmark-text"></i> {{ u.total_topicos }} aulas &rarr;
+                        </a>
+                    </td>
+                    <td><span class="badge bg-dark border border-secondary text-light">{{ u.ordem }}</span></td>
+                    <td>
+                        {% if u.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativa</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativa</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_topico_novo' %}?unidade={{ u.id }}" class="btn-adm-action text-info" title="Adicionar Aula"><i class="bi bi-plus-lg"></i></a>
+                            <a href="{% url 'admin_unidade_editar' u.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_unidade_excluir' u.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-secondary">
+                        Nenhuma unidade cadastrada.
+                        <a href="{% url 'admin_unidade_nova' %}" class="d-block mt-2 text-info">+ Criar Primeira Unidade</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

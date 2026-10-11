@@ -4,7 +4,7 @@ from .selos import SELOS
 
 def selo_pendente(request):
     if request.user.is_authenticated:
-        conquista = SeloConquistado.objects.filter(
+        conquista = SeloConquistado.objects.filter(  # type: ignore
             usuario=request.user,
             visualizado=False
         ).first()
@@ -15,4 +15,4 @@ def selo_pendente(request):
                 'selo_pendente_info': SELOS[conquista.selo],
             }
 
-    return {'selo_pendente': None, 'selo_pendente_info': None}
+    return {'selo_pendente': None, 'selo_pendente_info': None}

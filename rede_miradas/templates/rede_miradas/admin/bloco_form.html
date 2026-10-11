@@ -1,0 +1,134 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}{{ titulo_acao }}{% endblock %}
+{% block topo_icone %}<i class="bi bi-intersect text-success"></i>{% endblock %}
+{% block topo_titulo %}{{ titulo_acao }}{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_blocos_lista' %}">Blocos de Apresentação</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">{{ titulo_acao }}</span>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Configurações do Bloco</h2>
+            </div>
+            <div class="admin-card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="admin-form-label" for="{{ form.emoji.id_for_label }}">Emoji / Ícone</label>
+                            {{ form.emoji }}
+                            <div class="admin-form-hint">Ex: 🎬, 🚀, 💡, 🎨</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label" for="{{ form.ordem.id_for_label }}">Ordem de Exibição</label>
+                            {{ form.ordem }}
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center pt-3">
+                            <div class="form-check form-switch">
+                                {{ form.ativo }}
+                                <label class="form-check-label fw-bold text-white" for="{{ form.ativo.id_for_label }}">Ativo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="admin-form-label" for="{{ form.texto.id_for_label }}">Texto do Bloco</label>
+                        {{ form.texto }}
+                    </div>
+
+                    <div class="admin-color-section-card">
+                        <div class="admin-color-section-title">
+                            <i class="bi bi-palette"></i> Degradê da Borda Neon
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="admin-form-label">Cor Gradiente 1 (Início)</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    {{ form.cor_gradiente_1 }}
+                                    <span class="font-monospace text-secondary small" id="hex_cor_gradiente_1">{{ form.cor_gradiente_1.value|default:'#8b2ff7' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="admin-form-label">Cor Gradiente 2 (Fim)</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    {{ form.cor_gradiente_2 }}
+                                    <span class="font-monospace text-secondary small" id="hex_cor_gradiente_2">{{ form.cor_gradiente_2.value|default:'#22d3ee' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-adm-primary px-4">
+                            <i class="bi bi-check2"></i> Salvar Bloco
+                        </button>
+                        <a href="{% url 'admin_blocos_lista' %}" class="btn btn-adm-outline">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRÉVIA DO BLOCO -->
+    <div class="col-lg-5">
+        <div class="admin-live-preview-card">
+            <h3 class="h6 fw-bold text-white mb-3"><i class="bi bi-eye"></i> Prévia do Card</h3>
+            <div id="previewCard" class="p-4 rounded-4 text-center position-relative overflow-hidden" style="background: #0d1124; border: 2px solid #8b2ff7; box-shadow: 0 0 20px rgba(139, 47, 247, 0.25);">
+                <div id="previewEmoji" class="fs-1 mb-2">{{ form.emoji.value|default:'🎬' }}</div>
+                <div id="previewTextoBloco" class="text-white fw-medium">{{ form.texto.value|default:'Aprenda os segredos da narrativa cinematográfica.' }}</div>
+            </div>
+            <div class="small text-secondary mt-3">
+                O card usa uma borda estilizada com degradê nas cores selecionadas.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const emojiInput = document.getElementById('{{ form.emoji.id_for_label }}');
+    const textoInput = document.getElementById('{{ form.texto.id_for_label }}');
+    const grad1Input = document.getElementById('{{ form.cor_gradiente_1.id_for_label }}');
+    const grad2Input = document.getElementById('{{ form.cor_gradiente_2.id_for_label }}');
+
+    const previewEmoji = document.getElementById('previewEmoji');
+    const previewTextoBloco = document.getElementById('previewTextoBloco');
+    const previewCard = document.getElementById('previewCard');
+
+    function updatePreview() {
+        if (emojiInput) previewEmoji.textContent = emojiInput.value || '🎬';
+        if (textoInput) previewTextoBloco.textContent = textoInput.value || 'Texto explicativo...';
+        const c1 = grad1Input ? grad1Input.value : '#8b2ff7';
+        const c2 = grad2Input ? grad2Input.value : '#22d3ee';
+        previewCard.style.borderImage = `linear-gradient(90deg, ${c1}, ${c2}) 1`;
+        previewCard.style.boxShadow = `0 0 25px ${c1}33`;
+    }
+
+    if (emojiInput) emojiInput.addEventListener('input', updatePreview);
+    if (textoInput) textoInput.addEventListener('input', updatePreview);
+    if (grad1Input) {
+        grad1Input.addEventListener('input', e => {
+            document.getElementById('hex_cor_gradiente_1').textContent = e.target.value.toUpperCase();
+            updatePreview();
+        });
+    }
+    if (grad2Input) {
+        grad2Input.addEventListener('input', e => {
+            document.getElementById('hex_cor_gradiente_2').textContent = e.target.value.toUpperCase();
+            updatePreview();
+        });
+    }
+    updatePreview();
+</script>
+{% endblock %}

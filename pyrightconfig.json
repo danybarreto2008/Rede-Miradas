@@ -1,0 +1,13 @@
+{
+    "typeCheckingMode": "off",
+    "reportAttributeAccessIssue": "none",
+    "reportGeneralTypeIssues": "none",
+    "reportOptionalMemberAccess": "none",
+    "reportMissingTypeStubs": "none",
+    "reportArgumentType": "none",
+    "exclude": [
+        "venv",
+        "**/migrations/**",
+        "rede_miradas/management/commands/popular_trilhas.py"
+    ]
+}

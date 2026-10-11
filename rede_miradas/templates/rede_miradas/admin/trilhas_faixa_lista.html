@@ -1,0 +1,77 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Faixa Informativa das Trilhas{% endblock %}
+{% block topo_icone %}<i class="bi bi-badge-ad text-success"></i>{% endblock %}
+{% block topo_titulo %}Itens da Faixa Informativa (Tickers){% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas de Aprendizagem</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Faixa Informativa</span>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-1">Itens em Exibição na Faixa</h2>
+        <p class="text-secondary small mb-0">Texto rotativo/faixa de badges que destaca os diferenciais das trilhas (ex: 5 ETAPAS, EXERCÍCIOS, etc.).</p>
+    </div>
+    <a href="{% url 'admin_trilhas_faixa_novo' %}" class="btn btn-adm-primary">
+        <i class="bi bi-plus-lg"></i> Novo Item
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Texto em Exibição</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 130px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                <tr>
+                    <td>
+                        <span class="badge bg-dark border border-secondary p-2 px-3 fs-6 fw-bold text-white">
+                            {{ item.texto }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-dark border border-secondary text-light">{{ item.ordem }}</span>
+                    </td>
+                    <td>
+                        {% if item.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativo</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_trilhas_faixa_toggle' item.id %}" class="btn-adm-action {% if item.ativo %}toggle-on{% else %}toggle-off{% endif %}" title="Alternar status">
+                                <i class="bi {% if item.ativo %}bi-toggle-on fs-5{% else %}bi-toggle-off fs-5{% endif %}"></i>
+                            </a>
+                            <a href="{% url 'admin_trilhas_faixa_editar' item.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_trilhas_faixa_excluir' item.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-5 text-secondary">
+                        Nenhum item cadastrado na faixa informativa.
+                        <a href="{% url 'admin_trilhas_faixa_novo' %}" class="d-block mt-2 text-info">+ Criar Primeiro Item</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

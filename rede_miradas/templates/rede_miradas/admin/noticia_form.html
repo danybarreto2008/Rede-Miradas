@@ -1,0 +1,202 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}{{ titulo_acao }}{% endblock %}
+{% block topo_icone %}<i class="bi bi-newspaper text-info"></i>{% endblock %}
+{% block topo_titulo %}{{ titulo_acao }}{% endblock %}
+
+{% block extra_head %}
+    <!-- CKEditor 5 Assets -->
+    {{ form.media }}
+    <style>
+        /* Ajuste do CKEditor para fundo escuro do painel */
+        .ck.ck-editor__main>.ck-editor__editable {
+            background-color: #0d1124 !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            min-height: 280px;
+        }
+        .ck.ck-toolbar {
+            background-color: #12162d !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .ck.ck-button {
+            color: #e2e8f0 !important;
+        }
+        .ck.ck-button:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+    </style>
+{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_noticias_lista' %}">Notícias</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">{{ titulo_acao }}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="noticiaForm">
+    {% csrf_token %}
+
+    <div class="row g-4">
+        <!-- COLUNA PRINCIPAL: TEXTO E CONTEÚDO -->
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-pen-fill text-info"></i>
+                        Conteúdo da Matéria
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo.id_for_label }}">Título da Notícia</label>
+                        {{ form.titulo }}
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.slug.id_for_label }}">Endereço da Notícia (URL)</label>
+                            {{ form.slug }}
+                            <div class="admin-form-hint">💡 Opcional: Se deixar em branco, o sistema preenche sozinho a partir do título.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.categoria.id_for_label }}">Categoria</label>
+                            {{ form.categoria }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.resumo.id_for_label }}">Resumo / Linha Fina (máx. 300 caracteres)</label>
+                        {{ form.resumo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label">Corpo do Texto / Conteúdo Completo</label>
+                        {{ form.texto }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUNA LATERAL: PUBLICAÇÃO, IMAGEM E DESTAQUES -->
+        <div class="col-lg-4">
+            <!-- STATUS DE PUBLICAÇÃO -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-send-check-fill text-success"></i>
+                        Publicação
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="form-check form-switch mb-3">
+                        {{ form.publicada }}
+                        <label class="form-check-label fw-bold text-white" for="{{ form.publicada.id_for_label }}">Notícia Pública</label>
+                        <div class="admin-form-hint">Se desmarcado, fica salva como rascunho.</div>
+                    </div>
+
+                    <div class="d-grid gap-2 pt-2">
+                        <button type="submit" class="btn btn-adm-primary btn-lg">
+                            <i class="bi bi-cloud-arrow-up-fill"></i> Salvar Notícia
+                        </button>
+                        <a href="{% url 'admin_noticias_lista' %}" class="btn btn-adm-outline text-center">
+                            Voltar à Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IMAGEM DE CAPA -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-image-fill text-warning"></i>
+                        Imagem de Capa
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    {{ form.imagem }}
+                    {% if noticia.imagem %}
+                    <div class="mt-3">
+                        <img src="{{ noticia.imagem.url }}" alt="Capa" class="img-fluid rounded-3 shadow-sm border border-secondary border-opacity-25">
+                        <div class="small text-secondary mt-1">Capa atual selecionada.</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- OPÇÕES DE DESTAQUE & CORES -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        Destaque & Cor de Fundo
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="form-check form-switch mb-3">
+                        {{ form.destaque }}
+                        <label class="form-check-label fw-bold text-white" for="{{ form.destaque.id_for_label }}">Destaque Principal do Blog</label>
+                        <div class="admin-form-hint">Aparece em destaque hero no topo da página de notícias.</div>
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        {{ form.destaque_secundario }}
+                        <label class="form-check-label fw-bold text-white" for="{{ form.destaque_secundario.id_for_label }}">Destaque Secundário</label>
+                        <div class="admin-form-hint">Aparece na seção de destaques menores.</div>
+                    </div>
+
+                    <div class="admin-color-section-card p-3 mb-0">
+                        <label class="admin-form-label mb-2">Cor de Fundo da Seção de Destaque</label>
+                        <div class="d-flex align-items-center gap-3">
+                            {{ form.cor_fundo_destaque }}
+                            <span class="font-monospace text-secondary small" id="hex_cor_fundo_destaque">{{ form.cor_fundo_destaque.value|default:'#3A1660' }}</span>
+                        </div>
+                        <div class="admin-form-hint mt-2">
+                            Usada como cor de fundo tanto no destaque principal quanto nos cards secundários.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Gerar slug automaticamente se vazio
+    const tituloInput = document.getElementById('{{ form.titulo.id_for_label }}');
+    const slugInput = document.getElementById('{{ form.slug.id_for_label }}');
+
+    function slugify(text) {
+        return text.toString().toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
+    if (tituloInput && slugInput) {
+        tituloInput.addEventListener('blur', () => {
+            if (!slugInput.value.trim()) {
+                slugInput.value = slugify(tituloInput.value);
+            }
+        });
+    }
+
+    // Color sync
+    const corDestaque = document.getElementById('{{ form.cor_fundo_destaque.id_for_label }}');
+    if (corDestaque) {
+        corDestaque.addEventListener('input', e => {
+            document.getElementById('hex_cor_fundo_destaque').textContent = e.target.value.toUpperCase();
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,353 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}{{ titulo_acao }}{% endblock %}
+{% block topo_icone %}<i class="bi bi-card-checklist text-info"></i>{% endblock %}
+{% block topo_titulo %}{{ titulo_acao }}{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_cards_lista' %}">Cards de Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">{{ titulo_acao }}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="trilhaCardForm">
+    {% csrf_token %}
+
+    <div class="row g-4">
+        <!-- FORMULÁRIO COMPLETO -->
+        <div class="col-lg-8">
+            <!-- 1. IDENTIFICAÇÃO E TEXTOS -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-card-text text-info"></i> 1. Informações Básicas da Trilha</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.tag.id_for_label }}">Etapa / Tag</label>
+                            {{ form.tag }}
+                            <div class="admin-form-hint">Ex: ETAPA 1 ou INSCRIÇÃO DAS EQUIPES</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.slug.id_for_label }}">Endereço da Trilha na Web (URL)</label>
+                            {{ form.slug }}
+                            <div class="admin-form-hint">Ex: <code>inscricao-das-equipes</code> (preenchido sozinho a partir do título).</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo.id_for_label }}">Título do Card</label>
+                        {{ form.titulo }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.titulo_detalhe.id_for_label }}">Título Detalhado (Página de Aulas)</label>
+                        {{ form.titulo_detalhe }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.descricao.id_for_label }}">Descrição / Resumo dos Módulos</label>
+                        {{ form.descricao }}
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.imagem_capa.id_for_label }}">Imagem de Capa do Card</label>
+                            {{ form.imagem_capa }}
+                            {% if card.imagem_capa %}
+                            <div class="mt-2 small text-secondary">
+                                Capa atual: <a href="{{ card.imagem_capa.url }}" target="_blank" class="text-info">{{ card.imagem_capa.name }}</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.tipo_icone.id_for_label }}">Ícone Ilustrado Padrão</label>
+                            {{ form.tipo_icone }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. CORES DO CARD E EFEITOS NEON -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-palette-fill text-danger"></i> 2. Cores do Card & Efeitos Visuais</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor de Fundo do Card</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_fundo_card }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_fundo_card">{{ form.cor_fundo_card.value|default:'#101535' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor da Borda</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_borda_card }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_borda_card">{{ form.cor_borda_card.value|default:'#1E2659' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Estilo da Borda</label>
+                            {{ form.estilo_borda }}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor do Brilho (Glow Neon)</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_glow }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_glow">{{ form.cor_glow.value|default:'#7C3AED' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor da Tag Superior</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_tag }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_tag">{{ form.cor_tag.value|default:'#94A3B8' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor do Título</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_titulo }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_titulo">{{ form.cor_titulo.value|default:'#FFFFFF' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor da Descrição</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_descricao }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_descricao">{{ form.cor_descricao.value|default:'#CBD5E1' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. CORES DA BARRA LATERAL (PÁGINA DE DETALHES/AULAS) -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-layout-sidebar-inset text-warning"></i> 3. Cores da Sidebar (Página de Aulas)</h2>
+                </div>
+                <div class="admin-card-body">
+                    <p class="small text-secondary mb-3">
+                        Define as cores de destaque da barra lateral exibida quando o estudante está estudando os módulos desta trilha.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor de Fundo da Sidebar</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_sidebar }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_sidebar">{{ form.cor_sidebar.value|default:'#8F3D4E' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="admin-form-label">Cor do Box Superior da Sidebar</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_sidebar_topo }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_sidebar_topo">{{ form.cor_sidebar_topo.value|default:'#BA586C' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. BOTÃO E TIPOGRAFIA -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-cursor-fill text-success"></i> 4. Botão de Ação & Tipografia</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="form-check form-switch mb-3">
+                        {{ form.mostrar_botao }}
+                        <label class="form-check-label fw-bold text-white" for="{{ form.mostrar_botao.id_for_label }}">Exibir botão no Card</label>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="admin-form-label" for="{{ form.texto_botao.id_for_label }}">Texto do Botão</label>
+                            {{ form.texto_botao }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor de Fundo do Botão</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_fundo_botao }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_fundo_botao">{{ form.cor_fundo_botao.value|default:'#B94B61' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="admin-form-label">Cor do Texto do Botão</label>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ form.cor_texto_botao }}
+                                <span class="font-monospace text-secondary small" id="hex_cor_texto_botao">{{ form.cor_texto_botao.value|default:'#FFFFFF' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ form.link_botao.id_for_label }}">Link do Botão (Opcional)</label>
+                        {{ form.link_botao }}
+                        <div class="admin-form-hint">💡 Deixe em branco para direcionar automaticamente para as aulas desta trilha.</div>
+                    </div>
+
+                    <div class="row g-3 pt-2">
+                        <div class="col-md-4">
+                            <span class="small fw-bold text-light d-block mb-1">Formatação da Tag:</span>
+                            <div class="form-check">{{ form.tag_negrito }} <label class="form-check-label small" for="{{ form.tag_negrito.id_for_label }}">Negrito</label></div>
+                            <div class="form-check">{{ form.tag_italico }} <label class="form-check-label small" for="{{ form.tag_italico.id_for_label }}">Itálico</label></div>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="small fw-bold text-light d-block mb-1">Formatação do Título:</span>
+                            <div class="form-check">{{ form.titulo_negrito }} <label class="form-check-label small" for="{{ form.titulo_negrito.id_for_label }}">Negrito</label></div>
+                            <div class="form-check">{{ form.titulo_italico }} <label class="form-check-label small" for="{{ form.titulo_italico.id_for_label }}">Itálico</label></div>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="small fw-bold text-light d-block mb-1">Formatação da Descrição:</span>
+                            <div class="form-check">{{ form.descricao_negrito }} <label class="form-check-label small" for="{{ form.descricao_negrito.id_for_label }}">Negrito</label></div>
+                            <div class="form-check">{{ form.descricao_italico }} <label class="form-check-label small" for="{{ form.descricao_italico.id_for_label }}">Itálico</label></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ORDEM E ATIVAÇÃO -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title"><i class="bi bi-sort-numeric-down text-info"></i> 5. Ordem & Status</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="admin-form-label" for="{{ form.ordem.id_for_label }}">Ordem de Exibição</label>
+                            {{ form.ordem }}
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center pt-3">
+                            <div class="form-check form-switch">
+                                {{ form.ativo }}
+                                <label class="form-check-label fw-bold text-white" for="{{ form.ativo.id_for_label }}">Trilha Ativa no Site</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-5">
+                <button type="submit" class="btn btn-adm-primary btn-lg px-4">
+                    <i class="bi bi-check2-circle"></i> Salvar Trilha
+                </button>
+                <a href="{% url 'admin_trilhas_cards_lista' %}" class="btn btn-adm-outline btn-lg">Cancelar</a>
+            </div>
+        </div>
+
+        <!-- PRÉVIA EM TEMPO REAL DO CARD -->
+        <div class="col-lg-4">
+            <div class="admin-live-preview-card">
+                <h3 class="h6 fw-bold text-white mb-3"><i class="bi bi-eye text-info"></i> Prévia do Card da Trilha</h3>
+                <div id="trilhaCardPreview" class="p-4 rounded-4 position-relative overflow-hidden d-flex flex-column justify-content-between" style="min-height: 290px; background-color: {{ form.cor_fundo_card.value|default:'#101535' }}; border: 1px solid {{ form.cor_borda_card.value|default:'#1E2659' }}; box-shadow: 0 0 25px {{ form.cor_glow.value|default:'#7C3AED' }}33;">
+                    <div>
+                        <span id="prevCardTag" class="badge mb-2" style="color: {{ form.cor_tag.value|default:'#94A3B8' }}; background: rgba(255,255,255,0.06); font-size: 11px;">
+                            {{ form.tag.value|default:'ETAPA 1' }}
+                        </span>
+                        <h4 id="prevCardTitulo" class="fw-bold mb-2" style="color: {{ form.cor_titulo.value|default:'#FFFFFF' }};">
+                            {{ form.titulo.value|default:'Inscrição das equipes' }}
+                        </h4>
+                        <p id="prevCardDesc" class="small mb-3" style="color: {{ form.cor_descricao.value|default:'#CBD5E1' }};">
+                            {{ form.descricao.value|default:'Apresentação dos participantes, formação dos grupos e identidade visual.' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <button type="button" id="prevCardBotao" class="btn btn-sm rounded-pill px-3 fw-bold" style="background-color: {{ form.cor_fundo_botao.value|default:'#B94B61' }}; color: {{ form.cor_texto_botao.value|default:'#FFFFFF' }};">
+                            {{ form.texto_botao.value|default:'Começar' }}
+                        </button>
+                    </div>
+                </div>
+                <div class="small text-secondary mt-3">
+                    As cores do card, tags, títulos e botão mudam em tempo real.
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const tagInput = document.getElementById('{{ form.tag.id_for_label }}');
+    const titInput = document.getElementById('{{ form.titulo.id_for_label }}');
+    const descInput = document.getElementById('{{ form.descricao.id_for_label }}');
+    const btnTextInput = document.getElementById('{{ form.texto_botao.id_for_label }}');
+
+    const corFundoInput = document.getElementById('{{ form.cor_fundo_card.id_for_label }}');
+    const corBordaInput = document.getElementById('{{ form.cor_borda_card.id_for_label }}');
+    const corGlowInput = document.getElementById('{{ form.cor_glow.id_for_label }}');
+    const corTagInput = document.getElementById('{{ form.cor_tag.id_for_label }}');
+    const corTitInput = document.getElementById('{{ form.cor_titulo.id_for_label }}');
+    const corDescInput = document.getElementById('{{ form.cor_descricao.id_for_label }}');
+    const corFundoBtnInput = document.getElementById('{{ form.cor_fundo_botao.id_for_label }}');
+    const corTxtBtnInput = document.getElementById('{{ form.cor_texto_botao.id_for_label }}');
+
+    const cardBox = document.getElementById('trilhaCardPreview');
+    const prevTag = document.getElementById('prevCardTag');
+    const prevTit = document.getElementById('prevCardTitulo');
+    const prevDesc = document.getElementById('prevCardDesc');
+    const prevBtn = document.getElementById('prevCardBotao');
+
+    if (tagInput) tagInput.addEventListener('input', e => prevTag.textContent = e.target.value || 'ETAPA');
+    if (titInput) titInput.addEventListener('input', e => prevTit.textContent = e.target.value || 'Título da Trilha');
+    if (descInput) descInput.addEventListener('input', e => prevDesc.textContent = e.target.value || 'Descrição...');
+    if (btnTextInput) btnTextInput.addEventListener('input', e => prevBtn.textContent = e.target.value || 'Começar');
+
+    if (corFundoInput) corFundoInput.addEventListener('input', e => {
+        cardBox.style.backgroundColor = e.target.value;
+        document.getElementById('hex_cor_fundo_card').textContent = e.target.value.toUpperCase();
+    });
+    if (corBordaInput) corBordaInput.addEventListener('input', e => {
+        cardBox.style.borderColor = e.target.value;
+        document.getElementById('hex_cor_borda_card').textContent = e.target.value.toUpperCase();
+    });
+    if (corGlowInput) corGlowInput.addEventListener('input', e => {
+        cardBox.style.boxShadow = `0 0 25px ${e.target.value}44`;
+        document.getElementById('hex_cor_glow').textContent = e.target.value.toUpperCase();
+    });
+    if (corTagInput) corTagInput.addEventListener('input', e => {
+        prevTag.style.color = e.target.value;
+        document.getElementById('hex_cor_tag').textContent = e.target.value.toUpperCase();
+    });
+    if (corTitInput) corTitInput.addEventListener('input', e => {
+        prevTit.style.color = e.target.value;
+        document.getElementById('hex_cor_titulo').textContent = e.target.value.toUpperCase();
+    });
+    if (corDescInput) corDescInput.addEventListener('input', e => {
+        prevDesc.style.color = e.target.value;
+        document.getElementById('hex_cor_descricao').textContent = e.target.value.toUpperCase();
+    });
+    if (corFundoBtnInput) corFundoBtnInput.addEventListener('input', e => {
+        prevBtn.style.backgroundColor = e.target.value;
+        document.getElementById('hex_cor_fundo_botao').textContent = e.target.value.toUpperCase();
+    });
+    if (corTxtBtnInput) corTxtBtnInput.addEventListener('input', e => {
+        prevBtn.style.color = e.target.value;
+        document.getElementById('hex_cor_texto_botao').textContent = e.target.value.toUpperCase();
+    });
+
+    // Sidebar color code sync
+    const corSidebarInput = document.getElementById('{{ form.cor_sidebar.id_for_label }}');
+    const corSidebarTopoInput = document.getElementById('{{ form.cor_sidebar_topo.id_for_label }}');
+    if (corSidebarInput) corSidebarInput.addEventListener('input', e => document.getElementById('hex_cor_sidebar').textContent = e.target.value.toUpperCase());
+    if (corSidebarTopoInput) corSidebarTopoInput.addEventListener('input', e => document.getElementById('hex_cor_sidebar_topo').textContent = e.target.value.toUpperCase());
+</script>
+{% endblock %}

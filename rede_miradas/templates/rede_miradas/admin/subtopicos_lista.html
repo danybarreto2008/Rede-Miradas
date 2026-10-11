@@ -1,0 +1,88 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+
+{% block titulo %}Subtópicos das Trilhas{% endblock %}
+{% block topo_icone %}<i class="bi bi-list-ul text-info"></i>{% endblock %}
+{% block topo_titulo %}Subtópicos Rápidos das Trilhas{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Subtópicos</span>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-1">Itens Rápidos Listados no Card da Trilha</h2>
+        <p class="text-secondary small mb-0">Itens tópicos que aparecem na lista do card da trilha na visão geral.</p>
+    </div>
+    <a href="{% url 'admin_subtopico_novo' %}" class="btn btn-adm-primary">
+        <i class="bi bi-plus-lg"></i> Novo Subtópico
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Trilha</th>
+                    <th>Título do Subtópico</th>
+                    <th>Link Customizado</th>
+                    <th>Botão Começar</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 120px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in subtopicos %}
+                <tr>
+                    <td>
+                        <span class="badge" style="background-color: {{ s.trilha.cor_fundo_card }}; color: {{ s.trilha.cor_tag }}; border: 1px solid {{ s.trilha.cor_borda_card }};">
+                            {{ s.trilha.tag }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-white">{{ s.titulo }}</div>
+                    </td>
+                    <td>
+                        <span class="small font-monospace text-secondary">{{ s.link|default:"(Padrão da Trilha)" }}</span>
+                    </td>
+                    <td>
+                        {% if s.mostrar_botao_comecar %}
+                        <span class="admin-badge admin-badge-cyan">Sim</span>
+                        {% else %}
+                        <span class="text-secondary small">Não</span>
+                        {% endif %}
+                    </td>
+                    <td><span class="badge bg-dark border border-secondary text-light">{{ s.ordem }}</span></td>
+                    <td>
+                        {% if s.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativo</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_subtopico_editar' s.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_subtopico_excluir' s.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5 text-secondary">
+                        Nenhum subtópico cadastrado.
+                        <a href="{% url 'admin_subtopico_novo' %}" class="d-block mt-2 text-info">+ Criar Primeiro Subtópico</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
