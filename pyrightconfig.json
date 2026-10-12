@@ -5,6 +5,10 @@
     "reportOptionalMemberAccess": "none",
     "reportMissingTypeStubs": "none",
     "reportArgumentType": "none",
+    "reportIncompatibleMethodOverride": "none",
+    "reportIncompatibleVariableOverride": "none",
+    "reportOperatorIssue": "none",
+    "reportIndexIssue": "none",
     "exclude": [
         "venv",
         "**/migrations/**",

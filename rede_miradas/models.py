@@ -62,7 +62,7 @@ class CurtaVotacao(models.Model):
         ordering = ["ordem"]
 
     def __str__(self):
-        return self.titulo
+        return str(self.titulo)
 
 
 # Voto de um usuário — só pode ter UM voto no total
@@ -237,7 +237,7 @@ class Destaque(models.Model):
     ordem = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.titulo or f"Destaque {self.id}"
+        return str(self.titulo) if self.titulo else f"Destaque {self.id}"
 
 
 # Modelo dos cards "Aprenda. Crie. Conecte." da página "Comece por aqui"
@@ -267,7 +267,7 @@ class BlocoApresentacao(models.Model):
         verbose_name_plural = "Blocos de apresentação"
 
     def __str__(self):
-        return self.texto[:40] if self.texto else f"Bloco {self.id}"
+        return str(self.texto)[:40] if self.texto else f"Bloco {self.id}"
 
 
 # Modelo do texto da seção "Curtas em destaque"
@@ -281,7 +281,7 @@ class SecaoCurtas(models.Model):
         verbose_name_plural = "Texto da seção de curtas"
 
     def __str__(self):
-        return self.titulo
+        return str(self.titulo)
 
     # Modelo dos curtas em destaque da página "Comece por aqui"
 
@@ -311,7 +311,7 @@ class Curta(models.Model):
         ordering = ["ordem"]
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
 
 
 # Modelo do texto da seção final (chamada para ação)
@@ -331,7 +331,7 @@ class SecaoFinal(models.Model):
         verbose_name_plural = "Texto da seção final"
 
     def __str__(self):
-        return self.titulo
+        return str(self.titulo)
 
 
 # Modelo das notícias do blog
@@ -371,7 +371,7 @@ class Noticia(models.Model):
     )
 
     def __str__(self):
-        return self.titulo
+        return str(self.titulo)
 
 
 # Modelos da Página Inicial das Trilhas de Aprendizagem
@@ -445,7 +445,7 @@ class TrilhasHero(models.Model):
         verbose_name_plural = "Trilhas - Seção de Boas-Vindas (Hero)"
 
     def __str__(self):
-        return self.titulo or "Seção de Boas-Vindas"
+        return str(self.titulo or "Seção de Boas-Vindas")
 
 
 class TrilhasFaixaItem(models.Model):
@@ -464,7 +464,7 @@ class TrilhasFaixaItem(models.Model):
         ordering = ["ordem"]
 
     def __str__(self):
-        return self.texto
+        return str(self.texto)
 
 
 class TrilhasCard(models.Model):
@@ -627,7 +627,7 @@ class TrilhasCard(models.Model):
         ordering = ["ordem"]
 
     def __str__(self):
-        return f"{self.tag} - {self.titulo[:30]}"
+        return f"{self.tag} - {str(self.titulo)[:30]}"
 
 
 class SubtopicoTrilha(models.Model):

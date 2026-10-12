@@ -1,4 +1,5 @@
-from functools import wraps
+from functools import reduce, wraps
+from operator import or_
 
 from django.contrib import messages
 from django.contrib.auth import (
@@ -548,9 +549,14 @@ def admin_noticias_lista(request):
 
     if busca:
         noticias = noticias.filter(
-            Q(titulo__icontains=busca)
-            | Q(resumo__icontains=busca)
-            | Q(texto__icontains=busca)
+            reduce(
+                or_,
+                [
+                    Q(titulo__icontains=busca),
+                    Q(resumo__icontains=busca),
+                    Q(texto__icontains=busca),
+                ],
+            )
         )
     if categoria:
         noticias = noticias.filter(categoria=categoria)
@@ -1347,12 +1353,17 @@ def admin_usuarios_lista(request):
 
     if busca:
         usuarios = usuarios.filter(
-            Q(username__icontains=busca)
-            | Q(first_name__icontains=busca)
-            | Q(last_name__icontains=busca)
-            | Q(email__icontains=busca)
-            | Q(perfil__escola__icontains=busca)
-            | Q(perfil__grupo__icontains=busca)
+            reduce(
+                or_,
+                [
+                    Q(username__icontains=busca),
+                    Q(first_name__icontains=busca),
+                    Q(last_name__icontains=busca),
+                    Q(email__icontains=busca),
+                    Q(perfil__escola__icontains=busca),
+                    Q(perfil__grupo__icontains=busca),
+                ],
+            )
         )
 
     if tipo:
