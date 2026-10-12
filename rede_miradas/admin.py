@@ -24,7 +24,7 @@ from .models import (
 
 @admin.register(CurtaVotacao)
 class CurtaVotacaoAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "grupo",
         "turma",
@@ -53,7 +53,7 @@ class CurtaVotacaoAdmin(admin.ModelAdmin):
 
 @admin.register(Voto)
 class VotoAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "curta",
         "usuario",
         "data_voto",
@@ -72,7 +72,7 @@ class VotoAdmin(admin.ModelAdmin):
 
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "usuario",
         "tipo",
     )
@@ -111,7 +111,7 @@ class BlocoApresentacaoForm(forms.ModelForm):
 class BlocoApresentacaoAdmin(admin.ModelAdmin):
     form = BlocoApresentacaoForm
 
-    list_display = (
+    list_display = (  # type: ignore
         "emoji",
         "texto",
         "ordem",
@@ -128,7 +128,7 @@ class BlocoApresentacaoAdmin(admin.ModelAdmin):
 
 @admin.register(SecaoCurtas)
 class SecaoCurtasAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "subtitulo",
     )
@@ -138,7 +138,7 @@ class SecaoCurtasAdmin(admin.ModelAdmin):
 class DestaqueAdmin(admin.ModelAdmin):
     form = DestaqueForm
 
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "ordem",
         "ativo",
@@ -168,7 +168,7 @@ class CurtaForm(forms.ModelForm):
 
 @admin.register(Curta)
 class CurtaAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "nome",
         "grupo",
         "ativo",
@@ -185,7 +185,7 @@ class CurtaAdmin(admin.ModelAdmin):
 
 @admin.register(SecaoFinal)
 class SecaoFinalAdmin(admin.ModelAdmin):
-    list_display = ("titulo",)
+    list_display = ("titulo",)  # type: ignore
 
 
 class NoticiaForm(forms.ModelForm):
@@ -201,7 +201,7 @@ class NoticiaForm(forms.ModelForm):
 class NoticiaAdmin(admin.ModelAdmin):
     form = NoticiaForm
 
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "categoria",
         "data_publicacao",
@@ -277,7 +277,7 @@ class TrilhasHeroForm(forms.ModelForm):
 @admin.register(TrilhasHero)
 class TrilhasHeroAdmin(admin.ModelAdmin):
     form = TrilhasHeroForm
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "subtitulo",
         "texto_botao",
@@ -287,7 +287,7 @@ class TrilhasHeroAdmin(admin.ModelAdmin):
 
 @admin.register(TrilhasFaixaItem)
 class TrilhasFaixaItemAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "texto",
         "ordem",
         "ativo",
@@ -332,8 +332,8 @@ class UnidadeTrilhaInline(admin.TabularInline):
 @admin.register(TrilhasCard)
 class TrilhasCardAdmin(admin.ModelAdmin):
     form = TrilhasCardForm
-    inlines = [UnidadeTrilhaInline, SubtopicoTrilhaInline]
-    list_display = (
+    inlines = [UnidadeTrilhaInline, SubtopicoTrilhaInline]  # type: ignore
+    list_display = (  # type: ignore
         "tag",
         "titulo",
         "slug",
@@ -413,7 +413,7 @@ class TrilhasCardAdmin(admin.ModelAdmin):
 
 @admin.register(SubtopicoTrilha)
 class SubtopicoTrilhaAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "trilha",
         "ordem",
@@ -445,8 +445,8 @@ class TopicoUnidadeTrilhaInline(admin.StackedInline):
 
 @admin.register(UnidadeTrilha)
 class UnidadeTrilhaAdmin(admin.ModelAdmin):
-    inlines = [TopicoUnidadeTrilhaInline]
-    list_display = (
+    inlines = [TopicoUnidadeTrilhaInline]  # type: ignore
+    list_display = (  # type: ignore
         "numero",
         "titulo",
         "trilha",
@@ -475,7 +475,7 @@ class UnidadeTrilhaAdmin(admin.ModelAdmin):
 
 @admin.register(TopicoUnidadeTrilha)
 class TopicoUnidadeTrilhaAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (  # type: ignore
         "titulo",
         "unidade",
         "ordem",

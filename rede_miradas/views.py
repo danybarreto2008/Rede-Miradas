@@ -1,3 +1,6 @@
+from functools import reduce
+from operator import or_
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, Paginator
 from django.db.models import Prefetch, Q
@@ -247,9 +250,14 @@ def pagina_noticias(request):
 
     if busca:
         disponiveis = disponiveis.filter(
-            Q(titulo__icontains=busca)
-            | Q(resumo__icontains=busca)
-            | Q(texto__icontains=busca)
+            reduce(
+                or_,
+                [
+                    Q(titulo__icontains=busca),
+                    Q(resumo__icontains=busca),
+                    Q(texto__icontains=busca),
+                ],
+            )
         )
 
     disponiveis = disponiveis.order_by("-data_publicacao", "-id")
@@ -301,9 +309,14 @@ def carregar_mais_noticias(request):
     busca = request.GET.get("q", "").strip()
     if busca:
         disponiveis = disponiveis.filter(
-            Q(titulo__icontains=busca)
-            | Q(resumo__icontains=busca)
-            | Q(texto__icontains=busca)
+            reduce(
+                or_,
+                [
+                    Q(titulo__icontains=busca),
+                    Q(resumo__icontains=busca),
+                    Q(texto__icontains=busca),
+                ],
+            )
         )
 
     disponiveis = disponiveis.order_by("-data_publicacao", "-id")
@@ -406,9 +419,14 @@ def trilhas_visao_geral(request):
 def trilha_detalhe(request, slug=None):
     if not slug:
         trilha = TrilhasCard.objects.filter(
-            Q(slug="inscricao-das-equipes")
-            | Q(titulo__icontains="inscrição")
-            | Q(tag__icontains="inscrição")
+            reduce(
+                or_,
+                [
+                    Q(slug="inscricao-das-equipes"),
+                    Q(titulo__icontains="inscrição"),
+                    Q(tag__icontains="inscrição"),
+                ],
+            )
         ).first()
         if not trilha:
             trilha = (
