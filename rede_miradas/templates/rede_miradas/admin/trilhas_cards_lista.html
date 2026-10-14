@@ -1,0 +1,114 @@
+{% extends 'rede_miradas/admin/admin_base.html' %}
+{% load static %}
+
+{% block titulo %}Cards das Trilhas de Aprendizagem{% endblock %}
+{% block topo_icone %}<i class="bi bi-card-checklist text-info"></i>{% endblock %}
+{% block topo_titulo %}Cards das Trilhas de Aprendizagem{% endblock %}
+
+{% block conteudo %}
+<div class="admin-breadcrumb">
+    <a href="{% url 'painel_admin' %}">Painel</a>
+    <i class="bi bi-chevron-right"></i>
+    <a href="{% url 'admin_trilhas_dashboard' %}">Trilhas</a>
+    <i class="bi bi-chevron-right"></i>
+    <span class="text-white">Cards de Trilhas</span>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-white mb-1">Módulos & Etapas das Trilhas</h2>
+        <p class="text-secondary small mb-0">Personalize cores de fundo, bordas, glow neon, barra lateral, títulos e links de cada uma das trilhas.</p>
+    </div>
+    <a href="{% url 'admin_trilha_card_novo' %}" class="btn btn-adm-primary">
+        <i class="bi bi-plus-lg"></i> Adicionar Nova Trilha
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Capa</th>
+                    <th>Tag & Título</th>
+                    <th>Slug URL</th>
+                    <th>Paleta de Cores (Card / Borda / Glow / Sidebar)</th>
+                    <th>Estrutura</th>
+                    <th>Ordem</th>
+                    <th>Status</th>
+                    <th class="text-end" style="width: 140px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for card in cards %}
+                <tr>
+                    <td>
+                        {% if card.imagem_capa %}
+                        <img src="{{ card.imagem_capa.url }}" alt="{{ card.titulo }}" class="rounded-2 object-fit-cover shadow-sm" style="width: 64px; height: 42px;">
+                        {% else %}
+                        <div class="bg-dark rounded-2 d-flex align-items-center justify-content-center text-secondary" style="width: 64px; height: 42px;">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge mb-1" style="background-color: {{ card.cor_fundo_card }}; color: {{ card.cor_tag }}; border: 1px solid {{ card.cor_borda_card }}; font-size: 11px;">
+                            {{ card.tag }}
+                        </span>
+                        <div class="fw-bold text-white">{{ card.titulo }}</div>
+                    </td>
+                    <td>
+                        <span class="font-monospace small text-secondary">/trilhas/{{ card.slug }}/</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-1">
+                            <span title="Fundo do Card: {{ card.cor_fundo_card }}" class="border border-secondary rounded-circle" style="width: 18px; height: 18px; background-color: {{ card.cor_fundo_card }};"></span>
+                            <span title="Borda do Card: {{ card.cor_borda_card }}" class="border border-secondary rounded-circle" style="width: 18px; height: 18px; background-color: {{ card.cor_borda_card }};"></span>
+                            <span title="Glow Neon: {{ card.cor_glow }}" class="border border-secondary rounded-circle" style="width: 18px; height: 18px; background-color: {{ card.cor_glow }};"></span>
+                            <span title="Sidebar da Aula: {{ card.cor_sidebar }}" class="border border-secondary rounded-circle" style="width: 18px; height: 18px; background-color: {{ card.cor_sidebar }};"></span>
+                            <span title="Sidebar Topo: {{ card.cor_sidebar_topo }}" class="border border-secondary rounded-circle" style="width: 18px; height: 18px; background-color: {{ card.cor_sidebar_topo }};"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column gap-1">
+                            <a href="{% url 'admin_unidades_lista' %}?trilha={{ card.id }}" class="admin-badge admin-badge-cyan text-decoration-none">
+                                <i class="bi bi-journals"></i> {{ card.total_unidades }} unidades
+                            </a>
+                            <a href="{% url 'admin_subtopicos_lista' %}?trilha={{ card.id }}" class="admin-badge admin-badge-secondary text-decoration-none">
+                                <i class="bi bi-list-ul"></i> {{ card.total_subtopicos }} subtópicos
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge bg-dark border border-secondary text-light fw-bold">{{ card.ordem }}</span>
+                    </td>
+                    <td>
+                        {% if card.ativo %}
+                        <span class="admin-badge admin-badge-success">Ativa</span>
+                        {% else %}
+                        <span class="admin-badge admin-badge-secondary">Inativa</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_trilha_card_toggle' card.id %}" class="btn-adm-action {% if card.ativo %}toggle-on{% else %}toggle-off{% endif %}" title="Alternar ativo/inativo">
+                                <i class="bi {% if card.ativo %}bi-toggle-on fs-5{% else %}bi-toggle-off fs-5{% endif %}"></i>
+                            </a>
+                            <a href="{% url 'admin_trilha_card_editar' card.id %}" class="btn-adm-action edit" title="Editar Trilha"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'admin_trilha_card_excluir' card.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-secondary">
+                        Nenhuma trilha cadastrada ainda.
+                        <a href="{% url 'admin_trilha_card_novo' %}" class="d-block mt-2 text-info fw-bold">+ Cadastrar Primeira Trilha</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

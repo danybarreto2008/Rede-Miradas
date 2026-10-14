@@ -108,9 +108,15 @@
 
                     {% if user.is_authenticated %}
 
+                        {% if user.is_staff or user.is_superuser %}
+                            <a class="nav-link text-warning fw-bold d-flex align-items-center gap-1"
+                               href="{% url 'painel_admin' %}">
+                                <i class="bi bi-shield-shaded"></i> PAINEL ADMIN
+                            </a>
+                        {% endif %}
+
                         <!-- Meu perfil -->
-                        
-                            <a class="nav-link"
+                        <a class="nav-link"
                             href="{% url 'meu_perfil' %}"
                         >
                             MEU PERFIL
@@ -299,9 +305,16 @@
 
             {% if user.is_authenticated %}
 
+                {% if user.is_staff or user.is_superuser %}
+                    <a class="nav-link text-warning fw-bold d-flex align-items-center gap-2"
+                        href="{% url 'painel_admin' %}"
+                    >
+                        <i class="bi bi-shield-shaded"></i> PAINEL ADMIN
+                    </a>
+                {% endif %}
+
                 <!-- Meu perfil -->
-                
-                   <a class="nav-link"
+                <a class="nav-link"
                     href="{% url 'meu_perfil' %}"
                 >
                     MEU PERFIL
@@ -378,37 +391,25 @@
         <div class="footer-conteudo">
 
             <!-- IDENTIDADE -->
-            <div class="footer-identidade">
+        <div class="footer-identidade">
 
-                
-                   <a href="{% url 'home' %}"
-                    class="footer-logo"
-                >
+    <a
+            href="{% url 'home' %}"
+            class="footer-logo"
+            >
 
-                    <img
-                        src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
-                        alt="Logo Rede Miradas"
-                    >
+        <img
+            src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+            alt="Logo Rede Miradas"
+        >
 
-                    <span>
-                        REDE <strong>MIRADAS</strong>
-                    </span>
+        <span>
+            REDE <strong>MIRADAS</strong>
+        </span>
 
-                </a>
+    </a>
 
-
-                <p class="footer-descricao">
-                    Projeto de Ensino Miradas do IFRN Campus
-                    São Paulo do Potengi.
-                </p>
-
-
-                <p class="footer-endereco">
-                    <i class="bi bi-geo-alt"></i>
-                    IFRN Campus São Paulo do Potengi
-                </p>
-
-            </div>
+        </div>
 
 
             <!-- MIRADAS -->
@@ -472,6 +473,10 @@
 
                 <a href="#">
                     Contato
+                </a>
+
+                <a href="{% url 'login_superadmin' %}" class="opacity-75">
+                    <i class="bi bi-shield-lock"></i> Acesso Administrativo
                 </a>
 
             </div>
