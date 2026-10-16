@@ -55,6 +55,25 @@
 
             {% csrf_token %}
 
+            {% if form.errors %}
+            <div class="alert alert-danger rounded-4 p-3 mb-4 text-start" role="alert" style="background: rgba(220, 53, 69, 0.15); border: 1px solid rgba(220, 53, 69, 0.4); color: #ff8595;">
+                <div class="d-flex align-items-center gap-2 mb-2 fw-semibold">
+                    <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+                    <span>Por favor, verifique os campos abaixo:</span>
+                </div>
+                <ul class="mb-0 ps-3 small text-white-50">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong class="text-white">{{ field.label|default:field.name }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
 
 
             <!-- FOTO -->
@@ -263,6 +282,11 @@
                     </label>
 
                     {{ form.link_curta_participou }}
+                    {% if form.link_curta_participou.errors %}
+                        <div class="text-danger small mt-1">
+                            <i class="bi bi-exclamation-circle me-1"></i>{{ form.link_curta_participou.errors.0 }}
+                        </div>
+                    {% endif %}
 
                 </div>
 

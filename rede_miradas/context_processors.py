@@ -3,7 +3,7 @@ from .selos import SELOS
 
 
 def selo_pendente(request):
-    if request.user.is_authenticated:
+    if hasattr(request, 'user') and request.user.is_authenticated:
         conquista = SeloConquistado.objects.filter(  # type: ignore
             usuario=request.user,
             visualizado=False

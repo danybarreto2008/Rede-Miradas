@@ -5,6 +5,12 @@ from .models import Perfil
 
 
 class PerfilForm(forms.ModelForm):
+    instagram = forms.CharField(
+        required=False,
+        max_length=200,
+        help_text="Ex: @seuperfil ou https://instagram.com/seuperfil",
+    )
+
     class Meta:
         model = Perfil
         fields = [
@@ -48,3 +54,24 @@ class PerfilForm(forms.ModelForm):
         self.fields["bio"].widget.attrs.update(
             {"rows": 4, "placeholder": "Conte um pouco sobre você..."}
         )
+
+    def clean_link_curta_participou(self):
+        link = self.cleaned_data.get("link_curta_participou")
+        if link:
+            link = link.strip()
+            if not any(
+                dominio in link.lower() for dominio in ["youtube.com", "youtu.be"]
+            ):
+                raise forms.ValidationError(
+                    "Por favor, insira um link válido do YouTube (ex: https://www.youtube.com/watch?v=... ou https://youtu.be/...)."
+                )
+        return link
+
+    def clean_instagram(self):
+        val = self.cleaned_data.get("instagram", "").strip()
+        if not val:
+            return ""
+        if val.startswith(("http://", "https://")):
+            return val
+        val = val.lstrip("@")
+        return f"https://instagram.com/{val}"

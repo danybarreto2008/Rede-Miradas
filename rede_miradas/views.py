@@ -1,6 +1,7 @@
 from functools import reduce
 from operator import or_
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, Paginator
 from django.db.models import Prefetch, Q
@@ -46,6 +47,10 @@ def meu_perfil(request):
     perfil = getattr(request.user, "perfil", None)
 
     if not perfil:
+        messages.warning(
+            request,
+            "Perfil restrito a alunos e professores cadastrados via SUAP.",
+        )
         return render(request, "rede_miradas/perfil_bloqueado.html")
 
     favoritos = perfil.curtas_favoritos.all()
@@ -118,6 +123,10 @@ def editar_perfil(request):
     perfil = getattr(request.user, "perfil", None)
 
     if not perfil:
+        messages.warning(
+            request,
+            "Perfil restrito a alunos e professores cadastrados via SUAP.",
+        )
         return render(request, "rede_miradas/perfil_bloqueado.html")
 
     if request.method == "POST":
@@ -125,8 +134,13 @@ def editar_perfil(request):
 
         if form.is_valid():
             form.save()
-
+            messages.success(request, "Seu perfil foi atualizado com sucesso!")
             return redirect("meu_perfil")
+        else:
+            messages.error(
+                request,
+                "Não foi possível salvar o perfil. Verifique os campos destacados abaixo.",
+            )
 
     else:
         form = PerfilForm(instance=perfil)
@@ -148,12 +162,23 @@ def votacao(request):
 
     voto_usuario = Voto.objects.filter(usuario=request.user).first()
 
-    if request.method == "POST" and not voto_usuario:
+    if request.method == "POST":
+        if voto_usuario:
+            messages.warning(
+                request,
+                "Você já registrou seu voto nesta edição. Só é permitido um voto por participante.",
+            )
+            return redirect("votacao")
+
         curta_id = request.POST.get("curta_id")
         curta = get_object_or_404(CurtaVotacao, id=curta_id)
 
         Voto.objects.create(usuario=request.user, curta=curta)
         conceder_selo(request.user, "primeiro-voto")
+        messages.success(
+            request,
+            f"Seu voto no curta '{curta.titulo}' foi registrado com sucesso! Obrigado por participar.",
+        )
 
         return redirect("votacao")
 
@@ -169,6 +194,8 @@ def votacao(request):
 
 @login_required
 def redirecionar_apos_login(request):
+    nome = request.user.first_name or request.user.username
+    messages.success(request, f"Bem-vindo(a) à Rede Miradas, {nome}!")
 
     perfil = getattr(request.user, "perfil", None)
 
@@ -259,6 +286,10 @@ def pagina_noticias(request):
                 ],
             )
         )
+        if not disponiveis.exists():
+            messages.info(
+                request, f"Nenhuma notícia encontrada para a busca '{busca}'."
+            )
 
     disponiveis = disponiveis.order_by("-data_publicacao", "-id")
 
@@ -438,6 +469,9 @@ def trilha_detalhe(request, slug=None):
         trilha = get_object_or_404(TrilhasCard, slug=slug, ativo=True)
 
     if not trilha:
+        messages.warning(
+            request, "A trilha de aprendizagem solicitada não foi encontrada."
+        )
         return redirect("trilhas_visao_geral")
 
     unidades = (
@@ -556,6 +590,9 @@ def limpar_historico_trilhas(request):
     request.session.pop("ultima_trilha", None)
     request.session.pop("progresso_trilhas", None)
     request.session.modified = True
+    messages.info(
+        request, "Seu histórico de navegação nas trilhas foi limpo com sucesso."
+    )
     return redirect(request.META.get("HTTP_REFERER", "trilhas_visao_geral"))
 
 
