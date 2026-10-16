@@ -34,7 +34,9 @@ Notícias | Rede Miradas
                 </div>
 
                 <div class="destaque-imagem">
-                    <img src="{{ destaque.imagem.url }}" alt="{{ destaque.titulo }}">
+                    {% if destaque.imagem %}
+                        <img src="{{ destaque.imagem.url }}" alt="{{ destaque.titulo }}">
+                    {% endif %}
                 </div>
 
             </div>
@@ -64,7 +66,9 @@ Notícias | Rede Miradas
                 <a href="{% url 'noticia_detalhe' noticia.slug %}" class="noticia-card {% if forloop.counter == 1 %}noticia-grande{% else %}noticia-pequena{% endif %}">
 
                     <div class="noticia-imagem">
-                        <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                        {% if noticia.imagem %}
+                            <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                        {% endif %}
                     </div>
 
                     <div class="noticia-info">
@@ -96,7 +100,9 @@ Notícias | Rede Miradas
                 <a href="{% url 'noticia_detalhe' noticia.slug %}" class="card-destaque-secundario">
 
                     <div class="card-destaque-imagem">
-                        <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                        {% if noticia.imagem %}
+                            <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+                        {% endif %}
                     </div>
 
                     <div class="card-destaque-info" style="background-color: {{ noticia.cor_fundo_destaque }};">
@@ -113,9 +119,12 @@ Notícias | Rede Miradas
     </section>
 
     {% endif %}
-        {% if pagina_outros %}
 
-    <section class="outros-posts" data-pagina-atual="1" data-tem-proxima="{{ pagina_outros.has_next|yesno:'1,0' }}">
+    {% if pagina_outros %}
+
+    <section class="outros-posts"
+             data-pagina-atual="{{ pagina_outros.number }}"
+             data-total-paginas="{{ pagina_outros.paginator.num_pages }}">
 
         <div class="outros-posts-grid" id="grid-outros-posts">
             {% include "rede_miradas/_cards_outros_posts.html" %}
@@ -140,6 +149,8 @@ Notícias | Rede Miradas
 <script>
     (function () {
         const input = document.getElementById('campo-busca');
+        if (!input) return;
+
         const form = input.closest('form');
         let temporizador;
 
@@ -165,11 +176,20 @@ Notícias | Rede Miradas
 
         const botao = document.getElementById('botao-carregar-mais');
         const grid = document.getElementById('grid-outros-posts');
-        let paginaAtual = parseInt(secao.dataset.paginaAtual, 10);
+        if (!botao || !grid) return;
 
-        if (!botao) return;
+        const TEXTO_BOTAO = 'Carregar mais <span>→</span>';
+        const totalPaginas = parseInt(secao.dataset.totalPaginas, 10) || 1;
+        let paginaAtual = parseInt(secao.dataset.paginaAtual, 10) || 1;
+
+        function restaurarBotao() {
+            botao.disabled = false;
+            botao.innerHTML = TEXTO_BOTAO;
+        }
 
         botao.addEventListener('click', function () {
+            if (botao.disabled) return;
+
             const proximaPagina = paginaAtual + 1;
             const busca = new URLSearchParams(window.location.search).get('q') || '';
 
@@ -179,21 +199,30 @@ Notícias | Rede Miradas
             const url = "{% url 'carregar_mais_noticias' %}?pagina=" + proximaPagina + "&q=" + encodeURIComponent(busca);
 
             fetch(url)
-                .then(function (resposta) { return resposta.text(); })
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        throw new Error('Erro ao carregar notícias');
+                    }
+                    return resposta.text();
+                })
                 .then(function (html) {
+                    if (!html.trim()) {
+                        botao.remove();
+                        return;
+                    }
+
                     grid.insertAdjacentHTML('beforeend', html);
                     paginaAtual = proximaPagina;
 
-                    if (!html.trim()) {
+                    // Chegou na última página: o botão some junto com os últimos cards
+                    if (paginaAtual >= totalPaginas) {
                         botao.remove();
                     } else {
-                        botao.disabled = false;
-                        botao.innerHTML = 'Carregar mais <span>→</span>';
+                        restaurarBotao();
                     }
                 })
                 .catch(function () {
-                    botao.disabled = false;
-                    botao.innerHTML = 'Carregar mais <span>→</span>';
+                    restaurarBotao();
                 });
         });
     })();
