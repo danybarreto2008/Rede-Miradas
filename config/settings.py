@@ -190,7 +190,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = 'account_login'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if os.getenv('EMAIL_HOST_PASSWORD'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
 EMAIL_USE_TLS = True

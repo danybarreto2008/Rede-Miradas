@@ -60,6 +60,9 @@ class CurtaVotacao(models.Model):
         verbose_name = "Curta em votação"
         verbose_name_plural = "Curtas em votação"
         ordering = ["ordem"]
+        permissions = [
+            ("pode_gerenciar_votacao", "Pode gerenciar curtas em votação"),
+        ]
 
     def __str__(self):
         return str(self.titulo)
@@ -79,6 +82,7 @@ class Voto(models.Model):
     class Meta:
         verbose_name = "Voto"
         verbose_name_plural = "Votos"
+        ordering = ["-data_voto"]
 
     def __str__(self):
         return f"{self.usuario} → {self.curta}"
@@ -143,6 +147,7 @@ class Perfil(models.Model):
     class Meta:
         verbose_name = "Perfil"
         verbose_name_plural = "Perfis"
+        ordering = ["usuario__username"]
 
     def __str__(self):
         return f"{self.usuario} ({self.get_tipo_display()})"
@@ -236,6 +241,17 @@ class Destaque(models.Model):
 
     ordem = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        verbose_name = "Destaque"
+        verbose_name_plural = "Destaques"
+        ordering = ["ordem"]
+        permissions = [
+            (
+                "pode_gerenciar_destaques",
+                "Pode gerenciar destaques da página inicial",
+            ),
+        ]
+
     def __str__(self):
         return str(self.titulo) if self.titulo else f"Destaque {self.id}"
 
@@ -265,6 +281,7 @@ class BlocoApresentacao(models.Model):
     class Meta:
         verbose_name = "Bloco de apresentação"
         verbose_name_plural = "Blocos de apresentação"
+        ordering = ["ordem"]
 
     def __str__(self):
         return str(self.texto)[:40] if self.texto else f"Bloco {self.id}"
@@ -369,6 +386,15 @@ class Noticia(models.Model):
         default="#3A1660",
         help_text="Cor de fundo exibida na seção de destaque.",
     )
+
+    class Meta:
+        verbose_name = "Notícia"
+        verbose_name_plural = "Notícias"
+        ordering = ["-data_publicacao", "-id"]
+        permissions = [
+            ("pode_publicar_noticia", "Pode publicar notícias"),
+            ("pode_destacar_noticia", "Pode destacar notícias"),
+        ]
 
     def __str__(self):
         return str(self.titulo)
@@ -625,6 +651,9 @@ class TrilhasCard(models.Model):
         verbose_name = "Trilhas - Card de Trilha"
         verbose_name_plural = "Trilhas - Cards de Trilhas"
         ordering = ["ordem"]
+        permissions = [
+            ("pode_gerenciar_trilhas", "Pode gerenciar trilhas de aprendizagem"),
+        ]
 
     def __str__(self):
         return f"{self.tag} - {str(self.titulo)[:30]}"

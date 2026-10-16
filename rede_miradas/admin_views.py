@@ -292,6 +292,14 @@ def admin_destaque_excluir(request, id):
 
 @admin_required
 def admin_destaque_toggle(request, id):
+    if not (
+        request.user.is_superuser
+        or request.user.has_perm("rede_miradas.pode_gerenciar_destaques")
+    ):
+        messages.error(
+            request, "Você não possui permissão para gerenciar destaques."
+        )
+        return redirect("admin_destaques_lista")
     destaque = get_object_or_404(Destaque, id=id)
     destaque.ativo = not destaque.ativo
     destaque.save()
@@ -659,6 +667,14 @@ def admin_noticia_excluir(request, id):
 
 @admin_required
 def admin_noticia_toggle_pub(request, id):
+    if not (
+        request.user.is_superuser
+        or request.user.has_perm("rede_miradas.pode_publicar_noticia")
+    ):
+        messages.error(
+            request, "Você não possui permissão para publicar notícias."
+        )
+        return redirect("admin_noticias_lista")
     noticia = get_object_or_404(Noticia, id=id)
     noticia.publicada = not noticia.publicada
     noticia.save()
@@ -669,6 +685,14 @@ def admin_noticia_toggle_pub(request, id):
 
 @admin_required
 def admin_noticia_toggle_destaque(request, id):
+    if not (
+        request.user.is_superuser
+        or request.user.has_perm("rede_miradas.pode_destacar_noticia")
+    ):
+        messages.error(
+            request, "Você não possui permissão para destacar notícias."
+        )
+        return redirect("admin_noticias_lista")
     noticia = get_object_or_404(Noticia, id=id)
     noticia.destaque = not noticia.destaque
     noticia.save()
@@ -924,6 +948,15 @@ def admin_trilha_card_excluir(request, id):
 
 @admin_required
 def admin_trilha_card_toggle(request, id):
+    if not (
+        request.user.is_superuser
+        or request.user.has_perm("rede_miradas.pode_gerenciar_trilhas")
+    ):
+        messages.error(
+            request,
+            "Você não possui permissão para gerenciar trilhas de aprendizagem.",
+        )
+        return redirect("admin_trilhas_cards_lista")
     card = get_object_or_404(TrilhasCard, id=id)
     card.ativo = not card.ativo
     card.save()
@@ -1326,6 +1359,14 @@ def admin_curta_votacao_excluir(request, id):
 
 @admin_required
 def admin_curta_votacao_toggle(request, id):
+    if not (
+        request.user.is_superuser
+        or request.user.has_perm("rede_miradas.pode_gerenciar_votacao")
+    ):
+        messages.error(
+            request, "Você não possui permissão para gerenciar a votação."
+        )
+        return redirect("admin_votacao")
     curta = get_object_or_404(CurtaVotacao, id=id)
     curta.ativo = not curta.ativo
     curta.save()

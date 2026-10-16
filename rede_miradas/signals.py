@@ -3,6 +3,7 @@ from allauth.socialaccount.signals import (
     pre_social_login,
     social_account_added,
 )
+from django.contrib.auth.models import Group
 from django.dispatch import receiver
 
 from .models import Perfil, conceder_selo
@@ -21,6 +22,16 @@ def _tipo_por_dados(dados):
     return Perfil.ALUNO
 
 
+def _associar_grupo(usuario, tipo):
+    nome_grupo = (
+        "Professores"
+        if tipo == Perfil.PROFESSOR
+        else ("Alunos" if tipo == Perfil.ALUNO else "Comum")
+    )
+    grupo, _ = Group.objects.get_or_create(name=nome_grupo)
+    usuario.groups.add(grupo)
+
+
 @receiver(user_signed_up)
 def criar_perfil_ao_cadastrar(sender, request, user, **kwargs):
     sociallogin = kwargs.get('sociallogin')
@@ -37,6 +48,7 @@ def criar_perfil_ao_cadastrar(sender, request, user, **kwargs):
         perfil.tipo = tipo
         perfil.save()
 
+    _associar_grupo(user, tipo)
     conceder_selo(user, 'primeiro-login')
 
 
@@ -58,10 +70,12 @@ def criar_ou_atualizar_perfil_ao_logar_social(
             perfil.tipo = tipo
             perfil.save()
     else:
+        tipo = Perfil.COMUM
         perfil, _ = Perfil.objects.get_or_create(  # type: ignore
-            usuario=usuario, defaults={'tipo': Perfil.COMUM}
+            usuario=usuario, defaults={'tipo': tipo}
         )
 
+    _associar_grupo(usuario, tipo)
     conceder_selo(usuario, 'primeiro-login')
 
 
@@ -81,5 +95,9 @@ def associar_perfil_ao_conectar_social(
         )
         perfil.tipo = tipo
         perfil.save()
+    else:
+        tipo = Perfil.COMUM
 
+    _associar_grupo(usuario, tipo)
     conceder_selo(usuario, 'primeiro-login')
+
