@@ -4,14 +4,9 @@
 {% block titulo %}Trilhas de Aprendizagem | Rede Miradas{% endblock %}
 
 {% block conteudo %}
-<link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/trilhas_visao_geral.css' %}?v=1.1"
->
+<link rel="stylesheet" href="{% static 'rede_miradas/css/trilhas_visao_geral.css' %}?v=1.1">
 
 <div class="trilhas-visao-geral-page">
-
-    <!-- BARRA LATERAL (MINHAS COISAS) - PADRÃO FIGMA SUBSTACK -->
     <aside class="trilhas-sidebar" aria-label="Navegação das Trilhas">
         <div class="sidebar-heading">
             Minhas coisas
@@ -29,7 +24,8 @@
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="{% if user.is_authenticated %}{% url 'painel_aluno' %}{% else %}{% url 'account_login' %}{% endif %}" class="sidebar-nav-link">
+                <a href="{% if user.is_authenticated %}{% url 'painel_aluno' %}{% else %}{% url 'account_login' %}{% endif %}"
+                    class="sidebar-nav-link">
                     Progresso
                 </a>
             </li>
@@ -40,305 +36,326 @@
             </li>
         </ul>
     </aside>
-
-    <!-- ÁREA PRINCIPAL DAS TRILHAS -->
     <main class="trilhas-main-content">
 
         <h1 class="trilhas-page-title">
             TRILHAS
         </h1>
 
+        {% if ultima_trilha_acessada %}
+        <div class="trilha-retomada-banner mb-4 p-3 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-3"
+            style="background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.4); backdrop-filter: blur(10px);">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle p-2 d-flex align-items-center justify-content-center"
+                    style="background: rgba(124, 58, 237, 0.3); width: 44px; height: 44px; min-width: 44px;">
+                    <i class="bi bi-play-circle-fill fs-4" style="color: #22d3ee;"></i>
+                </div>
+                <div>
+                    <span class="badge mb-1 text-uppercase"
+                        style="background: #7c3aed; font-size: 0.72rem; letter-spacing: 0.5px;">Continuar de onde
+                        parou</span>
+                    <h5 class="mb-0 text-white fw-bold">{{ ultima_trilha_acessada.tag }} &bull; {{ ultima_trilha_acessada.titulo }}{% if ultima_trilha_acessada.subtopico_titulo %} &ndash; <span class="text-info fw-normal">{{ ultima_trilha_acessada.subtopico_titulo }}</span>{% endif %}</h5>
+                    <small class="text-white-50">Você estava acessando esta trilha recentemente nesta sessão.</small>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ ultima_trilha_acessada.url }}" class="btn btn-sm px-3 py-2 fw-bold rounded-pill text-white"
+                    style="background: linear-gradient(135deg, #7c3aed 0%, #22d3ee 100%);">
+                    Continuar Aula <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
         <div class="trilhas-grid">
 
             {% for card in cards %}
 
-                <article class="trilha-card-container" id="trilha-{{ card.id }}">
+            <article class="trilha-card-container" id="trilha-{{ card.id }}">
+                <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% if card.subtopico_ativo %}?unidade={{ card.subtopico_ativo }}#unidade-{{ card.subtopico_ativo }}{% endif %}{% else %}{{ card.link_botao|default:'#' }}{% endif %}"
+                    class="trilha-card-header-link" title="Acessar {{ card.titulo }}">
+                    <div class="trilha-card-header">
+                        {% if card.imagem_capa %}
+                        <img src="{{ card.imagem_capa.url }}" alt="{{ card.titulo }}" class="trilha-card-cover-img"
+                            loading="lazy">
+                        {% elif forloop.counter == 1 %}
+                        <img src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}" alt="{{ card.titulo }}"
+                            class="trilha-card-cover-img" loading="lazy">
+                        {% elif forloop.counter == 2 %}
+                        <img src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}"
+                            alt="{{ card.titulo }}" class="trilha-card-cover-img" loading="lazy">
+                        {% elif forloop.counter == 3 %}
+                        <img src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}" alt="{{ card.titulo }}"
+                            class="trilha-card-cover-img" loading="lazy">
+                        {% elif forloop.counter == 4 %}
+                        <img src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}"
+                            alt="{{ card.titulo }}" class="trilha-card-cover-img" loading="lazy">
+                        {% else %}
+                        <img src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}"
+                            alt="{{ card.titulo }}" class="trilha-card-cover-img" loading="lazy">
+                        {% endif %}
 
-                    <!-- Imagem de Capa com Título Central (Clicável) -->
-                    <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="trilha-card-header-link" title="Acessar {{ card.titulo }}">
-                        <div class="trilha-card-header">
-                            {% if card.imagem_capa %}
-                                <img
-                                    src="{{ card.imagem_capa.url }}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% elif forloop.counter == 1 %}
-                                <img
-                                    src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% elif forloop.counter == 2 %}
-                                <img
-                                    src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% elif forloop.counter == 3 %}
-                                <img
-                                    src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% elif forloop.counter == 4 %}
-                                <img
-                                    src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% else %}
-                                <img
-                                    src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}"
-                                    alt="{{ card.titulo }}"
-                                    class="trilha-card-cover-img"
-                                    loading="lazy"
-                                >
-                            {% endif %}
-
-                            <div class="trilha-card-overlay">
-                                <h2 class="trilha-card-title">
-                                    {{ card.titulo }}
-                                </h2>
-                            </div>
+                        <div class="trilha-card-overlay">
+                            <h2 class="trilha-card-title">
+                                {{ card.titulo }}
+                            </h2>
                         </div>
-                    </a>
-
-                    <!-- Corpo do Card com Subtópicos e Ações -->
-                    <div class="trilha-card-body">
-
-                        <ul class="trilha-subtopicos-list">
-
-                            {% for subtopico in card.subtopicos.all %}
-
-                                <li class="trilha-subtopico-item">
-                                    <div class="subtopico-left">
-                                        <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
-                                        <a href="{% if subtopico.link %}{{ subtopico.link }}{% elif card.slug %}{% url 'trilha_detalhe' slug=card.slug %}#unidade-{{ forloop.counter }}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="subtopico-text">
-                                            {{ subtopico.titulo }}
-                                        </a>
-                                    </div>
-
-                                    {% if subtopico.mostrar_botao_comecar or forloop.first %}
-                                        <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}{% else %}{{ card.link_botao|default:'#' }}{% endif %}" class="btn-comecar-subtopico">
-                                            {{ card.texto_botao|default:"Começar" }}
-                                        </a>
-                                    {% endif %}
-                                </li>
-
-                            {% empty %}
-
-                                <!-- Itens de fallback contextualizados para a trilha -->
-                                <li class="trilha-subtopico-item">
-                                    <div class="subtopico-left">
-                                        <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
-                                        <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
-                                            Apresentação e introdução
-                                        </a>
-                                    </div>
-                                    <a href="{{ card.link_botao|default:'#' }}" class="btn-comecar-subtopico">
-                                        Começar
-                                    </a>
-                                </li>
-
-                                <li class="trilha-subtopico-item">
-                                    <div class="subtopico-left">
-                                        <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
-                                        <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
-                                            Materiais de apoio e referências
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="trilha-subtopico-item">
-                                    <div class="subtopico-left">
-                                        <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
-                                        <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
-                                            Exemplos práticos e exercícios
-                                        </a>
-                                    </div>
-                                </li>
-
-                            {% endfor %}
-
-                        </ul>
-
                     </div>
+                </a>
+                <div class="trilha-card-body">
 
-                </article>
+                    <ul class="trilha-subtopicos-list">
+
+                        {% for subtopico in card.subtopicos.all %}
+
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
+                                <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}?unidade={{ forloop.counter }}#unidade-{{ forloop.counter }}{% elif subtopico.link %}{{ subtopico.link }}{% else %}{{ card.link_botao|default:'#' }}{% endif %}"
+                                    class="subtopico-text">
+                                    {{ subtopico.titulo }}
+                                </a>
+                            </div>
+
+                            {% if card.subtopico_ativo %}
+                                {% if forloop.counter == card.subtopico_ativo %}
+                                <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}?unidade={{ forloop.counter }}#unidade-{{ forloop.counter }}{% else %}{{ card.link_botao|default:'#' }}{% endif %}"
+                                    class="btn-comecar-subtopico">
+                                    Continuar
+                                </a>
+                                {% endif %}
+                            {% else %}
+                                {% if forloop.first or subtopico.mostrar_botao_comecar %}
+                                <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}?unidade=1#unidade-1{% else %}{{ card.link_botao|default:'#' }}{% endif %}"
+                                    class="btn-comecar-subtopico">
+                                    {{ card.texto_botao|default:"Começar" }}
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+
+                        {% empty %}
+
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
+                                <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
+                                    Apresentação e introdução
+                                </a>
+                            </div>
+                            <a href="{{ card.link_botao|default:'#' }}" class="btn-comecar-subtopico">
+                                Começar
+                            </a>
+                        </li>
+
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
+                                <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
+                                    Materiais de apoio e referências
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon" aria-hidden="true">&#9654;</span>
+                                <a href="{{ card.link_botao|default:'#' }}" class="subtopico-text">
+                                    Exemplos práticos e exercícios
+                                </a>
+                            </div>
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </article>
 
             {% empty %}
+            <article class="trilha-card-container">
+                <div class="trilha-card-header">
+                    <img src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}" alt="Inscrição das equipes"
+                        class="trilha-card-cover-img">
+                    <div class="trilha-card-overlay">
+                        <h2 class="trilha-card-title">Inscrição das equipes</h2>
+                    </div>
+                </div>
+                <div class="trilha-card-body">
+                    <ul class="trilha-subtopicos-list">
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}#unidade-1"
+                                    class="subtopico-text">Identidade visual</a>
+                            </div>
+                            <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}"
+                                class="btn-comecar-subtopico">Começar</a>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}"
+                                    class="subtopico-text">Ficha de inscrição</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
 
-                <!-- Fallback Completo das 5 Trilhas caso a base ainda não tenha sido populada -->
-                <!-- Etapa 1 -->
-                <article class="trilha-card-container">
-                    <div class="trilha-card-header">
-                        <img src="{% static 'rede_miradas/img/trilhas/capa_equipes.jpg' %}" alt="Inscrição das equipes" class="trilha-card-cover-img">
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">Inscrição das equipes</h2>
-                        </div>
+            <article class="trilha-card-container">
+                <div class="trilha-card-header">
+                    <img src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}" alt="Texto autoral"
+                        class="trilha-card-cover-img">
+                    <div class="trilha-card-overlay">
+                        <h2 class="trilha-card-title">Texto autoral</h2>
                     </div>
-                    <div class="trilha-card-body">
-                        <ul class="trilha-subtopicos-list">
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}#unidade-1" class="subtopico-text">Identidade visual</a>
-                                </div>
-                                <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}" class="btn-comecar-subtopico">Começar</a>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='inscricao-das-equipes' %}" class="subtopico-text">Ficha de inscrição</a>
-                                </div>
-                            </li>
-                        </ul>
+                </div>
+                <div class="trilha-card-body">
+                    <ul class="trilha-subtopicos-list">
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">CONTO e
+                                    CRÔNICA: como diferenciar?</a>
+                            </div>
+                            <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}"
+                                class="btn-comecar-subtopico">Começar</a>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}"
+                                    class="subtopico-text">Crônicas finalistas da Olimpíada</a>
+                            </div>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">Lá na
+                                    minha terra</a>
+                            </div>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}"
+                                    class="subtopico-text">Quebra-molas</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <article class="trilha-card-container">
+                <div class="trilha-card-header">
+                    <img src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}" alt="Roteiro"
+                        class="trilha-card-cover-img">
+                    <div class="trilha-card-overlay">
+                        <h2 class="trilha-card-title">Roteiro</h2>
                     </div>
-                </article>
-
-                <!-- Etapa 2 -->
-                <article class="trilha-card-container">
-                    <div class="trilha-card-header">
-                        <img src="{% static 'rede_miradas/img/trilhas/capa_texto_autoral.jpg' %}" alt="Texto autoral" class="trilha-card-cover-img">
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">Texto autoral</h2>
-                        </div>
+                </div>
+                <div class="trilha-card-body">
+                    <ul class="trilha-subtopicos-list">
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">O que é um
+                                    roteiro audiovisual e estrutura</a>
+                            </div>
+                            <a href="{% url 'trilha_detalhe' slug='roteiro' %}"
+                                class="btn-comecar-subtopico">Começar</a>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">Da ideia à
+                                    escaleta</a>
+                            </div>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">Formatação
+                                    padrão de roteiro</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <article class="trilha-card-container">
+                <div class="trilha-card-header">
+                    <img src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}"
+                        alt="Produção e Gravação" class="trilha-card-cover-img">
+                    <div class="trilha-card-overlay">
+                        <h2 class="trilha-card-title">Produção e Gravação</h2>
                     </div>
-                    <div class="trilha-card-body">
-                        <ul class="trilha-subtopicos-list">
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">CONTO e CRÔNICA: como diferenciar?</a>
-                                </div>
-                                <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="btn-comecar-subtopico">Começar</a>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">Crônicas finalistas da Olimpíada</a>
-                                </div>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">Lá na minha terra</a>
-                                </div>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='texto-autoral' %}" class="subtopico-text">Quebra-molas</a>
-                                </div>
-                            </li>
-                        </ul>
+                </div>
+                <div class="trilha-card-body">
+                    <ul class="trilha-subtopicos-list">
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}"
+                                    class="subtopico-text">Planejamento de filmagem e necessidades</a>
+                            </div>
+                            <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}"
+                                class="btn-comecar-subtopico">Começar</a>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}"
+                                    class="subtopico-text">Planos, enquadramentos e movimentos</a>
+                            </div>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}"
+                                    class="subtopico-text">Iluminação básica e captação de áudio</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <article class="trilha-card-container">
+                <div class="trilha-card-header">
+                    <img src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}"
+                        alt="Edição e Finalização" class="trilha-card-cover-img">
+                    <div class="trilha-card-overlay">
+                        <h2 class="trilha-card-title">Edição e Finalização</h2>
                     </div>
-                </article>
-
-                <!-- Etapa 3 -->
-                <article class="trilha-card-container">
-                    <div class="trilha-card-header">
-                        <img src="{% static 'rede_miradas/img/trilhas/capa_roteiro.jpg' %}" alt="Roteiro" class="trilha-card-cover-img">
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">Roteiro</h2>
-                        </div>
-                    </div>
-                    <div class="trilha-card-body">
-                        <ul class="trilha-subtopicos-list">
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">O que é um roteiro audiovisual e estrutura</a>
-                                </div>
-                                <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="btn-comecar-subtopico">Começar</a>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">Da ideia à escaleta</a>
-                                </div>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='roteiro' %}" class="subtopico-text">Formatação padrão de roteiro</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </article>
-
-                <!-- Etapa 4 -->
-                <article class="trilha-card-container">
-                    <div class="trilha-card-header">
-                        <img src="{% static 'rede_miradas/img/trilhas/capa_producao_gravacao.jpg' %}" alt="Produção e Gravação" class="trilha-card-cover-img">
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">Produção e Gravação</h2>
-                        </div>
-                    </div>
-                    <div class="trilha-card-body">
-                        <ul class="trilha-subtopicos-list">
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}" class="subtopico-text">Planejamento de filmagem e necessidades</a>
-                                </div>
-                                <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}" class="btn-comecar-subtopico">Começar</a>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}" class="subtopico-text">Planos, enquadramentos e movimentos</a>
-                                </div>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='producao-e-gravacao' %}" class="subtopico-text">Iluminação básica e captação de áudio</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </article>
-
-                <!-- Etapa 5 -->
-                <article class="trilha-card-container">
-                    <div class="trilha-card-header">
-                        <img src="{% static 'rede_miradas/img/trilhas/capa_edicao_finalizacao.jpg' %}" alt="Edição e Finalização" class="trilha-card-cover-img">
-                        <div class="trilha-card-overlay">
-                            <h2 class="trilha-card-title">Edição e Finalização</h2>
-                        </div>
-                    </div>
-                    <div class="trilha-card-body">
-                        <ul class="trilha-subtopicos-list">
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}" class="subtopico-text">Organização do material bruto e seleção</a>
-                                </div>
-                                <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}" class="btn-comecar-subtopico">Começar</a>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}" class="subtopico-text">Montagem, ritmo e trilha sonora</a>
-                                </div>
-                            </li>
-                            <li class="trilha-subtopico-item">
-                                <div class="subtopico-left">
-                                    <span class="subtopico-play-icon">&#9654;</span>
-                                    <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}" class="subtopico-text">Exportação final do curta-metragem</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </article>
+                </div>
+                <div class="trilha-card-body">
+                    <ul class="trilha-subtopicos-list">
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}"
+                                    class="subtopico-text">Organização do material bruto e seleção</a>
+                            </div>
+                            <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}"
+                                class="btn-comecar-subtopico">Começar</a>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}"
+                                    class="subtopico-text">Montagem, ritmo e trilha sonora</a>
+                            </div>
+                        </li>
+                        <li class="trilha-subtopico-item">
+                            <div class="subtopico-left">
+                                <span class="subtopico-play-icon">&#9654;</span>
+                                <a href="{% url 'trilha_detalhe' slug='edicao-e-finalizacao' %}"
+                                    class="subtopico-text">Exportação final do curta-metragem</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
 
             {% endfor %}
 

@@ -197,7 +197,7 @@ def painel_professor(request):
     return render(request, "rede_miradas/painel_professor.html")
 
 
-# View da página "Comece por aqui"
+# página Comece por aqui
 def home(request):
 
     destaques = Destaque.objects.filter(ativo=True).order_by("ordem")
@@ -223,7 +223,7 @@ def home(request):
     )
 
 
-# View da página de notícias
+# página de notícias
 def pagina_noticias(request):
 
     noticias_publicadas = Noticia.objects.filter(publicada=True)
@@ -284,8 +284,6 @@ def pagina_noticias(request):
         },
     )
 
-
-# View que devolve mais posts em HTML puro, usada pelo botão "Carregar mais"
 def carregar_mais_noticias(request):
 
     noticias_publicadas = Noticia.objects.filter(publicada=True)
@@ -340,7 +338,7 @@ def carregar_mais_noticias(request):
     )
 
 
-# View da página individual de uma notícia
+# página individual de uma notícia
 def noticia_detalhe(request, slug):
 
     noticia = get_object_or_404(Noticia, slug=slug, publicada=True)
@@ -377,7 +375,7 @@ def noticia_detalhe(request, slug):
     )
 
 
-# View da página inicial das Trilhas de Aprendizagem
+# página inicial das Trilhas de Aprendizagem
 def inicial_trilhas(request):
     hero = TrilhasHero.objects.first()
     itens_faixa = TrilhasFaixaItem.objects.filter(ativo=True).order_by("ordem")
@@ -398,13 +396,16 @@ def inicial_trilhas(request):
     )
 
 
-# View da página de visão geral das trilhas (Layout Substack Figma)
+# visão geral das trilhas 
 def trilhas_visao_geral(request):
-    cards = (
+    cards = list(
         TrilhasCard.objects.filter(ativo=True)
         .prefetch_related("subtopicos")
         .order_by("ordem")
     )
+    progresso_trilhas = request.session.get("progresso_trilhas", {})
+    for card in cards:
+        card.subtopico_ativo = progresso_trilhas.get(card.slug)
 
     return render(
         request,
@@ -415,7 +416,6 @@ def trilhas_visao_geral(request):
     )
 
 
-# View da página de detalhes de uma trilha (Unidades e Conteúdos)
 def trilha_detalhe(request, slug=None):
     if not slug:
         trilha = TrilhasCard.objects.filter(
@@ -465,6 +465,49 @@ def trilha_detalhe(request, slug=None):
         .first()
     )
 
+    progresso_trilhas = request.session.get("progresso_trilhas", {})
+    unidade_param = request.GET.get("unidade")
+    if unidade_param and str(unidade_param).isdigit():
+        unidade_atual_num = int(unidade_param)
+    else:
+        unidade_atual_num = progresso_trilhas.get(trilha.slug, 1)
+
+    progresso_trilhas[trilha.slug] = unidade_atual_num
+    request.session["progresso_trilhas"] = progresso_trilhas
+    subtopico_titulo = ""
+    subtopicos = list(trilha.subtopicos.filter(ativo=True).order_by("ordem"))
+    if 1 <= unidade_atual_num <= len(subtopicos):
+        subtopico_titulo = subtopicos[unidade_atual_num - 1].titulo
+    else:
+        un_obj = unidades.filter(numero=unidade_atual_num).first()
+        if un_obj:
+            subtopico_titulo = un_obj.titulo
+
+    url_com_unidade = (
+        f"/trilhas/{trilha.slug}/?unidade={unidade_atual_num}#unidade-{unidade_atual_num}"
+        if trilha.slug
+        else "/trilhas/visao-geral/"
+    )
+
+    item_sessao = {
+        "id": trilha.id,
+        "slug": trilha.slug or "",
+        "tag": trilha.tag or "",
+        "titulo": trilha.titulo or "",
+        "subtopico_titulo": subtopico_titulo,
+        "unidade_atual": unidade_atual_num,
+        "url": url_com_unidade,
+        "total_unidades": unidades.count(),
+        "capa_url": trilha.imagem_capa.url if trilha.imagem_capa else "",
+    }
+    request.session["ultima_trilha"] = item_sessao
+
+    historico = request.session.get("historico_trilhas", [])
+    historico = [h for h in historico if h.get("id") != trilha.id]
+    historico.insert(0, item_sessao)
+    request.session["historico_trilhas"] = historico[:5]
+    request.session.modified = True
+
     return render(
         request,
         "rede_miradas/trilha_detalhe.html",
@@ -472,16 +515,55 @@ def trilha_detalhe(request, slug=None):
             "trilha": trilha,
             "unidades": unidades,
             "total_unidades": unidades.count(),
+            "unidade_atual_num": unidade_atual_num,
             "trilha_anterior": trilha_anterior,
             "proxima_trilha": proxima_trilha,
         },
     )
 
 
+def salvar_progresso_trilha(request):
+    slug = request.GET.get("slug") or request.POST.get("slug")
+    unidade = request.GET.get("unidade") or request.POST.get("unidade")
+    if slug and unidade and str(unidade).isdigit():
+        unidade_num = int(unidade)
+        progresso_trilhas = request.session.get("progresso_trilhas", {})
+        progresso_trilhas[slug] = unidade_num
+        request.session["progresso_trilhas"] = progresso_trilhas
+
+        ultima = request.session.get("ultima_trilha")
+        if ultima and ultima.get("slug") == slug:
+            ultima["unidade_atual"] = unidade_num
+            ultima["url"] = f"/trilhas/{slug}/?unidade={unidade_num}#unidade-{unidade_num}"
+            trilha = TrilhasCard.objects.filter(slug=slug).first()
+            if trilha:
+                subtopicos = list(trilha.subtopicos.filter(ativo=True).order_by("ordem"))
+                if 1 <= unidade_num <= len(subtopicos):
+                    ultima["subtopico_titulo"] = subtopicos[unidade_num - 1].titulo
+                else:
+                    un = trilha.unidades.filter(numero=unidade_num).first()
+                    if un:
+                        ultima["subtopico_titulo"] = un.titulo
+            request.session["ultima_trilha"] = ultima
+
+        request.session.modified = True
+        return HttpResponse(status=204)
+    return HttpResponse(status=400)
+
+
+def limpar_historico_trilhas(request):
+    request.session.pop("historico_trilhas", None)
+    request.session.pop("ultima_trilha", None)
+    request.session.pop("progresso_trilhas", None)
+    request.session.modified = True
+    return redirect(request.META.get("HTTP_REFERER", "trilhas_visao_geral"))
+
+
 def trilha_inscricao_equipes(request):
     return trilha_detalhe(request, slug="inscricao-das-equipes")
 
 
-# View da página "Como Tudo Começou" — conteúdo estático direto no HTML
+#Como Tudo Começou
 def como_tudo_comecou(request):
     return render(request, "rede_miradas/como_tudo_comecou.html")
+

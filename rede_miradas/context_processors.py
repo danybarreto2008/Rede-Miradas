@@ -15,4 +15,13 @@ def selo_pendente(request):
                 'selo_pendente_info': SELOS[conquista.selo],
             }
 
-    return {'selo_pendente': None, 'selo_pendente_info': None}
+    return {'selo_pendente': None, 'selo_pendente_info': None}
+
+
+def historico_trilhas(request):
+    return {
+        'ultima_trilha_acessada': request.session.get('ultima_trilha'),
+        'historico_trilhas': request.session.get('historico_trilhas', []),
+        'progresso_trilhas': request.session.get('progresso_trilhas', {}),
+    }
+
