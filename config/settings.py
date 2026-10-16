@@ -74,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'rede_miradas.context_processors.selo_pendente',
+                'rede_miradas.context_processors.historico_trilhas',
             ],
 
         },
@@ -168,7 +169,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Arquivos CSS, JavaScript e imagens do projeto
+# Arquivos CSS, JavaScript e imagens
 STATIC_URL = '/static/'
 
 
@@ -196,7 +197,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_REDIRECT_URL = 'pos_login'
+LOGOUT_REDIRECT_URL = 'home'
 ACCOUNT_SIGNUP_REDIRECT_URL = 'pos_login'
+
+SESSION_COOKIE_AGE = 1209600  
+SESSION_SAVE_EVERY_REQUEST = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'suap': {
@@ -228,8 +233,7 @@ ACCOUNT_SIGNUP_FIELDS = [
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-# Permite conectar automaticamente a conta social (SUAP/Google)
-# se o e-mail já existir no banco
+#conecta automaticamente SUAP/Google se o e-mail já existir no banco
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'

@@ -1,19 +1,173 @@
 {% extends 'rede_miradas/base.html' %}
+{% load static %}
+
+{% block titulo %}Painel do Aluno | Rede Miradas{% endblock %}
 
 {% block conteudo %}
+<div class="container py-5 text-white">
+    <div class="row align-items-center mb-5 pb-4 border-bottom border-secondary border-opacity-25">
+        <div class="col-md-8">
+            <span class="badge mb-2 px-3 py-2 rounded-pill"
+                style="background: rgba(124, 58, 237, 0.25); color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.4);">
+                <i class="bi bi-mortarboard-fill me-1"></i> PAINEL DO ESTUDANTE
+            </span>
+            <h1 class="fw-bold display-6 mb-1">
+                Olá, {{ user.first_name|default:user.username }}!
+            </h1>
+            <p class="text-white-50 mb-0">
+                Acompanhe aqui o seu histórico de estudos das Trilhas de Aprendizagem e acesse rapidamente seus
+                recursos.
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{% url 'meu_perfil' %}" class="btn btn-outline-light rounded-pill px-3 me-2">
+                <i class="bi bi-person-circle me-1"></i> Meu Perfil
+            </a>
+            <a href="{% url 'trilhas_visao_geral' %}" class="btn btn-neon rounded-pill px-3">
+                <i class="bi bi-compass me-1"></i> Ver Todas as Trilhas
+            </a>
+        </div>
+    </div>
 
-<div class="container py-5 text-white text-center">
+    {% if ultima_trilha_acessada %}
+    <div class="mb-5">
+        <h4 class="fw-bold mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-play-circle text-info"></i> Continuar de onde você parou
+        </h4>
+        <div class="card border-0 rounded-4 p-4 position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.22) 0%, rgba(34, 211, 238, 0.12) 100%); border: 1px solid rgba(124, 58, 237, 0.4) !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge text-uppercase mb-2 px-3 py-1 rounded-pill"
+                        style="background: #7c3aed; font-size: 0.75rem;">
+                        {{ ultima_trilha_acessada.tag|default:"Trilha de Aprendizagem" }}
+                    </span>
+                    <h3 class="fw-bold text-white mb-2">
+                        {{ ultima_trilha_acessada.titulo }}
+                    </h3>
+                    <p class="text-white-50 mb-3 mb-lg-0">
+                        Esta é a última trilha que você visitou nesta sessão de estudos. Continue acompanhando os
+                        conteúdos e materiais práticos.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{{ ultima_trilha_acessada.url }}"
+                        class="btn btn-neon rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2">
+                        <span>Retomar Conteúdo</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
-    <h2>Bem-vindo(a), {{ user.first_name }}!</h2>
-    <p class="text-secondary">Este é o painel do aluno.</p>
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-clock-history text-info"></i> Trilhas visitadas recentemente
+            </h4>
+            {% if historico_trilhas %}
+            <a href="{% url 'limpar_historico_trilhas' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                title="Limpar histórico da sessão">
+                <i class="bi bi-trash3 me-1"></i> Limpar histórico
+            </a>
+            {% endif %}
+        </div>
 
-    <a href="{% url 'meu_perfil' %}" class="btn btn-outline-light d-inline-block mt-3 me-2">Meu perfil</a>
-
-    <form method="post" action="{% url 'account_logout' %}" class="d-inline-block mt-3">
-        {% csrf_token %}
-        <button type="submit" class="btn-neon">Sair</button>
-    </form>
+        {% if historico_trilhas %}
+        <div class="row g-3">
+            {% for item in historico_trilhas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 rounded-4 border-0 p-3"
+                    style="background: #0f1538; border: 1px solid rgba(255, 255, 255, 0.08) !important; transition: transform 0.2s, border-color 0.2s;">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge text-uppercase"
+                            style="background: rgba(124, 58, 237, 0.25); color: #c4b5fd;">
+                            {{ item.tag|default:"Trilha" }}
+                        </span>
+                        {% if forloop.first %}
+                        <span class="badge bg-success bg-opacity-75 rounded-pill text-white"
+                            style="font-size: 0.65rem;">
+                            Última acessada
+                        </span>
+                        {% endif %}
+                    </div>
+                    <h5 class="fw-bold text-white mb-2" style="font-size: 1.05rem;">
+                        {{ item.titulo }}
+                    </h5>
+                    <p class="text-white-50 small mb-3 flex-grow-1">
+                        {{ item.total_unidades|default:0 }} unidade(s) de conteúdo cadastrada(s).
+                    </p>
+                    <a href="{{ item.url }}" class="btn btn-outline-info btn-sm rounded-pill w-100 fw-semibold">
+                        Acessar Trilha <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5 rounded-4 border border-secondary border-opacity-25"
+            style="background: rgba(15, 21, 56, 0.5);">
+            <i class="bi bi-journal-bookmark fs-1 text-secondary opacity-50 d-block mb-3"></i>
+            <h5 class="text-white mb-2">Nenhuma trilha acessada nesta sessão</h5>
+            <p class="text-white-50 mb-3" style="max-width: 480px; margin: 0 auto;">
+                À medida que você navegar pelas etapas de aprendizagem, elas ficarão salvas automaticamente aqui para
+                você retomar facilmente seus estudos.
+            </p>
+            <a href="{% url 'trilhas_visao_geral' %}" class="btn btn-neon rounded-pill px-4">
+                Começar a Explorar Trilhas
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="row g-3 pt-3">
+        <div class="col-md-4">
+            <a href="{% url 'votacao' %}" class="card p-3 rounded-4 border-0 text-decoration-none h-100"
+                style="background: #0f1538; border: 1px solid rgba(255, 255, 255, 0.08) !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-2 text-warning d-flex align-items-center justify-content-center"
+                        style="background: rgba(234, 179, 8, 0.15); width: 44px; height: 44px;">
+                        <i class="bi bi-star-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Votação do Júri Popular</h6>
+                        <small class="text-white-50">Vote no seu curta favorito</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'noticias' %}" class="card p-3 rounded-4 border-0 text-decoration-none h-100"
+                style="background: #0f1538; border: 1px solid rgba(255, 255, 255, 0.08) !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-2 text-info d-flex align-items-center justify-content-center"
+                        style="background: rgba(34, 211, 238, 0.15); width: 44px; height: 44px;">
+                        <i class="bi bi-newspaper fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Notícias e Atualizações</h6>
+                        <small class="text-white-50">Fique por dentro do festival</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'meu_perfil' %}" class="card p-3 rounded-4 border-0 text-decoration-none h-100"
+                style="background: #0f1538; border: 1px solid rgba(255, 255, 255, 0.08) !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle p-2 text-success d-flex align-items-center justify-content-center"
+                        style="background: rgba(34, 197, 94, 0.15); width: 44px; height: 44px;">
+                        <i class="bi bi-person-lines-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Meu Perfil e Selos</h6>
+                        <small class="text-white-50">Veja suas conquistas na rede</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 
 </div>
-
 {% endblock %}

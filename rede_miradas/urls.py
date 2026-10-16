@@ -3,39 +3,46 @@ from django.urls import include, path
 from . import admin_views, views
 
 urlpatterns = [
-    # Página "Comece por aqui"
+    #Comece por aqui
     path("", views.home, name="home"),
-    # Página principal de notícias
+    #Página principal de notícias
     path("noticias/", views.pagina_noticias, name="noticias"),
-    # Carregar mais posts (precisa vir ANTES da rota de slug,
-    # senão "carregar-mais" é interpretado como um slug de notícia)
     path(
         "noticias/carregar-mais/",
         views.carregar_mais_noticias,
         name="carregar_mais_noticias",
     ),
-    # Página inicial das Trilhas de Aprendizagem
+    #Página inicial das Trilhas de Aprendizagem
     path("trilhas/", views.inicial_trilhas, name="inicial_trilhas"),
-    # Página de visão geral das trilhas
+    #Página de visão geral das trilhas
     path(
         "trilhas/visao-geral/",
         views.trilhas_visao_geral,
         name="trilhas_visao_geral",
     ),
-    # Página da 1ª trilha (Inscrição das equipes)
+    #Página da 1ª trilha
     path(
         "trilhas/inscricao-das-equipes/",
         views.trilha_inscricao_equipes,
         name="trilha_inscricao_equipes",
     ),
-    # Página individual/detalhe de uma trilha por slug
+    path(
+        "trilhas/limpar-historico/",
+        views.limpar_historico_trilhas,
+        name="limpar_historico_trilhas",
+    ),
+    path(
+        "trilhas/salvar-progresso/",
+        views.salvar_progresso_trilha,
+        name="salvar_progresso_trilha",
+    ),
+    #detalhe de uma trilha 
     path("trilhas/<slug:slug>/", views.trilha_detalhe, name="trilha_detalhe"),
-    # Página "Como tudo começou" (história do projeto)
+    #Como tudo começou
     path(
         "como-tudo-comecou/", views.como_tudo_comecou, name="como_tudo_comecou"
     ),
-    # Página individual de uma notícia
-    # (sempre por último, pois <slug:slug> combina com qualquer texto)
+    #detalhe de uma notícia
     path(
         "noticias/<slug:slug>/", views.noticia_detalhe, name="noticia_detalhe"
     ),
@@ -53,14 +60,11 @@ urlpatterns = [
         views.confirmar_selo,
         name="confirmar_selo",
     ),
-    # ==========================================
-    # PAINEL ADMINISTRATIVO (DASHBOARD)
-    # ==========================================
+    #painel administrativo
     path("painel/admin/", admin_views.admin_dashboard, name="painel_admin"),
     path(
         "painel/admin/logout/", admin_views.logout_admin, name="logout_admin"
     ),
-    # Home: Destaques (Banners)
     path(
         "painel/admin/destaques/",
         admin_views.admin_destaques_lista,
@@ -86,7 +90,6 @@ urlpatterns = [
         admin_views.admin_destaque_toggle,
         name="admin_destaque_toggle",
     ),
-    # Home: Blocos de Apresentação
     path(
         "painel/admin/blocos/",
         admin_views.admin_blocos_lista,
@@ -112,7 +115,6 @@ urlpatterns = [
         admin_views.admin_bloco_toggle,
         name="admin_bloco_toggle",
     ),
-    # Home: Curtas em Destaque na Home
     path(
         "painel/admin/curtas-home/",
         admin_views.admin_curtas_home_lista,
@@ -138,7 +140,6 @@ urlpatterns = [
         admin_views.admin_curta_home_toggle,
         name="admin_curta_home_toggle",
     ),
-    # Home: Textos das Seções
     path(
         "painel/admin/secoes-home/",
         admin_views.admin_secoes_home,
@@ -211,7 +212,7 @@ urlpatterns = [
         admin_views.admin_trilhas_faixa_toggle,
         name="admin_trilhas_faixa_toggle",
     ),
-    # Trilhas: Cards
+    #Cards
     path(
         "painel/admin/trilhas/cards/",
         admin_views.admin_trilhas_cards_lista,
@@ -237,7 +238,7 @@ urlpatterns = [
         admin_views.admin_trilha_card_toggle,
         name="admin_trilha_card_toggle",
     ),
-    # Trilhas: Unidades
+    #Unidades
     path(
         "painel/admin/trilhas/unidades/",
         admin_views.admin_unidades_lista,
@@ -258,7 +259,7 @@ urlpatterns = [
         admin_views.admin_unidade_excluir,
         name="admin_unidade_excluir",
     ),
-    # Trilhas: Tópicos / Aulas
+    #Tópicos
     path(
         "painel/admin/trilhas/topicos/",
         admin_views.admin_topicos_lista,
@@ -279,7 +280,7 @@ urlpatterns = [
         admin_views.admin_topico_excluir,
         name="admin_topico_excluir",
     ),
-    # Trilhas: Subtópicos Rápidos
+    #Subtópicos Rápidos
     path(
         "painel/admin/trilhas/subtopicos/",
         admin_views.admin_subtopicos_lista,
@@ -326,7 +327,6 @@ urlpatterns = [
         admin_views.admin_curta_votacao_toggle,
         name="admin_curta_votacao_toggle",
     ),
-    # Usuários & Comunidade
     path(
         "painel/admin/usuarios/",
         admin_views.admin_usuarios_lista,
