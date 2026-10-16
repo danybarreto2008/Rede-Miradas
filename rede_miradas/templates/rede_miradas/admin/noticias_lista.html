@@ -121,12 +121,16 @@
                     </td>
                     <td class="text-end">
                         <div class="d-inline-flex gap-1">
+                            {% if perms.rede_miradas.pode_publicar_noticia %}
                             <a href="{% url 'admin_noticia_toggle_pub' n.id %}" class="btn-adm-action {% if n.publicada %}toggle-on{% else %}toggle-off{% endif %}" title="{% if n.publicada %}Despublicar{% else %}Publicar{% endif %}">
                                 <i class="bi {% if n.publicada %}bi-eye fs-6{% else %}bi-eye-slash fs-6{% endif %}"></i>
                             </a>
+                            {% endif %}
+                            {% if perms.rede_miradas.pode_destacar_noticia %}
                             <a href="{% url 'admin_noticia_toggle_destaque' n.id %}" class="btn-adm-action {% if n.destaque %}text-warning{% endif %}" title="Alternar Destaque">
                                 <i class="bi {% if n.destaque %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                             </a>
+                            {% endif %}
                             <a href="{% url 'admin_noticia_editar' n.id %}" class="btn-adm-action edit" title="Editar"><i class="bi bi-pencil"></i></a>
                             <a href="{% url 'admin_noticia_excluir' n.id %}" class="btn-adm-action delete" title="Excluir"><i class="bi bi-trash3"></i></a>
                         </div>
