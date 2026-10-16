@@ -179,8 +179,8 @@
         {% if messages %}
         <div class="px-4 pt-3">
             {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'warning' %}warning{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
-                <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill{% elif message.tags == 'error' %}bi-exclamation-triangle-fill{% else %}bi-info-circle-fill{% endif %} me-2"></i>
+            <div class="alert alert-{% if 'error' in message.tags or 'danger' in message.tags %}danger{% elif 'warning' in message.tags %}warning{% elif 'success' in message.tags %}success{% else %}info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi {% if 'success' in message.tags %}bi-check-circle-fill{% elif 'error' in message.tags or 'danger' in message.tags %}bi-exclamation-triangle-fill{% elif 'warning' in message.tags %}bi-exclamation-triangle-fill{% else %}bi-info-circle-fill{% endif %} me-2"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

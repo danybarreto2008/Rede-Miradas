@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants as messages_constants
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,6 +83,15 @@ TEMPLATES = [
     },
 
 ]
+
+MESSAGE_TAGS = {
+    messages_constants.DEBUG: 'secondary',
+    messages_constants.INFO: 'info',
+    messages_constants.SUCCESS: 'success',
+    messages_constants.WARNING: 'warning',
+    messages_constants.ERROR: 'danger',
+}
+
 
 
 WSGI_APPLICATION = 'config.wsgi.application'
