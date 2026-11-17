@@ -73,9 +73,19 @@ class CurtaVotacao(models.Model):
 class Voto(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    # E-mail usado na votação (sempre minúsculo). Único: 1 voto por e-mail.
+    email = models.EmailField(
+        "E-mail do votante",
+        unique=True,
+        null=True,
+        blank=True,
+        editable=False,
+    )
+
     curta = models.ForeignKey(
         CurtaVotacao, on_delete=models.CASCADE, related_name="votos"
     )
+    # ... o resto continua igual
 
     data_voto = models.DateTimeField(auto_now_add=True)
 
@@ -350,6 +360,90 @@ class SecaoFinal(models.Model):
     def __str__(self):
         return str(self.titulo)
 
+# Textos e imagens FIXOS (padrão) da página "Comece por aqui".
+# Já nascem preenchidos; o admin pode alterar em "Textos das Seções".
+class TextosHome(models.Model):
+    # ---- Hero ----
+    hero_titulo_leve = models.CharField("Hero: título (parte fina)", max_length=60, default="REDE")
+    hero_titulo_forte = models.CharField("Hero: título (parte em negrito)", max_length=60, default="MIRADAS")
+    hero_texto = models.TextField(
+        "Hero: texto",
+        default=(
+            "Explore trilhas de aprendizagem, conheça produtoras parceiras "
+            "e descubra projetos desenvolvidos por escolas."
+        ),
+    )
+    hero_botao_texto = models.CharField("Hero: texto do botão", max_length=50, default="Saiba mais")
+    hero_botao_link = models.CharField("Hero: link do botão", max_length=255, default="#aprenda")
+
+    # ---- Aprenda. Crie. Conecte. ----
+    aprenda_titulo = models.CharField("Aprenda: título", max_length=120, default="APRENDA. CRIE. CONECTE.")
+    aprenda_texto = models.TextField(
+        "Aprenda: texto",
+        default=(
+            "A Rede Miradas é uma plataforma dedicada à divulgação, "
+            "valorização e votação de curtas-metragens, conectando "
+            "estudantes, realizadores e espectadores em um espaço de "
+            "criatividade, cultura e produção audiovisual."
+        ),
+    )
+    aprenda_imagem = models.ImageField("Aprenda: ilustração (opcional)", upload_to="home/", blank=True, null=True)
+
+    # ---- Trilhas ----
+    trilhas_titulo = models.CharField("Trilhas: título", max_length=120, default="TRILHAS DE APRENDIZADO")
+    trilhas_texto = models.TextField(
+        "Trilhas: texto",
+        default=(
+            "Aprenda produção audiovisual em módulos práticos e criativos, "
+            "do roteiro à edição final do seu curta."
+        ),
+    )
+    trilhas_botao_texto = models.CharField("Trilhas: texto do botão", max_length=50, default="Visão geral das trilhas")
+    trilhas_botao_link = models.CharField("Trilhas: link do botão", max_length=255, default="/trilhas/visao-geral/")
+    trilhas_imagem = models.ImageField("Trilhas: ilustração (opcional)", upload_to="home/", blank=True, null=True)
+
+    # ---- Selos ----
+    selos_titulo = models.CharField("Selos: título", max_length=120, default="SELOS MIRADAS")
+    selos_texto = models.TextField(
+        "Selos: texto",
+        default=(
+            "Explore e encontre selos escondido pelo Rede miradas, cada "
+            "selo traz um curta metragem que marcou a edição."
+        ),
+    )
+    selos_botao_texto = models.CharField("Selos: texto do botão", max_length=50, default="Ver selos")
+    selos_botao_link = models.CharField("Selos: link do botão", max_length=255, default="/perfil/")
+    selos_imagem = models.ImageField("Selos: ilustração (opcional)", upload_to="home/", blank=True, null=True)
+
+    # ---- Júri popular ----
+    juri_titulo = models.CharField("Júri: título", max_length=120, default="JÚRI POPULAR")
+    juri_texto = models.TextField(
+        "Júri: texto",
+        default=(
+            "Durante a época de votação, você vai poder escolher seus "
+            "curtas favoritos direto por aqui e ajudar a eleger o "
+            "vencedor do júri popular."
+        ),
+    )
+    juri_botao_texto = models.CharField("Júri: texto do botão", max_length=50, default="VER PARTICIPANTES")
+    juri_botao_link = models.CharField("Júri: link do botão", max_length=255, default="/votacao/")
+
+    # ---- Notícias ----
+    noticias_titulo = models.CharField("Notícias: título", max_length=120, default="ACOMPANHE NOTÍCIAS")
+    noticias_texto = models.TextField(
+        "Notícias: texto",
+        default="fique por dentro de tudo que rola por aqui, datas, vencedores e troféus",
+    )
+    noticias_botao_texto = models.CharField("Notícias: texto do botão", max_length=50, default="Página de notícias")
+    noticias_botao_link = models.CharField("Notícias: link do botão", max_length=255, default="/noticias/")
+    noticias_imagem = models.ImageField("Notícias: ilustração (opcional)", upload_to="home/", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Textos fixos da página inicial"
+        verbose_name_plural = "Textos fixos da página inicial"
+
+    def __str__(self):
+        return "Textos da página inicial"
 
 # Modelo das notícias do blog
 class Noticia(models.Model):

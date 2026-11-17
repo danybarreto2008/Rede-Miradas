@@ -11,7 +11,7 @@
     <span class="text-white">Textos das Seções</span>
 </div>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="row g-4">
@@ -107,7 +107,53 @@
             </div>
         </div>
     </div>
+    <h2 class="h5 text-white mt-5 mb-1">
+        <i class="bi bi-house-heart text-warning"></i>
+        Textos fixos da página "Comece por aqui"
+    </h2>
+    <p class="small text-secondary mb-3">
+        Estes textos já vêm preenchidos. Altere o que quiser e clique em Salvar.
+        As imagens são opcionais: sem enviar nada, a ilustração padrão continua.
+    </p>
 
+    <datalist id="destinos-comuns">
+        <option value="#aprenda">Rolar até "Aprenda. Crie. Conecte."</option>
+        <option value="/trilhas/">Trilhas de Aprendizagem</option>
+        <option value="/trilhas/visao-geral/">Visão geral das trilhas</option>
+        <option value="/noticias/">Notícias</option>
+        <option value="/votacao/">Votação do Júri Popular</option>
+        <option value="/perfil/">Meu perfil (selos)</option>
+        <option value="/como-tudo-comecou/">Como tudo começou</option>
+        <option value="/accounts/signup/">Cadastro</option>
+        <option value="/accounts/login/">Entrar</option>
+    </datalist>
+
+    <div class="row g-4">
+        {% for grupo in grupos_textos %}
+        <div class="col-lg-6">
+            <div class="admin-card h-100">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">
+                        <i class="bi {{ grupo.icone }} text-info"></i>
+                        {{ grupo.titulo }}
+                    </h2>
+                </div>
+                <div class="admin-card-body">
+                    {% if grupo.ajuda %}
+                    <p class="small text-secondary mb-3">{{ grupo.ajuda }}</p>
+                    {% endif %}
+                    {% for campo in grupo.campos %}
+                    <div class="mb-3">
+                        <label class="admin-form-label" for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+                        {{ campo }}
+                        {% if campo.errors %}<div class="text-danger small">{{ campo.errors|join:" " }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     <div class="mt-4">
         <button type="submit" class="btn btn-adm-primary btn-lg px-4">
             <i class="bi bi-check2-circle"></i> Salvar Textos das Seções

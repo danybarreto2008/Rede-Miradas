@@ -158,11 +158,10 @@
     <div class="table-responsive">
         <table class="admin-table">
             <thead>
-                <tr>
-                    <th>Usuário Votante</th>
-                    <th>Curta Escolhido</th>
-                    <th>Data e Hora do Voto</th>
-                </tr>
+                <th>Usuário Votante</th>
+                <th>E-mail</th>
+                <th>Curta Escolhido</th>
+                <th>Data e Hora do Voto</th>
             </thead>
             <tbody>
                 {% for v in ultimos_votos %}
@@ -171,6 +170,7 @@
                         <i class="bi bi-person-fill text-secondary me-1"></i>
                         <span class="text-white">{{ v.usuario.get_full_name|default:v.usuario.username }}</span>
                     </td>
+                    <td class="text-secondary small">{{ v.email|default:v.usuario.email|default:"—" }}</td>
                     <td>
                         <span class="badge bg-dark border border-secondary text-info">{{ v.curta.titulo }}</span>
                     </td>

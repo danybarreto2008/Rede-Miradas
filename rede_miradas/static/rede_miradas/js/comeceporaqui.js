@@ -1,185 +1,142 @@
-/* Controla o carrossel */
+/* =====================================================
+   PÁGINA "COMECE POR AQUI" — scripts
+   ===================================================== */
+
+
+/* ---------- Destaques: troca de banners (só se houver mais de 1) ---------- */
+
 let slideAtual = 0;
+let timerSlides = null;
 
 const slides = document.querySelectorAll('.slide');
 
 
-/* Mostra o slide escolhido */
 function mostrarSlide(indice) {
 
     if (slides.length === 0) {
         return;
     }
 
-
-    /* Remove o slide atual */
     slides[slideAtual].classList.remove('ativo');
 
-
-    /* Calcula o próximo slide */
     slideAtual = (indice + slides.length) % slides.length;
 
-
-    /* Mostra o novo slide */
     slides[slideAtual].classList.add('ativo');
 }
 
 
-/* Botões de próximo e anterior */
+function iniciarTimer() {
+
+    if (slides.length < 2) {
+        return;
+    }
+
+    clearInterval(timerSlides);
+
+    timerSlides = setInterval(function () {
+        mostrarSlide(slideAtual + 1);
+    }, 5000);
+}
+
+
+/* usado pelos botões ❮ ❯ dos destaques */
 function mudarSlide(direcao) {
 
     mostrarSlide(slideAtual + direcao);
 
-    reiniciarTimer();
+    iniciarTimer();
 }
 
-
-/* Faz o slide passar sozinho */
-let timer = setInterval(() => {
-
-    mostrarSlide(slideAtual + 1);
-
-}, 5000);
+iniciarTimer();
 
 
-/* Reinicia o temporizador */
-function reiniciarTimer() {
+/* ---------- Animações ao rolar a página ---------- */
 
-    clearInterval(timer);
+/*
+   Esconde o elemento e, quando ele aparece na tela, adiciona a classe
+   "visivel" (o CSS faz a animação). Ao sair da tela, reseta para
+   animar de novo na volta.
+*/
+/*
+   Esconde o elemento e, quando ele aparece na tela, adiciona a classe
+   "visivel" (o CSS faz a animação). Acontece UMA vez só: depois de
+   animar, o elemento fica visível e não anima de novo ao rolar.
+*/
+function animarAoRolar(elemento, margemInferior) {
 
-    timer = setInterval(() => {
+    if (!elemento || !('IntersectionObserver' in window)) {
+        return;
+    }
 
-        mostrarSlide(slideAtual + 1);
+    /* anima quando o elemento já entrou X% da altura da tela (padrão: 12%) */
+    const margem = margemInferior === undefined ? 12 : margemInferior;
 
-    }, 5000);
+    /* 1) esconde e força o navegador a registrar esse estado */
+    elemento.classList.add('anim-pronto');
+    void elemento.offsetWidth;
+
+    /* 2) mostra com animação na primeira vez que aparecer */
+    const observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada) {
+            if (entrada.isIntersecting) {
+                elemento.classList.add('visivel');
+                observador.disconnect();   /* nunca mais anima */
+            }
+        });
+    }, { rootMargin: '0px 0px -' + margem + '% 0px', threshold: 0 });
+
+    observador.observe(elemento);
 }
+/* Aprenda. Crie. Conecte.: círculo, depois título + texto */
+animarAoRolar(document.querySelector('.aprenda-texto'));
 
-// Rola a lista de curtas para os lados ao clicar nas setas
-function mudarCurta(direcao) {
+/* Trilhas: título + texto */
+animarAoRolar(document.querySelector('.trilhas-cabecalho'));
 
-    const lista = document.getElementById('curtasLista');
+/* Trilhas: ícones entram pelas laterais */
+animarAoRolar(document.querySelector('.trilhas'));
 
-    if (!lista) return;
+/* Júri Popular: estrelas entram uma de cada lado */
+animarAoRolar(document.querySelector('.juri'));
 
-    const item = lista.querySelector('.curta-item');
-
-    const distancia = item ? item.getBoundingClientRect().width + 20 : 200;
-
-    lista.scrollBy({
-        left: distancia * direcao,
-        behavior: 'smooth'
-    });
-
-}
-
-// ==========================================
-// CARROSSEL DOS CURTAS
-// ==========================================
-
-let curtaPagina = 0;
+/* ---------- Curtas em destaque: setas rolam a lista ---------- */
 
 const viewportCurtas = document.querySelector('.curtas-viewport');
-const listaCurtas = document.querySelector('.curtas-lista');
-const cardsCurtas = document.querySelectorAll('.curta-card');
 
 
-function quantidadeCurtasVisiveis() {
-
-    return 5;
-}
-
-
-function totalPaginasCurtas() {
-
-    return Math.ceil(cardsCurtas.length / quantidadeCurtasVisiveis());
-}
-
-
-function atualizarCurtas() {
-
-    if (!listaCurtas || cardsCurtas.length === 0) {
-        return;
-    }
-
-    const quantidadeVisivel = quantidadeCurtasVisiveis();
-
-    const totalPaginas = Math.ceil(cardsCurtas.length / quantidadeVisivel);
-
-    if (curtaPagina >= totalPaginas) {
-        curtaPagina = totalPaginas - 1;
-    }
-
-    if (curtaPagina < 0) {
-        curtaPagina = 0;
-    }
-
-    const larguraCard = cardsCurtas[0].getBoundingClientRect().width;
-
-    const estiloLista = window.getComputedStyle(listaCurtas);
-
-    const gap = parseFloat(estiloLista.columnGap || estiloLista.gap) || 0;
-
-    const deslocamentoPagina = (larguraCard + gap) * quantidadeVisivel;
-
-    listaCurtas.style.transform = `translateX(-${curtaPagina * deslocamentoPagina}px)`;
-}
-
-
+/* usado pelos botões ❮ ❯ das curtas */
 function mudarCurta(direcao) {
 
-    if (!listaCurtas || cardsCurtas.length === 0) {
+    if (!viewportCurtas) {
         return;
     }
 
-    const quantidadeVisivel = quantidadeCurtasVisiveis();
+    const fim = viewportCurtas.scrollWidth - viewportCurtas.clientWidth - 4;
 
-    const totalPaginas = Math.ceil(cardsCurtas.length / quantidadeVisivel);
-
-    curtaPagina += direcao;
-
-    if (curtaPagina >= totalPaginas) {
-        curtaPagina = 0;
+    /* se todas as curtas já cabem na tela, não há o que rolar */
+    if (fim <= 0) {
+        return;
     }
 
-    if (curtaPagina < 0) {
-        curtaPagina = totalPaginas - 1;
+    /* chegou no fim e clicou em ❯ -> volta ao começo (e vice-versa) */
+    if (direcao > 0 && viewportCurtas.scrollLeft >= fim) {
+        viewportCurtas.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
     }
 
-    atualizarCurtas();
-}
+    if (direcao < 0 && viewportCurtas.scrollLeft <= 4) {
+        viewportCurtas.scrollTo({ left: fim, behavior: 'smooth' });
+        return;
+    }
 
-// ==========================================
-// AJUSTA O TEXTO DOS CARDS "APRENDA. CRIE. CONECTE."
-// PARA SEMPRE CABER DENTRO DO CARD
-// ==========================================
-
-function ajustarTextoBlocos() {
-
-    document.querySelectorAll('.card-bloco').forEach((card) => {
-
-        const inner = card.querySelector('.card-bloco-inner');
-        const texto = card.querySelector('.card-bloco-texto');
-
-        if (!inner || !texto) {
-            return;
-        }
-
-        let tamanho = 16;
-
-        texto.style.fontSize = tamanho + 'px';
-
-        while (inner.scrollHeight > inner.clientHeight && tamanho > 5) {
-
-            tamanho -= 1;
-
-            texto.style.fontSize = tamanho + 'px';
-        }
+    viewportCurtas.scrollBy({
+        left: viewportCurtas.clientWidth * 0.85 * direcao,
+        behavior: 'smooth'
     });
 }
 
 
-window.addEventListener('load', ajustarTextoBlocos);
-window.addEventListener('resize', ajustarTextoBlocos);
+/* ---------- Seção final: triângulos passam por cima do rodapé ---------- */
 
 function ajustarTriangulosFinal() {
 
@@ -192,13 +149,9 @@ function ajustarTriangulosFinal() {
         return;
     }
 
-    const alturaSecao = secaoFinal.offsetHeight;
-    const alturaFooter = footer.offsetHeight;
-
-    clip.style.height = `${alturaSecao + alturaFooter}px`;
-    wrapperTriangulos.style.height = `${alturaSecao}px`;
+    clip.style.height = `${secaoFinal.offsetHeight + footer.offsetHeight}px`;
+    wrapperTriangulos.style.height = `${secaoFinal.offsetHeight}px`;
 }
 
 window.addEventListener('load', ajustarTriangulosFinal);
 window.addEventListener('resize', ajustarTriangulosFinal);
-

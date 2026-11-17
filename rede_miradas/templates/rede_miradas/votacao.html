@@ -1,115 +1,232 @@
 {% extends 'rede_miradas/base.html' %}
-
 {% load static %}
 
+{% block titulo %}Júri Popular | Rede Miradas{% endblock %}
+
 {% block conteudo %}
+<link rel="stylesheet" href="{% static 'rede_miradas/css/votacao.css' %}?v=3">
 
-<link rel="stylesheet" href="{% static 'rede_miradas/css/votacao.css' %}?v=1">
+<div class="votacao-pagina">
 
-<div class="container py-5">
+    <!-- 1. HERO -->
+    <section class="votacao-hero">
 
-    <h2 class="text-center text-white fw-bold mb-2">Vote no seu curta favorito</h2>
+        <div class="votacao-hero-glow"></div>
 
-    {% if voto_usuario %}
+        <div class="votacao-hero-triangulos">
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                 class="votacao-triangulo-topo" alt="" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                 class="votacao-triangulo-base" alt="" aria-hidden="true">
+        </div>
 
-        <p class="text-center text-secondary mb-5">
-            Você já votou em <strong class="text-white">{{ voto_usuario.curta.titulo }}</strong>. Obrigado por participar!
-        </p>
+        <div class="votacao-hero-conteudo container">
 
-    {% else %}
+            <span class="votacao-etiqueta">3º MIRADAS · 2026</span>
 
-        <p class="text-center text-secondary mb-5">
-            Escolha o curta que mais gostou. Você só pode votar uma vez.
-        </p>
+            <h1 class="votacao-hero-titulo">Júri Popular</h1>
 
-    {% endif %}
+            {% if voto_usuario %}
+                <p class="votacao-hero-texto">
+                    Seu voto já foi registrado! Você escolheu
+                    <strong>{{ voto_usuario.curta.titulo }}</strong>.
+                    Obrigado por participar.
+                </p>
 
-    <div class="row g-4 justify-content-center">
-
-        {% for curta in curtas %}
-
-            <div class="col-6 col-md-4 col-lg-3">
-
-                <div class="voto-card">
-
-                    <div class="voto-card-inner">
-                        <img src="{{ curta.cartaz.url }}" alt="{{ curta.titulo }}" class="voto-imagem">
-                    </div>
-
-                    <div class="voto-info">
-
-                        <p class="voto-titulo">{{ curta.titulo }}</p>
-                        <p class="voto-detalhes">{{ curta.grupo }} · {{ curta.turma }}</p>
-
-                        {% if voto_usuario %}
-
-                            <button class="btn-votar" disabled>
-                                {% if voto_usuario.curta_id == curta.id %}Seu voto ✓{% else %}Votar{% endif %}
-                            </button>
-
-                        {% else %}
-
-                            <button
-                                class="btn-votar"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalConfirmarVoto"
-                                data-curta-id="{{ curta.id }}"
-                                data-curta-nome="{{ curta.titulo }}"
-                            >
-                                Votar
-                            </button>
-
-                        {% endif %}
-
-                    </div>
-
+                <div class="votacao-status">
+                    <span class="votacao-status-icone">✓</span>
+                    Voto confirmado
                 </div>
+            {% else %}
+                <p class="votacao-hero-texto">
+                    O júri é você! Assista aos curtas e escolha aquele que
+                    mais gostou. Só é permitido um voto por e-mail.
+                </p>
+
+                {% if email_votante %}
+                    <div class="votacao-email">
+                        Você vota como <strong>{{ email_votante }}</strong>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- 2. FAIXA -->
+    <section class="votacao-faixa">
+        <div class="votacao-faixa-container">
+
+            <div class="faixa-item">III MIRADAS</div>
+
+            <div class="faixa-separador" aria-hidden="true">
+                <svg class="faixa-estrela" viewBox="0 0 24 24">
+                    <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                </svg>
+            </div>
+
+            <div class="faixa-item">VISAGENS: O FANTASTICO NO COTIDIANO</div>
+
+            <div class="faixa-separador" aria-hidden="true">
+                <svg class="faixa-estrela" viewBox="0 0 24 24">
+                    <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                </svg>
+            </div>
+
+            <div class="faixa-item">III MIRADAS</div>
+
+        </div>
+    </section>
+
+
+    <!-- 3. CURTAS (3 POR FILEIRA) -->
+    <section class="votacao-curtas-secao">
+
+        <div class="votacao-curtas-triangulos">
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                 class="votacao-triangulo-esq" alt="" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                 class="votacao-triangulo-dir" alt="" aria-hidden="true">
+        </div>
+
+        <div class="container votacao-curtas-container">
+
+            {% if sem_email %}
+                <div class="votacao-aviso">
+                    Sua conta não tem e-mail cadastrado, por isso não é possível votar.
+                    Atualize seu perfil com um e-mail e volte aqui.
+                </div>
+            {% endif %}
+
+            <div class="row g-4 justify-content-center">
+
+                {% for curta in curtas %}
+                    <div class="col-12 col-sm-6 col-lg-4">
+
+                        <article class="voto-card {% if voto_usuario and voto_usuario.curta_id == curta.id %}voto-card-escolhido{% endif %}">
+
+                            <div class="voto-card-imagem">
+                                {% if curta.cartaz %}
+                                    <img src="{{ curta.cartaz.url }}"
+                                         alt="Cartaz do curta {{ curta.titulo }}"
+                                         loading="lazy">
+                                {% else %}
+                                    <div class="voto-card-sem-imagem">
+                                        <span>II MIRADAS</span>
+                                        <span>Cartaz indisponível</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if voto_usuario and voto_usuario.curta_id == curta.id %}
+                                    <span class="voto-card-selo">✓ Seu voto</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="voto-card-corpo">
+
+                                <h2 class="voto-card-titulo">{{ curta.titulo }}</h2>
+
+                                <div class="voto-card-dados">
+                                    <p class="voto-card-linha">
+                                        <span class="voto-card-rotulo">Grupo</span>
+                                        {{ curta.grupo }}
+                                    </p>
+                                    <p class="voto-card-linha">
+                                        <span class="voto-card-rotulo">Turma</span>
+                                        {{ curta.turma }}
+                                    </p>
+                                </div>
+
+                                {% if voto_usuario %}
+                                    {% if voto_usuario.curta_id == curta.id %}
+                                        <button type="button" class="btn-votar" disabled>Seu voto ✓</button>
+                                    {% else %}
+                                        <button type="button" class="btn-votar" disabled>Votação concluída</button>
+                                    {% endif %}
+                                {% elif sem_email %}
+                                    <button type="button" class="btn-votar" disabled>Cadastre um e-mail</button>
+                                {% else %}
+                                    <button
+                                        type="button"
+                                        class="btn-votar"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalConfirmarVoto"
+                                        data-curta-id="{{ curta.id }}"
+                                        data-curta-nome="{{ curta.titulo }}"
+                                    >
+                                        Votar neste curta
+                                    </button>
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="votacao-vazia">
+                            <h2>Nenhum curta disponível</h2>
+                            <p>Os curtas aparecerão aqui quando estiverem disponíveis para votação.</p>
+                        </div>
+                    </div>
+                {% endfor %}
 
             </div>
 
-        {% empty %}
+        </div>
 
-            <p class="text-center text-secondary">Nenhum curta disponível para votação no momento.</p>
-
-        {% endfor %}
-
-    </div>
+    </section>
 
 </div>
 
 
-<div class="modal fade" id="modalConfirmarVoto" tabindex="-1">
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div class="modal fade" id="modalConfirmarVoto" tabindex="-1"
+     aria-labelledby="tituloModalVoto" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content votacao-modal">
 
-        <div class="modal-content bg-black text-white">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="tituloModalVoto">Confirmar voto</h2>
 
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title">Confirmar voto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
 
             <form method="post" action="{% url 'votacao' %}">
-
                 {% csrf_token %}
 
                 <input type="hidden" name="curta_id" id="inputCurtaId">
 
                 <div class="modal-body">
-                    Você está votando em <strong id="nomeCurtaModal"></strong>. Esse voto não pode ser desfeito.
+                    Você escolheu:
+
+                    <strong id="nomeCurtaModal" class="nome-curta-modal"></strong>
+
+                    <p>
+                        Seu voto será registrado com o e-mail
+                        <strong>{{ email_votante }}</strong>.
+                        Depois de confirmado, ele não poderá ser alterado.
+                    </p>
                 </div>
 
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn-neon">Confirmar voto</button>
-                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-modal-cancelar" data-bs-dismiss="modal">
+                        Voltar
+                    </button>
 
+                    <button type="submit" class="btn-modal-confirmar">
+                        Confirmar voto
+                    </button>
+                </div>
             </form>
 
         </div>
-
     </div>
-
 </div>
 
 <script src="{% static 'rede_miradas/js/votacao.js' %}?v=1"></script>

@@ -17,6 +17,7 @@ from .models import (
     TrilhasFaixaItem,
     TrilhasHero,
     UnidadeTrilha,
+    TextosHome
 )
 
 
@@ -755,3 +756,20 @@ class PerfilAdminForm(forms.ModelForm):
             "instagram": forms.URLInput(attrs={"class": "form-control"}),
             "link_outra_rede": forms.URLInput(attrs={"class": "form-control"}),
         }
+
+class TextosHomeForm(forms.ModelForm):
+    """Textos e ilustrações fixas da página 'Comece por aqui'."""
+
+    class Meta:
+        model = TextosHome
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for nome, campo in self.fields.items():
+            if isinstance(campo.widget, forms.Textarea):
+                campo.widget.attrs.update({"class": "form-control", "rows": 3})
+            else:
+                campo.widget.attrs.update({"class": "form-control"})
+            if nome.endswith("_botao_link"):
+                campo.widget.attrs["list"] = "destinos-comuns"

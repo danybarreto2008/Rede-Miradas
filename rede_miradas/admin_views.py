@@ -32,6 +32,7 @@ from .admin_forms import (
     TrilhasFaixaItemForm,
     TrilhasHeroForm,
     UnidadeTrilhaForm,
+    TextosHomeForm,
 )
 from .models import (
     BlocoApresentacao,
@@ -49,6 +50,7 @@ from .models import (
     TrilhasHero,
     UnidadeTrilha,
     Voto,
+    TextosHome,
 )
 
 
@@ -493,6 +495,26 @@ def admin_curta_home_toggle(request, id):
 
 
 # secoes de texto
+GRUPOS_TEXTOS_HOME = [
+    ("Topo da página (Hero)", "bi-stars",
+     "Aparece quando NÃO há nenhum Banner/Destaque ativo.",
+     ["hero_titulo_leve", "hero_titulo_forte", "hero_texto",
+      "hero_botao_texto", "hero_botao_link"]),
+    ("Aprenda. Crie. Conecte.", "bi-film",
+     "Título, texto e ilustração acima dos 3 cards.",
+     ["aprenda_titulo", "aprenda_texto", "aprenda_imagem"]),
+    ("Trilhas de Aprendizado", "bi-signpost-split", "",
+     ["trilhas_titulo", "trilhas_texto", "trilhas_botao_texto",
+      "trilhas_botao_link", "trilhas_imagem"]),
+    ("Selos Miradas", "bi-patch-check", "",
+     ["selos_titulo", "selos_texto", "selos_botao_texto",
+      "selos_botao_link", "selos_imagem"]),
+    ("Júri Popular", "bi-trophy", "",
+     ["juri_titulo", "juri_texto", "juri_botao_texto", "juri_botao_link"]),
+    ("Acompanhe Notícias", "bi-newspaper", "",
+     ["noticias_titulo", "noticias_texto", "noticias_botao_texto",
+      "noticias_botao_link", "noticias_imagem"]),
+]
 
 
 @admin_required
@@ -500,8 +522,7 @@ def admin_secoes_home(request):
     secao_curtas = SecaoCurtas.objects.first()
     if not secao_curtas:
         secao_curtas = SecaoCurtas.objects.create(
-            titulo="CURTAS EM DESTAQUE",
-            subtitulo="Conheça algumas das obras produzidas pelos estudantes.",
+            titulo="CURTAS EM DESTAQUE", subtitulo=""
         )
 
     secao_final = SecaoFinal.objects.first()
@@ -509,30 +530,39 @@ def admin_secoes_home(request):
         secao_final = SecaoFinal.objects.create(
             titulo="PRONTO PARA DAR VIDA ÀS SUAS IDEIAS?",
             subtitulo=(
-                "Junte-se à Rede Miradas e comece a criar histórias."
+                "A Rede Miradas reúne aprendizado, colaboração e "
+                "oportunidades para transformar criatividade em projetos."
             ),
-            texto_botao="Conheça as trilhas",
-            link_botao="/trilhas/",
+            texto_botao="Começar agora",
+            link_botao="/accounts/signup/",
         )
 
+    textos = TextosHome.objects.first() or TextosHome.objects.create()
+
     if request.method == "POST":
-        form_curtas = SecaoCurtasForm(
-            request.POST, instance=secao_curtas, prefix="curtas"
-        )
-        form_final = SecaoFinalForm(
-            request.POST, instance=secao_final, prefix="final"
-        )
-        if form_curtas.is_valid() and form_final.is_valid():
+        form_curtas = SecaoCurtasForm(request.POST, instance=secao_curtas, prefix="curtas")
+        form_final = SecaoFinalForm(request.POST, instance=secao_final, prefix="final")
+        form_textos = TextosHomeForm(request.POST, request.FILES, instance=textos, prefix="textos")
+        if form_curtas.is_valid() and form_final.is_valid() and form_textos.is_valid():
             form_curtas.save()
             form_final.save()
-            messages.success(
-                request,
-                "Textos das seções da página inicial atualizados com sucesso!",
-            )
+            form_textos.save()
+            messages.success(request, "Textos das seções da página inicial atualizados com sucesso!")
             return redirect("admin_secoes_home")
     else:
         form_curtas = SecaoCurtasForm(instance=secao_curtas, prefix="curtas")
         form_final = SecaoFinalForm(instance=secao_final, prefix="final")
+        form_textos = TextosHomeForm(instance=textos, prefix="textos")
+
+    grupos_textos = [
+        {
+            "titulo": titulo,
+            "icone": icone,
+            "ajuda": ajuda,
+            "campos": [form_textos[nome] for nome in campos],
+        }
+        for titulo, icone, ajuda, campos in GRUPOS_TEXTOS_HOME
+    ]
 
     return render(
         request,
@@ -540,8 +570,11 @@ def admin_secoes_home(request):
         {
             "form_curtas": form_curtas,
             "form_final": form_final,
+            "form_textos": form_textos,
+            "grupos_textos": grupos_textos,
         },
     )
+
 
 
 # blog/noticias

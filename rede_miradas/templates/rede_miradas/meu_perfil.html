@@ -10,7 +10,7 @@
 
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/perfil.css' %}?v=23"
+    href="{% static 'rede_miradas/css/perfil.css' %}?v=25"
 >
 
 
@@ -273,14 +273,17 @@
             {% if selos_conquistados %}
 
                 <div class="insignias-lista">
-                    {% for selo in selos_conquistados %}
-                        <img
-                            src="{% static selo.imagem %}"
-                            alt="{{ selo.nome }}"
-                            title="{{ selo.nome }}"
-                        >
-                    {% endfor %}
-                </div>
+    {% for selo in selos_conquistados %}
+    
+        <div class="insignia-item" title="{{ selo.nome }}">
+            <img
+                src="{% static selo.imagem %}"
+                alt="{{ selo.nome }}"
+                class="insignia-personagem"
+            >
+        </div>
+    {% endfor %}
+</div>
 
             {% else %}
 
