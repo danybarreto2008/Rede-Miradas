@@ -1094,3 +1094,166 @@ html.lenis body {
 .lenis.lenis-smooth {
     scroll-behavior: auto !important;
 }
+
+
+/* Destaque fixo da Rede Miradas */
+
+.slide-fixo {
+    background:
+        radial-gradient(ellipse at 25% 50%, #17102f 0%, #050714 65%);
+}
+
+.slide-fixo-ilustracao {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 53%;
+    height: 100%;
+
+    background-image: url("../img/triangulomiradas.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.slide-fixo-conteudo {
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+
+    padding-left: clamp(50px, 6.8vw, 100px);
+    padding-right: 0;
+
+    gap: 12px;
+}
+
+.slide-fixo-conteudo h1 {
+    font-size: clamp(30px, 4.3vw, 42px);
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.slide-fixo-conteudo p {
+    max-width: 350px;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 300;
+    color: #ffffff;
+}
+
+.slide-fixo-botao {
+    display: inline-block;
+    margin-top: 3px;
+    padding: 11px 34px;
+
+    background: #ffffff;
+    color: #080808;
+
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: 0.25s ease;
+}
+
+.slide-fixo-botao:hover {
+    background: #e8e8e8;
+    color: #080808;
+    transform: translateY(-2px);
+}
+
+/* Destaque fixo - telas maiores */
+
+@media (min-width: 768px) {
+
+    .slide-fixo {
+        overflow: hidden;
+    }
+
+    .slide-fixo-ilustracao {
+        position: absolute;
+
+        width: 150%;
+        height: 180%;
+
+        top: -40%;
+        right: -10%;
+
+        background-size: contain;
+        background-position: center right;
+        background-repeat: no-repeat;
+    }
+
+    .slide-fixo-conteudo {
+        padding-left: clamp(40px, 9vw, 180px);
+        padding-right: 0;
+
+        gap: 16px;
+
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .slide-fixo-conteudo h1 {
+        font-size: clamp(38px, 4.5vw, 48px);
+        max-width: 500px;
+    }
+
+    .slide-fixo-conteudo p {
+        font-size: 20px;
+        line-height: 1.25;
+        max-width: 480px;
+    }
+
+    .slide-fixo-botao {
+        font-size: 18px;
+        padding: 13px 38px;
+    }
+
+}
+.slide-fixo-ilustracao {
+    z-index: 1;
+}
+
+.slide-fixo::before {
+    content: "";
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.slide-fixo-conteudo {
+    position: relative;
+    z-index: 3;
+}
+.slide-fixo-conteudo {
+    position: relative;
+    z-index: 3;
+}
+
+.slide-fixo-conteudo::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+
+    width: 600px;
+    height: 450px;
+
+    left: 40px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: radial-gradient(
+        ellipse,
+        rgba(112, 48, 190, 0.28) 0%,
+        rgba(112, 48, 190, 0.12) 45%,
+        transparent 75%
+    );
+
+    pointer-events: none;
+}

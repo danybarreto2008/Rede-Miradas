@@ -192,7 +192,9 @@ class CurtaForm(forms.ModelForm):
 
 @admin.register(Curta)
 class CurtaAdmin(admin.ModelAdmin):
-    list_display = (  # type: ignore
+    form = CurtaForm
+
+    list_display = (
         "nome",
         "grupo",
         "ativo",

@@ -222,3 +222,6 @@ __marimo__/
 node_modules/
 media/
 staticfiles/
+.env
+venv/
+db.sqlite3

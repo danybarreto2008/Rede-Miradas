@@ -7,18 +7,44 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=15">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=22">
+
 
 
 {# ================= DESTAQUES (carrossel) ================= #}
 <section class="carrossel">
 
+    
+<!-- Destaque fixo -->
+<div class="slide slide-fixo ativo">
+
+    <div class="slide-fixo-ilustracao"></div>
+
+    <div class="slide-conteudo slide-fixo-conteudo">
+
+        <h1>REDE MIRADAS</h1>
+
+        <p>
+            Explore trilhas de aprendizagem, conheça
+            produtoras parceiras e descubra projetos
+            desenvolvidos por escolas.
+        </p>
+
+        <a href="{% url 'como_tudo_comecou' %}" class="slide-fixo-botao">
+            Saiba mais
+        </a>
+
+    </div>
+
+</div>
+
+
+    <!-- Destaques cadastrados pelo administrador -->
     {% for destaque in destaques %}
 
         <div
             class="
                 slide
-                {% if forloop.first %}ativo{% endif %}
                 horizontal-{{ destaque.posicao_horizontal }}
                 vertical-{{ destaque.posicao_vertical }}
 
@@ -45,6 +71,7 @@
                 --cor-borda-botao: {{ destaque.cor_borda_botao }};
             "
         >
+
             <div class="slide-conteudo">
 
                 {% if destaque.titulo %}
@@ -62,22 +89,19 @@
                 {% endif %}
 
             </div>
-        </div>
 
-    {% empty %}
-
-        <div class="sem-destaques">
-            Nenhum destaque cadastrado.
         </div>
 
     {% endfor %}
 
-    {% if destaques|length > 1 %}
+    <!-- Setas aparecem quando existe pelo menos um destaque cadastrado -->
+    {% if destaques|length > 0 %}
         <button class="carrossel-anterior" onclick="mudarSlide(-1)">❮</button>
         <button class="carrossel-proximo" onclick="mudarSlide(1)">❯</button>
     {% endif %}
 
 </section>
+
 
 
 <div class="home-nova">
@@ -151,20 +175,6 @@
                     <a href="{{ curta.link_youtube }}" target="_blank" rel="noopener" class="curta-card" title="{{ curta.nome }}"
                        style="--cor-borda-1: {{ curta.cor_borda_1 }}; --cor-borda-2: {{ curta.cor_borda_2 }};">
                         <img src="{{ curta.cartaz.url }}" alt="Cartaz de {{ curta.nome }}" class="curta-imagem">
-                    </a>
-                {% empty %}
-                    {# Cartazes FIXOS: só aparecem se não houver curta cadastrada #}
-                    <a href="{% url 'como_tudo_comecou' %}" class="curta-card">
-                        <img src="{% static 'rede_miradas/img/home/cartaz-1.svg' %}" alt="Cartaz: Amígdalas" class="curta-imagem">
-                    </a>
-                    <a href="{% url 'como_tudo_comecou' %}" class="curta-card">
-                        <img src="{% static 'rede_miradas/img/home/cartaz-2.svg' %}" alt="Cartaz: Camaleão" class="curta-imagem">
-                    </a>
-                    <a href="{% url 'como_tudo_comecou' %}" class="curta-card">
-                        <img src="{% static 'rede_miradas/img/home/cartaz-3.svg' %}" alt="Cartaz: Lagartas Não Falam" class="curta-imagem">
-                    </a>
-                    <a href="{% url 'como_tudo_comecou' %}" class="curta-card">
-                        <img src="{% static 'rede_miradas/img/home/cartaz-4.svg' %}" alt="Cartaz: party 4 u" class="curta-imagem">
                     </a>
                 {% endfor %}
 
