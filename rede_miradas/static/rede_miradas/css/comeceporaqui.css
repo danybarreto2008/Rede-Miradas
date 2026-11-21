@@ -1257,3 +1257,26 @@ html.lenis body {
 
     pointer-events: none;
 }
+
+/* Ajustes para celulares pequenos */
+@media (max-width: 480px) {
+    .slide-fixo-conteudo {
+        padding: 18px;
+    }
+
+    .slide-fixo-conteudo h1 {
+        font-size: 24px;
+        line-height: 1.1;
+    }
+
+    .slide-fixo-conteudo p {
+        font-size: 14px;
+        line-height: 1.3;
+        max-width: 250px;
+    }
+
+    .slide-fixo-botao {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+}
