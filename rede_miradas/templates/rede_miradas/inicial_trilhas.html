@@ -6,7 +6,7 @@
 {% block conteudo %}
 <link
     rel="stylesheet"
-    href="{% static 'rede_miradas/css/inicial_trilhas.css' %}?v=20260921_dark_v3"
+    href="{% static 'rede_miradas/css/inicial_trilhas.css' %}?v=20261122_hero_v4"
 >
 
 <div class="trilhas-pagina">
@@ -19,12 +19,23 @@
         data-glow-2="{{ hero.cor_glow_2|default:'#22D3EE' }}"
         data-title-color="{{ hero.cor_titulo|default:'#FFFFFF' }}"
         data-subtitle-color="{{ hero.cor_subtitulo|default:'rgba(255, 255, 255, 0.88)' }}"
-        data-btn-bg="{{ hero.cor_fundo_botao|default:'#FFFFFF' }}"
-        data-btn-color="{{ hero.cor_texto_botao|default:'#0B0C10' }}"
+        data-btn-bg="{{ hero.cor_fundo_botao|default:'#B94B61' }}"
+        data-btn-color="{{ hero.cor_texto_botao|default:'#FFFFFF' }}"
     >
 
         <!-- Brilho neon de fundo -->
         <div class="trilhas-hero-glow"></div>
+
+        <!-- Stickers Ilustrados Flutuantes (Estilo Página Inicial) -->
+        <span class="hero-flutuante hero-flutuante-lapis" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-roteiro.png' %}?v=5" alt="">
+        </span>
+        <span class="hero-flutuante hero-flutuante-mao" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-equipes.png' %}?v=5" alt="">
+        </span>
+        <span class="hero-flutuante hero-flutuante-claquete" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-edicao.svg' %}?v=5" alt="">
+        </span>
 
         <!-- Triângulos decorativos nas bordas -->
         <div class="trilhas-hero-triangulos">
@@ -45,28 +56,56 @@
         <!-- Conteúdo central de boas-vindas -->
         <div class="trilhas-hero-content container">
 
+            <div class="hero-tag-badge">
+                <span class="badge-pill-neon">
+                    <i class="bi bi-camera-reels-fill me-1"></i>
+                    FORMAÇÃO AUDIOVISUAL GRATUITA
+                </span>
+            </div>
+
             <h1
                 class="trilhas-hero-title {% if hero.titulo_negrito %}fw-bold{% else %}fw-normal{% endif %} {% if hero.titulo_italico %}fst-italic{% endif %}"
             >
-                {{ hero.titulo|default:"Bem-Vindo(a)" }}
+                {% if hero.titulo %}
+                    {{ hero.titulo }}
+                {% else %}
+                    Sua jornada <span class="hero-title-gradient">do roteiro à tela</span>
+                {% endif %}
             </h1>
 
             <p
                 class="trilhas-hero-subtitle {% if hero.subtitulo_negrito %}fw-bold{% endif %} {% if hero.subtitulo_italico %}fst-italic{% endif %}"
             >
-                {{ hero.subtitulo|default:"Aprenda produção audiovisual em módulos práticos e criativos." }}
+                {{ hero.subtitulo|default:"Aprenda produção audiovisual em 5 etapas práticas para planejar, gravar e editar o seu curta-metragem." }}
             </p>
 
             {% if hero.mostrar_botao|default_if_none:True %}
-                <div>
+                <div class="hero-cta-wrapper">
                     <a
                         href="{{ hero.link_botao|default:'/trilhas/visao-geral/' }}"
                         class="btn-conheca-trilhas"
                     >
-                        {{ hero.texto_botao|default:"Conheça as trilhas" }}
+                        <span>{{ hero.texto_botao|default:"Explorar as 5 Etapas" }}</span>
+                        <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
             {% endif %}
+
+            <!-- Chips de recursos / destaques rápidos -->
+            <div class="hero-feature-chips">
+                <div class="feature-chip">
+                    <i class="bi bi-film"></i>
+                    <span>5 Etapas Guiadas</span>
+                </div>
+                <div class="feature-chip">
+                    <i class="bi bi-laptop"></i>
+                    <span>Do Roteiro à Edição</span>
+                </div>
+                <div class="feature-chip">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Conquiste Selos</span>
+                </div>
+            </div>
 
         </div>
 
