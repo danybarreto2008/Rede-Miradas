@@ -133,8 +133,10 @@
         const navLinks = document.querySelectorAll('.trilha-sidebar-unit-item');
 
         function reportarProgresso(unidadeNumero) {
+            {% if user.is_authenticated %}
             if (!slug || !unidadeNumero) return;
             fetch("{% url 'salvar_progresso_trilha' %}?slug=" + encodeURIComponent(slug) + "&unidade=" + encodeURIComponent(unidadeNumero));
+            {% endif %}
         }
         const params = new URLSearchParams(window.location.search);
         const paramUnidade = params.get('unidade');

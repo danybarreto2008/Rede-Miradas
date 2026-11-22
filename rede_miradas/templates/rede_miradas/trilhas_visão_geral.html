@@ -42,7 +42,7 @@
             TRILHAS
         </h1>
 
-        {% if ultima_trilha_acessada %}
+        {% if user.is_authenticated and ultima_trilha_acessada %}
         <div class="trilha-retomada-banner mb-4 p-3 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-3"
             style="background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.4); backdrop-filter: blur(10px);">
             <div class="d-flex align-items-center gap-3">
@@ -117,7 +117,7 @@
                                 </a>
                             </div>
 
-                            {% if card.subtopico_ativo %}
+                            {% if user.is_authenticated and card.subtopico_ativo %}
                                 {% if forloop.counter == card.subtopico_ativo %}
                                 <a href="{% if card.slug %}{% url 'trilha_detalhe' slug=card.slug %}?unidade={{ forloop.counter }}#unidade-{{ forloop.counter }}{% else %}{{ card.link_botao|default:'#' }}{% endif %}"
                                     class="btn-comecar-subtopico">
