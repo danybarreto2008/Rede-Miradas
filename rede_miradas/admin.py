@@ -54,14 +54,38 @@ class CurtaVotacaoAdmin(admin.ModelAdmin):
 @admin.register(Voto)
 class VotoAdmin(admin.ModelAdmin):
     list_display = (  # type: ignore
-        "curta",
+        "email",
         "usuario",
+        "curta",
+        "grupo_curta",
+        "turma_curta",
         "data_voto",
     )
 
-    list_filter = ("curta",)
+    list_filter = ("curta", "curta__turma")
+
+    search_fields = (  # type: ignore
+        "email",
+        "usuario__username",
+        "usuario__first_name",
+        "usuario__last_name",
+        "curta__titulo",
+        "curta__grupo",
+    )
+
+    list_select_related = ("usuario", "curta")
+
+    date_hierarchy = "data_voto"
 
     ordering = ("-data_voto",)
+
+    @admin.display(description="Grupo", ordering="curta__grupo")
+    def grupo_curta(self, obj):
+        return obj.curta.grupo
+
+    @admin.display(description="Turma", ordering="curta__turma")
+    def turma_curta(self, obj):
+        return obj.curta.turma
 
     def has_add_permission(self, request):
         return False
@@ -168,7 +192,9 @@ class CurtaForm(forms.ModelForm):
 
 @admin.register(Curta)
 class CurtaAdmin(admin.ModelAdmin):
-    list_display = (  # type: ignore
+    form = CurtaForm
+
+    list_display = (
         "nome",
         "grupo",
         "ativo",

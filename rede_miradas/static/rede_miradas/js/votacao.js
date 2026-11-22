@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
 
+document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modalConfirmarVoto');
 
     if (!modal) {
@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     modal.addEventListener('show.bs.modal', (evento) => {
-
         const botao = evento.relatedTarget;
+
+        if (!botao) {
+            return;
+        }
 
         const curtaId = botao.getAttribute('data-curta-id');
         const curtaNome = botao.getAttribute('data-curta-nome');

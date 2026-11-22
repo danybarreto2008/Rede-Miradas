@@ -8,6 +8,7 @@ from django.db.models import Prefetch, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
+from django.db import IntegrityError, transaction
 
 from .forms import PerfilForm
 from .models import (
@@ -26,6 +27,7 @@ from .models import (
     TrilhasHero,
     Voto,
     conceder_selo,
+    TextosHome,
 )
 from .selos import SELOS
 
@@ -160,20 +162,53 @@ def votacao(request):
 
     curtas = CurtaVotacao.objects.filter(ativo=True).order_by("ordem")
 
-    voto_usuario = Voto.objects.filter(usuario=request.user).first()
+    # 1 voto por e-mail (sempre minúsculo e sem espaços)
+    email = (request.user.email or "").strip().lower()
+
+    filtro_voto = Q(usuario=request.user)
+    if email:
+        filtro_voto |= Q(email=email)
+
+    voto_usuario = (
+        Voto.objects.select_related("curta").filter(filtro_voto).first()
+    )
 
     if request.method == "POST":
         if voto_usuario:
             messages.warning(
                 request,
-                "Você já registrou seu voto nesta edição. Só é permitido um voto por participante.",
+                "Você já registrou seu voto nesta edição. Só é permitido um voto por e-mail.",
             )
             return redirect("votacao")
 
-        curta_id = request.POST.get("curta_id")
-        curta = get_object_or_404(CurtaVotacao, id=curta_id)
+        if not email:
+            messages.error(
+                request,
+                "Sua conta não tem e-mail cadastrado, por isso não foi possível registrar o voto.",
+            )
+            return redirect("votacao")
 
-        Voto.objects.create(usuario=request.user, curta=curta)
+        curta_id = request.POST.get("curta_id", "")
+        if not curta_id.isdigit():
+            messages.error(request, "Curta inválido.")
+            return redirect("votacao")
+
+        curta = get_object_or_404(CurtaVotacao, id=curta_id, ativo=True)
+
+        try:
+            with transaction.atomic():
+                Voto.objects.create(
+                    usuario=request.user,
+                    email=email,
+                    curta=curta,
+                )
+        except IntegrityError:
+            messages.warning(
+                request,
+                "Este e-mail já registrou um voto nesta edição.",
+            )
+            return redirect("votacao")
+
         conceder_selo(request.user, "primeiro-voto")
         messages.success(
             request,
@@ -188,10 +223,10 @@ def votacao(request):
         {
             "curtas": curtas,
             "voto_usuario": voto_usuario,
+            "email_votante": email,
+            "sem_email": not email,
         },
     )
-
-
 @login_required
 def redirecionar_apos_login(request):
     nome = request.user.first_name or request.user.username
@@ -228,19 +263,20 @@ def painel_professor(request):
 def home(request):
 
     destaques = Destaque.objects.filter(ativo=True).order_by("ordem")
-
     blocos = BlocoApresentacao.objects.filter(ativo=True).order_by("ordem")
 
+    # Se ainda não existir, cria já com os textos padrão
+    textos = TextosHome.objects.first() or TextosHome.objects.create()
+
     secao_curtas = SecaoCurtas.objects.first()
-
     curtas = Curta.objects.filter(ativo=True).order_by("ordem")
-
     secao_final = SecaoFinal.objects.first()
 
     return render(
         request,
         "rede_miradas/comeceporaqui.html",
         {
+            "textos": textos,
             "secao_curtas": secao_curtas,
             "destaques": destaques,
             "blocos": blocos,

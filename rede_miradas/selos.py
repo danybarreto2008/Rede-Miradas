@@ -10,6 +10,8 @@ SELOS = {
     'primeiro-voto': {
         'nome': 'Júri Popular',
         'descricao': 'Você votou no júri popular pela primeira vez.',
-        'imagem': 'rede_miradas/img/selos/juri-popular.png',
+        'imagem': 'rede_miradas/img/selos/camaleao.png',
+        'estrela': 'rede_miradas/img/selos/estrelaCamaleao.png',
     },
-}
+}
+
