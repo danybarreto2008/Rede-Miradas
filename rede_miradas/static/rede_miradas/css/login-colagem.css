@@ -1228,3 +1228,168 @@ body {
 
     z-index: 2;
 }
+
+/* =========================================================
+   RESPONSIVIDADE — LOGIN REDE MIRADAS
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    html,
+    body {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .login-split {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        background: #ffffff;
+    }
+
+    /* Colagem no topo */
+
+    .login-colagem {
+        width: 100%;
+        height: 260px;
+        min-height: 260px;
+        flex: none;
+        overflow: hidden;
+    }
+
+    .login-colagem img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Painel do login */
+
+    .login-form-lado {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        min-height: calc(100vh - 236px);
+        height: auto;
+        flex: none;
+
+        margin-top: -24px;
+        padding: 45px 24px 40px;
+
+        background: #252b70;
+        border-radius: 28px 28px 0 0;
+        overflow: hidden;
+    }
+
+    /* Conteúdo */
+
+    .login-form-conteudo {
+        position: relative;
+        z-index: 5;
+
+        width: 390px;
+        max-width: 100%;
+        margin: 0 auto;
+
+        color: #ffffff;
+    }
+
+    /* Elementos decorativos */
+
+    .triangulo-login {
+        display: none;
+    }
+
+    /* Logo e textos */
+
+    .pagina-login-split .logo-login-split {
+        color: #ffffff;
+    }
+
+    .pagina-login-split .login-form-conteudo h1 {
+        color: #ffffff;
+    }
+
+    .pagina-login-split .mensagem-confirmacao-login {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .pagina-login-split .voltar-site {
+        color: #ffffff;
+    }
+
+    .pagina-login-split .voltar-site:hover {
+        color: #ddddff;
+    }
+
+    /* Textos de outras páginas de login */
+
+    .login-form-lado label,
+    .login-form-lado p,
+    .login-form-lado .separador-login-split,
+    .login-form-lado .alternativa-login-split {
+        color: #ffffff;
+    }
+
+    .login-form-lado .linha-extra-login-split a,
+    .login-form-lado .alternativa-login-split a {
+        color: #ffffff;
+    }
+
+    /* Campos */
+
+    .login-form-lado input {
+        background: #ffffff;
+        color: #222222;
+    }
+
+    .login-form-lado input::placeholder {
+        color: #555555;
+    }
+
+    /* Erros */
+
+    .erros-login-split {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+    }
+
+    .erro-campo-login-split {
+        color: #ffbaba;
+    }
+}
+
+/* Celulares menores */
+
+@media (max-width: 380px) {
+
+    .login-colagem {
+        height: 220px;
+        min-height: 220px;
+    }
+
+    .login-form-lado {
+        min-height: calc(100vh - 196px);
+        padding: 35px 20px 30px;
+    }
+
+    .login-form-conteudo {
+        max-width: 100%;
+    }
+
+    .logo-login-split {
+        font-size: 24px;
+    }
+}
