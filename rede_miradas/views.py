@@ -470,9 +470,13 @@ def trilhas_visao_geral(request):
         .prefetch_related("subtopicos")
         .order_by("ordem")
     )
-    progresso_trilhas = request.session.get("progresso_trilhas", {})
-    for card in cards:
-        card.subtopico_ativo = progresso_trilhas.get(card.slug)
+    if hasattr(request, "user") and request.user.is_authenticated:
+        progresso_trilhas = request.session.get("progresso_trilhas", {})
+        for card in cards:
+            card.subtopico_ativo = progresso_trilhas.get(card.slug)
+    else:
+        for card in cards:
+            card.subtopico_ativo = None
 
     return render(
         request,
@@ -535,48 +539,54 @@ def trilha_detalhe(request, slug=None):
         .first()
     )
 
-    progresso_trilhas = request.session.get("progresso_trilhas", {})
+    is_auth = hasattr(request, "user") and request.user.is_authenticated
+    progresso_trilhas = (
+        request.session.get("progresso_trilhas", {}) if is_auth else {}
+    )
     unidade_param = request.GET.get("unidade")
     if unidade_param and str(unidade_param).isdigit():
         unidade_atual_num = int(unidade_param)
     else:
-        unidade_atual_num = progresso_trilhas.get(trilha.slug, 1)
+        unidade_atual_num = (
+            progresso_trilhas.get(trilha.slug, 1) if is_auth else 1
+        )
 
-    progresso_trilhas[trilha.slug] = unidade_atual_num
-    request.session["progresso_trilhas"] = progresso_trilhas
-    subtopico_titulo = ""
-    subtopicos = list(trilha.subtopicos.filter(ativo=True).order_by("ordem"))
-    if 1 <= unidade_atual_num <= len(subtopicos):
-        subtopico_titulo = subtopicos[unidade_atual_num - 1].titulo
-    else:
-        un_obj = unidades.filter(numero=unidade_atual_num).first()
-        if un_obj:
-            subtopico_titulo = un_obj.titulo
+    if is_auth:
+        progresso_trilhas[trilha.slug] = unidade_atual_num
+        request.session["progresso_trilhas"] = progresso_trilhas
+        subtopico_titulo = ""
+        subtopicos = list(trilha.subtopicos.filter(ativo=True).order_by("ordem"))
+        if 1 <= unidade_atual_num <= len(subtopicos):
+            subtopico_titulo = subtopicos[unidade_atual_num - 1].titulo
+        else:
+            un_obj = unidades.filter(numero=unidade_atual_num).first()
+            if un_obj:
+                subtopico_titulo = un_obj.titulo
 
-    url_com_unidade = (
-        f"/trilhas/{trilha.slug}/?unidade={unidade_atual_num}#unidade-{unidade_atual_num}"
-        if trilha.slug
-        else "/trilhas/visao-geral/"
-    )
+        url_com_unidade = (
+            f"/trilhas/{trilha.slug}/?unidade={unidade_atual_num}#unidade-{unidade_atual_num}"
+            if trilha.slug
+            else "/trilhas/visao-geral/"
+        )
 
-    item_sessao = {
-        "id": trilha.id,
-        "slug": trilha.slug or "",
-        "tag": trilha.tag or "",
-        "titulo": trilha.titulo or "",
-        "subtopico_titulo": subtopico_titulo,
-        "unidade_atual": unidade_atual_num,
-        "url": url_com_unidade,
-        "total_unidades": unidades.count(),
-        "capa_url": trilha.imagem_capa.url if trilha.imagem_capa else "",
-    }
-    request.session["ultima_trilha"] = item_sessao
+        item_sessao = {
+            "id": trilha.id,
+            "slug": trilha.slug or "",
+            "tag": trilha.tag or "",
+            "titulo": trilha.titulo or "",
+            "subtopico_titulo": subtopico_titulo,
+            "unidade_atual": unidade_atual_num,
+            "url": url_com_unidade,
+            "total_unidades": unidades.count(),
+            "capa_url": trilha.imagem_capa.url if trilha.imagem_capa else "",
+        }
+        request.session["ultima_trilha"] = item_sessao
 
-    historico = request.session.get("historico_trilhas", [])
-    historico = [h for h in historico if h.get("id") != trilha.id]
-    historico.insert(0, item_sessao)
-    request.session["historico_trilhas"] = historico[:5]
-    request.session.modified = True
+        historico = request.session.get("historico_trilhas", [])
+        historico = [h for h in historico if h.get("id") != trilha.id]
+        historico.insert(0, item_sessao)
+        request.session["historico_trilhas"] = historico[:5]
+        request.session.modified = True
 
     return render(
         request,
@@ -593,6 +603,8 @@ def trilha_detalhe(request, slug=None):
 
 
 def salvar_progresso_trilha(request):
+    if not (hasattr(request, "user") and request.user.is_authenticated):
+        return HttpResponse(status=204)
     slug = request.GET.get("slug") or request.POST.get("slug")
     unidade = request.GET.get("unidade") or request.POST.get("unidade")
     if slug and unidade and str(unidade).isdigit():

@@ -19,9 +19,15 @@ def selo_pendente(request):
 
 
 def historico_trilhas(request):
+    if hasattr(request, 'user') and request.user.is_authenticated:
+        return {
+            'ultima_trilha_acessada': request.session.get('ultima_trilha'),
+            'historico_trilhas': request.session.get('historico_trilhas', []),
+            'progresso_trilhas': request.session.get('progresso_trilhas', {}),
+        }
     return {
-        'ultima_trilha_acessada': request.session.get('ultima_trilha'),
-        'historico_trilhas': request.session.get('historico_trilhas', []),
-        'progresso_trilhas': request.session.get('progresso_trilhas', {}),
+        'ultima_trilha_acessada': None,
+        'historico_trilhas': [],
+        'progresso_trilhas': {},
     }
 

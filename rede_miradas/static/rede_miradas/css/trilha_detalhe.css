@@ -26,8 +26,9 @@
     min-height: calc(100vh - 72px);
     background-color: var(--trilha-bg-main);
     color: var(--trilha-text-white);
+    font-family: "Lexend", "Segoe UI", system-ui, sans-serif;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* ==========================================================================
@@ -44,6 +45,8 @@
     position: sticky;
     top: 0;
     height: 100vh;
+    max-height: 100vh;
+    align-self: flex-start;
     overflow-y: auto;
 }
 
@@ -88,7 +91,9 @@
 .trilha-sidebar-unit-item {
     display: flex;
     flex-direction: column;
-    padding: 1.2rem 1.75rem;
+    padding: 1.05rem 1.4rem;
+    margin: 0.2rem 0.65rem;
+    border-radius: 12px;
     text-decoration: none;
     color: var(--trilha-text-white);
     transition: all 0.25s ease;
@@ -99,12 +104,14 @@
 .trilha-sidebar-unit-item:hover {
     background-color: var(--trilha-sidebar-hover);
     color: #ffffff;
-    padding-left: 2rem;
+    transform: translateX(4px);
+    padding-left: 1.4rem;
 }
 
 .trilha-sidebar-unit-item.active {
     background-color: var(--trilha-sidebar-active);
-    border-left-color: #ffffff;
+    border-left-color: #ff7b92;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     font-weight: 700;
 }
 
@@ -138,6 +145,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    margin-top: auto;
 }
 
 .btn-sidebar-back {
@@ -749,6 +757,17 @@
 /* ==========================================================================
    RESPONSIVIDADE (TABLETS E CELULARES)
    ========================================================================== */
+@media (min-width: 993px) and (max-width: 1200px) {
+    .trilha-sidebar {
+        width: 260px;
+        min-width: 260px;
+    }
+
+    .trilha-main-content {
+        padding: 2.5rem 2rem;
+    }
+}
+
 @media (max-width: 992px) {
     .trilha-detalhe-page {
         flex-direction: column;
@@ -758,7 +777,9 @@
         width: 100%;
         min-width: 100%;
         height: auto;
+        max-height: none;
         position: relative;
+        top: auto;
     }
 
     .trilha-sidebar-units-list {
@@ -781,6 +802,11 @@
 
     .sidebar-unit-divider {
         display: none;
+    }
+
+    .trilha-sidebar-footer {
+        margin-top: 0;
+        padding: 1rem 1.25rem 1.5rem 1.25rem;
     }
 
     .trilha-main-content {
