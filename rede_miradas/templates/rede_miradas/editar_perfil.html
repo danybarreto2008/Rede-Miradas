@@ -8,406 +8,578 @@
 
 {% block conteudo %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/perfil.css' %}?v=21"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/perfil.css' %}?v=31">
 
 
-<div class="pagina-editar-perfil">
+<div class="perfil-pagina perfil-pagina-edicao">
 
-    <div class="editar-container">
-
-
-        <a
-            href="{% url 'meu_perfil' %}"
-            class="voltar-perfil"
-        >
-            <i class="bi bi-arrow-left"></i>
-            VOLTAR PARA O PERFIL
-        </a>
+    {# MENU LATERAL FIXO #}
+    {% include 'rede_miradas/_perfil_menu.html' %}
 
 
+    <div class="perfil-area">
 
-        <div class="editar-cabecalho">
-
-            <span class="perfil-etiqueta">
-                MEU PERFIL
-            </span>
-
-            <h1>
-                Editar perfil
-            </h1>
-
-            <p>
-                Atualize as informações que aparecem no seu perfil da Rede Miradas.
-            </p>
-
-        </div>
+        {# BARRA DE BUSCA #}
+        {% include 'rede_miradas/_perfil_busca.html' %}
 
 
-
-        <form
-            method="post"
-            enctype="multipart/form-data"
-            class="formulario-perfil"
-        >
+        <form method="post" enctype="multipart/form-data" id="form-perfil" novalidate>
 
             {% csrf_token %}
 
-            {% if form.errors %}
-            <div class="alert alert-danger rounded-4 p-3 mb-4 text-start" role="alert" style="background: rgba(220, 53, 69, 0.15); border: 1px solid rgba(220, 53, 69, 0.4); color: #ff8595;">
-                <div class="d-flex align-items-center gap-2 mb-2 fw-semibold">
-                    <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
-                    <span>Por favor, verifique os campos abaixo:</span>
-                </div>
-                <ul class="mb-0 ps-3 small text-white-50">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li><strong class="text-white">{{ field.label|default:field.name }}:</strong> {{ error }}</li>
+            {% if form.errors or formset.total_error_count %}
+                <div class="perfil-erros" role="alert">
+                    <strong><i class="bi bi-exclamation-triangle-fill"></i> Verifique os campos abaixo:</strong>
+                    <ul>
+                        {% for field in form %}
+                            {% for erro in field.errors %}
+                                <li><b>{{ field.label|default:field.name }}:</b> {{ erro }}</li>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+                        {% for erro in form.non_field_errors %}
+                            <li>{{ erro }}</li>
+                        {% endfor %}
+                        {% for f in formset %}
+                            {% for field in f %}
+                                {% for erro in field.errors %}
+                                    <li><b>Produção · {{ field.label }}:</b> {{ erro }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
 
 
+            <!-- ================= FOTO DE DESTAQUE (BANNER) ================= -->
 
-            <!-- FOTO -->
-
-            <section class="editar-bloco">
-
-                <span class="editar-numero">
-                    01
-                </span>
-
-                <h2>
-                    Foto de perfil
-                </h2>
-
-                <p>
-                    Escolha uma imagem para representar você.
-                </p>
-
-                {% if perfil.foto %}
-
-                    <img
-                        src="{{ perfil.foto.url }}"
-                        class="preview-imagem-edicao"
-                        alt="Foto atual"
-                    >
-
-                {% endif %}
-
-
-                <div class="campo-formulario">
-
-                    {{ form.foto }}
-
-                </div>
-
-            </section>
-
-
-
-            <!-- BANNER -->
-
-            <section class="editar-bloco">
-
-                <span class="editar-numero">
-                    02
-                </span>
-
-                <h2>
-                    Banner do perfil
-                </h2>
-
-                <p>
-                    Escolha a imagem que ficará no fundo do seu perfil.
-                </p>
-
+            <section class="perfil-banner">
 
                 {% if perfil.banner %}
-
-                    <img
-                        src="{{ perfil.banner.url }}"
-                        class="preview-banner-edicao"
-                        alt="Banner atual"
-                    >
-
+                    <img src="{{ perfil.banner.url }}" alt="Foto de destaque do perfil" class="perfil-banner-img" id="previa-banner">
+                {% else %}
+                    <div class="perfil-banner-padrao" id="previa-banner-padrao"></div>
+                    <img src="" alt="" class="perfil-banner-img" id="previa-banner" hidden>
                 {% endif %}
 
+                <label for="id_banner" class="perfil-upload perfil-upload-banner">
+                    <i class="bi bi-image"></i> Alterar foto de destaque
+                </label>
+                {{ form.banner }}
 
-                <div class="campo-formulario">
+                <div class="perfil-banner-blur"></div>
 
-                    {{ form.banner }}
+                <ul class="perfil-banner-info perfil-banner-info-edicao">
 
-                </div>
+                    <li>
+                        <span class="perfil-info-icone"><i class="bi bi-calendar3"></i></span>
+                        <label class="perfil-info-campo">
+                            <small>Nascimento</small>
+                            {{ form.data_nascimento }}
+                        </label>
+                    </li>
+
+                    <li>
+                        <span class="perfil-info-icone"><i class="bi bi-geo-alt"></i></span>
+                        <label class="perfil-info-campo">
+                            <small>Cidade</small>
+                            {{ form.cidade }}
+                        </label>
+                    </li>
+
+                    <li>
+                        <span class="perfil-info-icone"><i class="bi bi-building"></i></span>
+                        <label class="perfil-info-campo">
+                            <small>Instituição</small>
+                            {{ form.escola }}
+                        </label>
+                    </li>
+
+                </ul>
 
             </section>
 
 
+            <!-- ================= CARD DO USUÁRIO + BIOGRAFIA + INSÍGNIAS ================= -->
 
-            <!-- INFORMAÇÕES -->
+            <div class="perfil-grade">
 
-            <section class="editar-bloco">
+                <!-- CARD DO USUÁRIO -->
 
-                <span class="editar-numero">
-                    03
-                </span>
+                <aside class="perfil-cartao">
 
-                <h2>
-                    Informações
-                </h2>
+                    <div class="perfil-foto">
 
+                        {% if perfil.foto %}
+                            <img src="{{ perfil.foto.url }}" alt="Foto de perfil" id="previa-foto">
+                        {% else %}
+                            <span class="perfil-foto-vazia" id="previa-foto-padrao"><i class="bi bi-person-fill"></i></span>
+                            <img src="" alt="" id="previa-foto" hidden>
+                        {% endif %}
 
-                <div class="form-grid">
-
-
-                    <div class="campo-formulario">
-
-                        <label>
-                            Escola
+                        <label for="id_foto" class="perfil-foto-trocar" title="Alterar foto de perfil">
+                            <i class="bi bi-camera-fill"></i>
                         </label>
 
-                        {{ form.escola }}
+                        {{ form.foto }}
 
                     </div>
 
+                    <h1 class="perfil-nome">
+                        {{ perfil.usuario.get_full_name|default:perfil.usuario.username }}
+                    </h1>
 
-                    <div class="campo-formulario">
+                    <p class="perfil-dica">Escolha o que descreve você (pode marcar mais de um):</p>
 
-                        <label>
-                            Grupo / equipe
+                    <div class="chips-ocupacoes">
+                        {% for opcao in form.ocupacoes_escolhidas %}
+                            <label class="chip">
+                                {{ opcao.tag }}
+                                <span>{{ opcao.choice_label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+
+                    <div class="perfil-redes-edicao">
+
+                        <label class="campo-rede">
+                            <i class="bi bi-facebook"></i>
+                            {{ form.facebook }}
                         </label>
 
-                        {{ form.grupo }}
+                        <label class="campo-rede">
+                            <i class="bi bi-instagram"></i>
+                            {{ form.instagram }}
+                        </label>
+
+                        <label class="campo-rede">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9.5"/>
+                                <circle cx="12" cy="12" r="3.6"/>
+                                <path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4" stroke-linecap="round"/>
+                            </svg>
+                            {{ form.vsco }}
+                        </label>
+
+                        <label class="campo-rede">
+                            <i class="bi bi-link-45deg"></i>
+                            {{ form.link_outra_rede }}
+                        </label>
 
                     </div>
 
-
-                </div>
-
-            </section>
+                </aside>
 
 
+                <!-- BIOGRAFIA + INSÍGNIAS -->
 
-            <!-- SOBRE -->
+                <div class="perfil-direita">
 
-            <section class="editar-bloco">
+                    <!-- BIOGRAFIA -->
 
-                <span class="editar-numero">
-                    04
-                </span>
+                    <section class="perfil-bio">
 
-                <h2>
-                    Sobre você
-                </h2>
+                        <header class="perfil-titulo-bloco">
+                            <span class="perfil-titulo-icone"><i class="bi bi-file-text"></i></span>
+                            <h2>Biografia</h2>
+                        </header>
 
+                        <div class="perfil-linha"></div>
 
-                <div class="campo-formulario">
-
-                    <label>
-                        Bio
-                    </label>
-
-                    {{ form.bio }}
-
-                </div>
-
-            </section>
-
-
-
-            <!-- MINHA PRODUÇÃO -->
-
-            <section class="editar-bloco">
-
-                <span class="editar-numero">
-                    05
-                </span>
-
-                <h2>
-                    Minha produção
-                </h2>
-
-                <p>
-                    Mostre um curta do qual você participou.
-                </p>
-
-
-                <div class="campo-formulario">
-
-                    <label>
-                        Nome do curta
-                    </label>
-
-                    {{ form.nome_curta_participou }}
-
-                </div>
-
-
-
-                <div class="campo-formulario">
-
-                    <label>
-                        Cartaz ou foto do curta
-                    </label>
-
-
-                    {% if perfil.foto_curta_participou %}
+                        {{ form.bio }}
 
                         <img
-                            src="{{ perfil.foto_curta_participou.url }}"
-                            class="preview-imagem-edicao"
-                            alt="Foto atual do curta"
+                            src="{% static 'rede_miradas/img/triangulomiradas.png' %}"
+                            alt=""
+                            class="perfil-bio-logo"
                         >
 
-                    {% endif %}
+                    </section>
 
 
-                    {{ form.foto_curta_participou }}
+                    <!-- INSÍGNIAS (só visualização: são conquistadas na plataforma) -->
 
-                </div>
+                    <section class="perfil-bloco perfil-insignias">
 
+                        <header class="perfil-titulo-bloco">
+                            <span class="perfil-titulo-icone"><i class="bi bi-award"></i></span>
+                            <h2>Insígnias</h2>
+                        </header>
 
+                        <div class="perfil-linha"></div>
 
-                <div class="campo-formulario">
+                        {% if selos_conquistados %}
 
-                    <label>
-                        Link do curta no YouTube
-                    </label>
+                            <ul class="insignias-lista">
+                                {% for selo in selos_conquistados %}
+                                    <li class="insignia">
+                                        <img src="{% static selo.imagem %}" alt="{{ selo.nome }}">
+                                        <span class="insignia-textos">
+                                            <strong>{{ selo.nome }}</strong>
+                                            <small>{{ selo.motivo|default:selo.descricao }}</small>
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
 
-                    {{ form.link_curta_participou }}
-                    {% if form.link_curta_participou.errors %}
-                        <div class="text-danger small mt-1">
-                            <i class="bi bi-exclamation-circle me-1"></i>{{ form.link_curta_participou.errors.0 }}
-                        </div>
-                    {% endif %}
+                        {% else %}
 
-                </div>
+                            <div class="perfil-vazio">
+                                <i class="bi bi-award"></i>
+                                <p>Nenhuma insígnia conquistada ainda.</p>
+                            </div>
 
-            </section>
+                        {% endif %}
 
+                        <p class="perfil-dica perfil-dica-rodape">
+                            As insígnias são conquistadas participando da Rede Miradas.
+                        </p>
 
-
-            <!-- REDES -->
-
-            <section class="editar-bloco">
-
-                <span class="editar-numero">
-                    06
-                </span>
-
-                <h2>
-                    Redes sociais
-                </h2>
-
-
-                <div class="campo-formulario">
-
-                    <label>
-                        Instagram
-                    </label>
-
-                    {{ form.instagram }}
+                    </section>
 
                 </div>
-
-
-
-                <div class="campo-formulario">
-
-                    <label>
-                        Outra rede / portfólio
-                    </label>
-
-                    {{ form.link_outra_rede }}
-
-                </div>
-
-            </section>
-
-
-
-            <!-- FAVORITOS -->
-
-            <section class="editar-bloco">
-
-                <span class="editar-numero">
-                    07
-                </span>
-
-                <h2>
-                    Curtas favoritos
-                </h2>
-
-                <p>
-                    Escolha os curtas que você quer mostrar no seu perfil.
-                </p>
-
-
-                <div class="favoritos-edicao">
-
-                    {% if form.curtas_favoritos.field.queryset.exists %}
-
-                        {{ form.curtas_favoritos }}
-
-                    {% else %}
-
-                        <div class="favoritos-vazio">
-
-                            <i class="bi bi-film"></i>
-
-                            <strong>
-                                Nenhum curta disponível ainda.
-                            </strong>
-
-                            <span>
-                                Quando novos curtas forem publicados na plataforma,
-                                eles aparecerão aqui para você escolher seus favoritos.
-                            </span>
-
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-            </section>
-
-
-
-            <!-- BOTÕES -->
-
-            <div class="editar-acoes">
-
-                <a
-                    href="{% url 'meu_perfil' %}"
-                    class="botao-cancelar"
-                >
-                    CANCELAR
-                </a>
-
-
-                <button
-                    type="submit"
-                    class="perfil-botao botao-salvar"
-                >
-                    <i class="bi bi-check-lg"></i>
-                    SALVAR ALTERAÇÕES
-                </button>
 
             </div>
 
+
+            <!-- ================= CURTAS FAVORITOS ================= -->
+
+            <section class="perfil-secao" id="favoritos">
+
+                <header class="perfil-titulo-bloco">
+                    <span class="perfil-titulo-icone"><i class="bi bi-heart"></i></span>
+                    <h2>Curtas favoritos</h2>
+                    <div class="perfil-linha perfil-linha-longa"></div>
+                    <span class="favoritos-contador" id="favoritos-contador">0/{{ max_favoritos }}</span>
+                </header>
+
+                <p class="perfil-dica">
+                    Escolha até {{ max_favoritos }} curtas e dê de 1 a 5 estrelas para cada um.
+                </p>
+
+                {% if curtas_edicao %}
+
+                    <div class="favoritos-grade favoritos-grade-edicao" data-max="{{ max_favoritos }}">
+
+                        {% for item in curtas_edicao %}
+
+                            <div
+                                class="favorito favorito-edicao"
+                                style="--cor-borda-1: {{ item.curta.cor_borda_1 }}; --cor-borda-2: {{ item.curta.cor_borda_2 }};"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    name="curtas_favoritos"
+                                    value="{{ item.curta.pk }}"
+                                    id="fav_{{ item.curta.pk }}"
+                                    class="favorito-check"
+                                    {% if item.marcado %}checked{% endif %}
+                                >
+
+                                <label for="fav_{{ item.curta.pk }}" class="favorito-cartaz">
+                                    {% if item.curta.cartaz %}
+                                        <img src="{{ item.curta.cartaz.url }}" alt="Cartaz de {{ item.curta.nome }}">
+                                    {% else %}
+                                        <span class="sem-imagem"><i class="bi bi-film"></i></span>
+                                    {% endif %}
+                                    <span class="favorito-marca"><i class="bi bi-check-lg"></i></span>
+                                </label>
+
+                                <h3>{{ item.curta.nome }}</h3>
+
+                                <div class="estrelas-edicao" title="Quantas estrelas você dá para este curta?">
+                                    {% for n in "54321" %}
+                                        <input
+                                            type="radio"
+                                            name="nota_{{ item.curta.pk }}"
+                                            id="nota_{{ item.curta.pk }}_{{ n }}"
+                                            value="{{ n }}"
+                                            {% if item.nota|stringformat:"d" == n %}checked{% endif %}
+                                        >
+                                        <label for="nota_{{ item.curta.pk }}_{{ n }}" title="{{ n }} estrela{{ n|pluralize }}">
+                                            <i class="bi bi-star-fill"></i>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="perfil-vazio perfil-vazio-largo">
+                        <i class="bi bi-film"></i>
+                        <p>Nenhum curta disponível ainda.</p>
+                        <span>Quando novos curtas forem publicados, eles aparecerão aqui.</span>
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- ================= MINHA PRODUÇÃO ================= -->
+
+            <section class="perfil-secao" id="producao">
+
+                <header class="perfil-titulo-bloco">
+                    <span class="perfil-titulo-icone"><i class="bi bi-camera-reels"></i></span>
+                    <h2>Minha produção</h2>
+                    <div class="perfil-linha perfil-linha-longa"></div>
+                </header>
+
+                <p class="perfil-dica">Adicione os curtas que você produziu (até 6).</p>
+
+                {{ formset.management_form }}
+
+                <div class="producao-grade producao-grade-edicao" id="producoes-lista">
+
+                    {% for f in formset %}
+
+                        <div
+                            class="producao-card producao-edicao"
+                            {% if not f.instance.pk %}data-novo="1"{% endif %}
+                        >
+
+                            {% for oculto in f.hidden_fields %}{{ oculto }}{% endfor %}
+
+                            <label class="producao-imagem producao-upload" for="{{ f.cartaz.id_for_label }}">
+
+                                {% if f.instance.cartaz %}
+                                    <img src="{{ f.instance.cartaz.url }}" alt="">
+                                {% else %}
+                                    <img src="" alt="" hidden>
+                                    <span class="sem-imagem"><i class="bi bi-image"></i><small>Cartaz ou foto</small></span>
+                                {% endif %}
+
+                            </label>
+
+                            {{ f.cartaz }}
+
+                            <div class="producao-info producao-info-edicao">
+
+                                {{ f.nome }}
+                                {{ f.link_youtube }}
+
+                                {% if f.instance.pk %}
+                                    <label class="producao-remover">
+                                        {{ f.DELETE }} <span><i class="bi bi-trash3"></i> Remover</span>
+                                    </label>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <button type="button" class="perfil-btn perfil-btn-pequeno perfil-btn-claro" id="producao-adicionar">
+                    <i class="bi bi-plus-lg"></i> Adicionar outro curta
+                </button>
+
+            </section>
+
+
+            <!-- ================= BOTÕES ================= -->
+
+            <div class="perfil-acoes">
+
+                <a href="{% url 'meu_perfil' %}" class="perfil-btn perfil-btn-claro">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="perfil-btn" id="perfil-salvar">
+                    <i class="bi bi-check-lg"></i> Salvar alterações
+                </button>
+
+            </div>
 
         </form>
 
     </div>
 
 </div>
+
+
+<script>
+(function () {
+
+    /* ---------- prévia da foto de perfil e da foto de destaque ---------- */
+
+    function previa(inputId, imgId, padraoId) {
+
+        const input = document.getElementById(inputId);
+        const img = document.getElementById(imgId);
+        const padrao = padraoId ? document.getElementById(padraoId) : null;
+
+        if (!input || !img) {
+            return;
+        }
+
+        input.addEventListener('change', function () {
+
+            const arquivo = input.files && input.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            const leitor = new FileReader();
+
+            leitor.onload = function (e) {
+                img.src = e.target.result;
+                img.hidden = false;
+
+                if (padrao) {
+                    padrao.hidden = true;
+                }
+            };
+
+            leitor.readAsDataURL(arquivo);
+        });
+    }
+
+    previa('id_foto', 'previa-foto', 'previa-foto-padrao');
+    previa('id_banner', 'previa-banner', 'previa-banner-padrao');
+
+
+    /* ---------- curtas favoritos: no máximo 4 ---------- */
+
+    const grade = document.querySelector('.favoritos-grade-edicao');
+    const contador = document.getElementById('favoritos-contador');
+
+    if (grade && contador) {
+
+        const maximo = parseInt(grade.dataset.max, 10) || 4;
+        const checks = grade.querySelectorAll('.favorito-check');
+
+        function atualizar() {
+            const marcados = grade.querySelectorAll('.favorito-check:checked').length;
+            contador.textContent = marcados + '/' + maximo;
+            contador.classList.toggle('cheio', marcados >= maximo);
+        }
+
+        checks.forEach(function (check) {
+            check.addEventListener('change', function () {
+
+                const marcados = grade.querySelectorAll('.favorito-check:checked').length;
+
+                if (marcados > maximo) {
+                    check.checked = false;
+                    contador.classList.add('tremer');
+                    setTimeout(function () { contador.classList.remove('tremer'); }, 500);
+                }
+
+                atualizar();
+            });
+        });
+
+        atualizar();
+    }
+
+
+    /* ---------- minha produção: mostra um espaço vazio por vez ---------- */
+
+    const lista = document.getElementById('producoes-lista');
+    const botaoAdicionar = document.getElementById('producao-adicionar');
+
+    if (lista && botaoAdicionar) {
+
+        const novos = Array.from(lista.querySelectorAll('[data-novo]'));
+
+        function vazio(bloco) {
+            const nome = bloco.querySelector('input[name$="-nome"]');
+            const link = bloco.querySelector('input[name$="-link_youtube"]');
+            const arquivo = bloco.querySelector('input[type="file"]');
+            return !(nome && nome.value) && !(link && link.value) &&
+                   !(arquivo && arquivo.files && arquivo.files.length);
+        }
+
+        let mostrouUmVazio = false;
+
+        novos.forEach(function (bloco) {
+            if (vazio(bloco)) {
+                if (mostrouUmVazio) {
+                    bloco.hidden = true;
+                }
+                mostrouUmVazio = true;
+            }
+        });
+
+        function atualizarBotao() {
+            botaoAdicionar.hidden = !lista.querySelector('[data-novo][hidden]');
+        }
+
+        botaoAdicionar.addEventListener('click', function () {
+            const proximo = lista.querySelector('[data-novo][hidden]');
+            if (proximo) {
+                proximo.hidden = false;
+            }
+            atualizarBotao();
+        });
+
+        atualizarBotao();
+
+        /* prévia do cartaz de cada produção */
+        lista.querySelectorAll('input[type="file"]').forEach(function (input) {
+            input.addEventListener('change', function () {
+
+                const arquivo = input.files && input.files[0];
+                const bloco = input.closest('.producao-edicao');
+                const img = bloco.querySelector('.producao-imagem img');
+                const sem = bloco.querySelector('.producao-imagem .sem-imagem');
+
+                if (!arquivo || !img) {
+                    return;
+                }
+
+                const leitor = new FileReader();
+
+                leitor.onload = function (e) {
+                    img.src = e.target.result;
+                    img.hidden = false;
+                    if (sem) { sem.hidden = true; }
+                };
+
+                leitor.readAsDataURL(arquivo);
+            });
+        });
+    }
+
+
+    /* ---------- botão salvar: animação do login antes de enviar ---------- */
+
+    const formulario = document.getElementById('form-perfil');
+    const salvar = document.getElementById('perfil-salvar');
+
+    if (formulario && salvar) {
+
+        formulario.addEventListener('submit', function (evento) {
+
+            if (salvar.classList.contains('animando')) {
+                return;
+            }
+
+            evento.preventDefault();
+
+            salvar.classList.add('animando');
+
+            setTimeout(function () {
+                formulario.submit();
+            }, 450);
+        });
+    }
+
+})();
+</script>
 
 {% endblock %}

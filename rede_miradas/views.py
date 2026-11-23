@@ -5,17 +5,19 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, Paginator
 from django.db.models import Prefetch, Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 
-from .forms import PerfilForm
+from .forms import MAX_FAVORITOS, PerfilForm, ProducaoFormSet
 from .models import (
     BlocoApresentacao,
     Curta,
     CurtaVotacao,
     Destaque,
+    NotaCurtaFavorito,
     Noticia,
     Perfil,
     SecaoCurtas,
@@ -30,7 +32,6 @@ from .models import (
     TextosHome,
 )
 from .selos import SELOS
-
 POSTS_POR_PAGINA = 6
 
 
@@ -41,6 +42,69 @@ def confirmar_selo(request, conquista_id):
         id=conquista_id, usuario=request.user
     ).update(visualizado=True)
     return HttpResponse(status=204)
+
+
+def _itens_busca():
+    """
+    Itens que a barra de busca do perfil encontra:
+    páginas/funcionalidades do site e curtas em destaque.
+    """
+    itens = [
+        {"tipo": "Página", "titulo": "Início", "url": reverse("home"), "icone": "bi-house-door"},
+        {"tipo": "Página", "titulo": "Trilhas de aprendizagem", "url": reverse("inicial_trilhas"), "icone": "bi-mortarboard"},
+        {"tipo": "Página", "titulo": "Notícias", "url": reverse("noticias"), "icone": "bi-newspaper"},
+        {"tipo": "Página", "titulo": "Como tudo começou", "url": reverse("como_tudo_comecou"), "icone": "bi-clock-history"},
+        {"tipo": "Função", "titulo": "Votação · Júri popular", "url": reverse("votacao"), "icone": "bi-star"},
+        {"tipo": "Função", "titulo": "Meu perfil", "url": reverse("meu_perfil"), "icone": "bi-person"},
+        {"tipo": "Função", "titulo": "Editar perfil", "url": reverse("editar_perfil"), "icone": "bi-pencil"},
+    ]
+
+    for curta in Curta.objects.filter(ativo=True).order_by("nome"):
+        itens.append(
+            {
+                "tipo": "Curta",
+                "titulo": curta.nome,
+                "url": curta.link_youtube,
+                "icone": "bi-film",
+                "externo": True,
+            }
+        )
+
+    return itens
+
+
+def _selos_do_usuario(usuario):
+    return [
+        SELOS[c.selo]
+        for c in SeloConquistado.objects.filter(usuario=usuario)
+        if c.selo in SELOS
+    ]
+
+
+def _contexto_perfil(perfil, eh_dono):
+    """Dados que a página de perfil mostra (meu perfil ou de outra pessoa)."""
+
+    # curtas favoritos (até 4) com as estrelas que o usuário deu
+    notas = dict(
+        NotaCurtaFavorito.objects.filter(perfil=perfil).values_list(
+            "curta_id", "nota"
+        )
+    )
+
+    favoritos = [
+        {"curta": curta, "nota": notas.get(curta.pk, 0)}
+        for curta in perfil.curtas_favoritos.all()[:MAX_FAVORITOS]
+    ]
+
+    return {
+        "perfil": perfil,
+        "eh_dono": eh_dono,
+        "favoritos": favoritos,
+        "favoritos_vazios": range(MAX_FAVORITOS - len(favoritos)),
+        "producoes": perfil.producoes.all(),
+        "selos_conquistados": _selos_do_usuario(perfil.usuario),
+        "busca_itens": _itens_busca(),
+    }
 
 
 @login_required
@@ -55,67 +119,67 @@ def meu_perfil(request):
         )
         return render(request, "rede_miradas/perfil_bloqueado.html")
 
-    favoritos = perfil.curtas_favoritos.all()
-
-    voto = Voto.objects.filter(usuario=request.user).first()
-
-    selos = []
-
-    selos.append(
-        {
-            "icone": "bi-stars",
-            "nome": "Primeiro passo",
-            "descricao": "Você entrou para a Rede Miradas.",
-            "cor": "rosa",
-        }
+    return render(
+        request,
+        "rede_miradas/meu_perfil.html",
+        _contexto_perfil(perfil, eh_dono=True),
     )
 
-    if favoritos.count() >= 3:
-        selos.append(
-            {
-                "icone": "bi-film",
-                "nome": "Olhar de cinema",
-                "descricao": "Você adicionou 3 ou mais curtas aos favoritos.",
-                "cor": "roxo",
-            }
-        )
 
-    if perfil.nome_curta_participou:
-        selos.append(
-            {
-                "icone": "bi-pencil",
-                "nome": "Mão na massa",
-                "descricao": "Você participou de uma produção audiovisual.",
-                "cor": "azul",
-            }
-        )
+@login_required
+def ver_perfil(request, pk):
+    """Perfil de outra pessoa (só para visualizar)."""
 
-    if voto:
-        selos.append(
-            {
-                "icone": "bi-star",
-                "nome": "Júri popular",
-                "descricao": "Você participou da votação.",
-                "cor": "verde",
-            }
-        )
+    perfil = get_object_or_404(
+        Perfil.objects.select_related("usuario"),
+        pk=pk,
+        tipo__in=[Perfil.ALUNO, Perfil.PROFESSOR],
+    )
 
-    selos_conquistados = [
-        SELOS[c.selo]
-        for c in SeloConquistado.objects.filter(usuario=request.user)
-        if c.selo in SELOS
-    ]
+    if perfil.usuario_id == request.user.id:
+        return redirect("meu_perfil")
 
     return render(
         request,
         "rede_miradas/meu_perfil.html",
+        _contexto_perfil(perfil, eh_dono=False),
+    )
+
+
+@login_required
+def buscar_perfis(request):
+    """Busca de perfis pelo nome (usada na barra de busca do perfil)."""
+
+    termo = request.GET.get("q", "").strip()
+
+    if len(termo) < 2:
+        return JsonResponse({"perfis": []})
+
+    consulta = Perfil.objects.select_related("usuario").filter(
+        tipo__in=[Perfil.ALUNO, Perfil.PROFESSOR]
+    ).exclude(usuario__first_name="")
+
+    # cada palavra digitada precisa aparecer no nome ou no sobrenome
+    for parte in termo.split()[:4]:
+        consulta = consulta.filter(
+            Q(usuario__first_name__icontains=parte)
+            | Q(usuario__last_name__icontains=parte)
+        )
+
+    perfis = consulta.order_by("usuario__first_name")[:6]
+
+    return JsonResponse(
         {
-            "perfil": perfil,
-            "favoritos": favoritos,
-            "selos": selos,
-            "selos_conquistados": selos_conquistados,
-            "voto": voto,
-        },
+            "perfis": [
+                {
+                    "titulo": p.usuario.get_full_name(),
+                    "detalhe": p.escola or p.get_tipo_display(),
+                    "url": reverse("ver_perfil", args=[p.pk]),
+                    "foto": p.foto.url if p.foto else "",
+                }
+                for p in perfis
+            ]
+        }
     )
 
 
@@ -133,30 +197,93 @@ def editar_perfil(request):
 
     if request.method == "POST":
         form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        formset = ProducaoFormSet(
+            request.POST,
+            request.FILES,
+            instance=perfil,
+            prefix="producoes",
+        )
 
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
+
+            # estrelas: guarda só dos curtas que continuam favoritos
+            favoritos_ids = set(
+                perfil.curtas_favoritos.values_list("pk", flat=True)
+            )
+
+            NotaCurtaFavorito.objects.filter(perfil=perfil).exclude(
+                curta_id__in=favoritos_ids
+            ).delete()
+
+            for curta_id in favoritos_ids:
+                try:
+                    nota = int(request.POST.get(f"nota_{curta_id}", 0))
+                except ValueError:
+                    nota = 0
+
+                NotaCurtaFavorito.objects.update_or_create(
+                    perfil=perfil,
+                    curta_id=curta_id,
+                    defaults={"nota": max(0, min(5, nota))},
+                )
+
             messages.success(request, "Seu perfil foi atualizado com sucesso!")
             return redirect("meu_perfil")
-        else:
-            messages.error(
-                request,
-                "Não foi possível salvar o perfil. Verifique os campos destacados abaixo.",
-            )
+
+        messages.error(
+            request,
+            "Não foi possível salvar o perfil. Verifique os campos destacados abaixo.",
+        )
 
     else:
         form = PerfilForm(instance=perfil)
+        formset = ProducaoFormSet(instance=perfil, prefix="producoes")
+
+    # curtas disponíveis para escolher como favoritos + estrelas já dadas
+    if request.method == "POST":
+        marcados = {
+            int(valor)
+            for valor in request.POST.getlist("curtas_favoritos")
+            if valor.isdigit()
+        }
+        notas = {}
+        for curta_id in marcados:
+            try:
+                notas[curta_id] = int(request.POST.get(f"nota_{curta_id}", 0))
+            except ValueError:
+                notas[curta_id] = 0
+    else:
+        marcados = set(perfil.curtas_favoritos.values_list("pk", flat=True))
+        notas = dict(
+            NotaCurtaFavorito.objects.filter(perfil=perfil).values_list(
+                "curta_id", "nota"
+            )
+        )
+
+    curtas_edicao = [
+        {
+            "curta": curta,
+            "marcado": curta.pk in marcados,
+            "nota": notas.get(curta.pk, 0),
+        }
+        for curta in Curta.objects.filter(ativo=True).order_by("ordem", "nome")
+    ]
 
     return render(
         request,
         "rede_miradas/editar_perfil.html",
         {
             "form": form,
+            "formset": formset,
             "perfil": perfil,
+            "curtas_edicao": curtas_edicao,
+            "max_favoritos": MAX_FAVORITOS,
+            "selos_conquistados": _selos_do_usuario(request.user),
+            "busca_itens": _itens_busca(),
         },
     )
-
-
 @login_required
 def votacao(request):
 

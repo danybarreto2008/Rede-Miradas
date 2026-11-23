@@ -1,1719 +1,1573 @@
-html,
-body {
-    min-height: 100%;
+/* =====================================================
+   PERFIL — Rede Miradas
+   Menu lateral fixo + foto de destaque + cards
+   Paleta: azul, vermelho, degradês e pontos de luz (igual à home)
+   ===================================================== */
+
+/* ---------- esconde a navbar e o rodapé do site nesta página ---------- */
+
+body:has(.perfil-pagina) {
+    background: #050714;
+}
+
+body:has(.perfil-pagina) .navbar-miradas,
+body:has(.perfil-pagina) footer.footer {
+    display: none !important;
+}
+
+/* mensagens do Django (ex: "perfil atualizado") ao lado do menu */
+body:has(.perfil-pagina) main > .container {
+    max-width: none;
+    margin-left: 124px;
+    padding-right: 28px;
+}
+
+
+/* ---------- base ---------- */
+
+.perfil-pagina {
+    --p-fundo: #050714;
+    --p-card: #0b0f2e;
+    --p-card-2: #10153f;
+    --p-borda: rgba(120, 130, 255, 0.22);
+    --p-azul: #2a43d6;
+    --p-azul-claro: #6b86ff;
+    --p-vermelho: #c94433;
+    --p-texto: #ffffff;
+    --p-suave: rgba(255, 255, 255, 0.66);
+    --p-ouro: #ffc83d;
+
+    --menu-w: 92px;
+    --card-w: 300px;
+    --grade-pad: 24px;
+    --grade-gap: 28px;
+
+    position: relative;
+    min-height: 100vh;
+    padding: 16px 20px 56px calc(var(--menu-w) + 32px);
+    color: var(--p-texto);
+    font-family: "Lexend", "Segoe UI", system-ui, sans-serif;
+    background: var(--p-fundo);
+    overflow-x: clip;
+}
+
+.perfil-pagina *,
+.perfil-pagina *::before,
+.perfil-pagina *::after {
+    box-sizing: border-box;
+}
+
+:where(.perfil-pagina) :is(h1, h2, h3, p, ul) {
     margin: 0;
+    padding: 0;
 }
 
-body {
-    min-height: 100vh;
-
-    background: #030308;
-
-    color: #ffffff;
+:where(.perfil-pagina) ul {
+    list-style: none;
 }
 
-
-/* =========================================================
-   PERFIL
-   ========================================================= */
-
-.pagina-perfil {
-    position: relative;
-
-    width: 100%;
-    min-height: 100vh;
-
-    overflow: hidden;
-
-    background:
-        radial-gradient(
-            ellipse 700px 450px at 5% 20%,
-            rgba(255, 47, 214, 0.10),
-            transparent 70%
-        ),
-        radial-gradient(
-            ellipse 600px 500px at 95% 45%,
-            rgba(139, 47, 247, 0.11),
-            transparent 70%
-        ),
-        radial-gradient(
-            ellipse 500px 400px at 50% 90%,
-            rgba(34, 211, 238, 0.06),
-            transparent 70%
-        ),
-        #030308;
-
-    color: #ffffff;
+:where(.perfil-pagina) a {
+    text-decoration: none;
 }
 
-
-/* =========================================================
-   ELIPSES DECORATIVAS
-   ========================================================= */
-
-.pagina-perfil::before,
-.pagina-perfil::after {
+/* brilhos de fundo (azul e vermelho) */
+.perfil-pagina::before {
     content: "";
-
-    position: absolute;
-
-    pointer-events: none;
-
-    border-radius: 50%;
-
-    filter: blur(80px);
-
-    opacity: 0.45;
-
+    position: fixed;
+    inset: 0;
     z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 700px 460px at 92% 8%, rgba(42, 67, 214, 0.28), transparent 70%),
+        radial-gradient(ellipse 620px 480px at 20% 96%, rgba(201, 68, 51, 0.20), transparent 70%),
+        radial-gradient(ellipse 520px 420px at 60% 55%, rgba(120, 105, 210, 0.12), transparent 70%);
 }
 
-.pagina-perfil::before {
-    width: 420px;
-    height: 220px;
-
-    top: 500px;
-    left: -180px;
-
-    background: rgba(255, 47, 214, 0.13);
-
-    transform: rotate(-25deg);
+/* pontos de luz */
+.perfil-pagina::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 14% 22%, rgba(160, 180, 255, 0.95) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 14% 22%, rgba(110, 140, 255, 0.28), transparent 42px),
+        radial-gradient(circle at 82% 34%, rgba(255, 150, 130, 0.95) 0 2px, transparent 3.5px),
+        radial-gradient(circle at 82% 34%, rgba(201, 68, 51, 0.30), transparent 50px),
+        radial-gradient(circle at 63% 8%, rgba(170, 190, 255, 0.9) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 36% 74%, rgba(255, 255, 255, 0.85) 0 1.2px, transparent 2.5px),
+        radial-gradient(circle at 91% 82%, rgba(160, 180, 255, 0.9) 0 1.8px, transparent 3px),
+        radial-gradient(circle at 91% 82%, rgba(110, 140, 255, 0.25), transparent 46px),
+        radial-gradient(circle at 5% 60%, rgba(255, 150, 130, 0.85) 0 1.4px, transparent 3px);
 }
 
-.pagina-perfil::after {
-    width: 500px;
-    height: 260px;
-
-    top: 1050px;
-    right: -220px;
-
-    background: rgba(139, 47, 247, 0.14);
-
-    transform: rotate(25deg);
-}
-
-
-/* =========================================================
-   TOPO
-   ========================================================= */
-
-.perfil-topo {
+.perfil-area {
     position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-
-    padding-bottom: 65px;
+    z-index: 1;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 
-/* =========================================================
-   BANNER
-   ========================================================= */
+/* =====================================================
+   MENU LATERAL FIXO
+   ===================================================== */
+
+.perfil-menu {
+    position: fixed;
+    z-index: 20;
+    top: 16px;
+    left: 16px;
+    bottom: 16px;
+    width: var(--menu-w);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    padding: 20px 0;
+    border-radius: 28px;
+    overflow: hidden;
+    background: linear-gradient(185deg, #2643dc 0%, #17228f 48%, #0a0f45 100%);
+    box-shadow: 0 20px 50px rgba(30, 60, 220, 0.30), inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+}
+
+/* luzes dentro do menu */
+.perfil-menu::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.22), transparent 70px),
+        radial-gradient(circle at 80% 92%, rgba(201, 68, 51, 0.55), transparent 110px);
+}
+
+.perfil-menu > * {
+    position: relative;
+}
+
+.perfil-menu-logo {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.30);
+    transition: transform 0.25s ease;
+}
+
+.perfil-menu-logo:hover {
+    transform: translateY(-2px) scale(1.04);
+}
+
+.perfil-menu-logo img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.perfil-menu-nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.perfil-menu-link {
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 0 8px;
+    border-radius: 16px;
+    color: rgba(255, 255, 255, 0.82);
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.perfil-menu-link:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.perfil-menu-icone {
+    font-size: 1.45rem;
+    line-height: 1;
+}
+
+.perfil-menu-nome {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+
+/* =====================================================
+   BARRA DE BUSCA
+   ===================================================== */
+
+.perfil-busca {
+    position: relative;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 54px;
+    margin-bottom: 18px;
+    padding: 0 20px;
+    border: 1px solid var(--p-borda);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.perfil-busca:focus-within {
+    border-color: var(--p-azul-claro);
+    box-shadow: 0 0 0 4px rgba(107, 134, 255, 0.16), 0 0 30px rgba(42, 67, 214, 0.30);
+}
+
+.perfil-busca-lupa {
+    color: var(--p-azul-claro);
+    font-size: 1.05rem;
+}
+
+.perfil-busca input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+.perfil-busca input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.perfil-busca input::-webkit-search-cancel-button {
+    filter: invert(1);
+}
+
+.perfil-busca-atalho {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--p-borda);
+    border-radius: 8px;
+    color: var(--p-suave);
+    font-size: 0.8rem;
+}
+
+.perfil-busca-resultados {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid var(--p-borda);
+    border-radius: 22px;
+    background: rgba(8, 11, 38, 0.97);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.perfil-busca-resultados[hidden] {
+    display: none;
+}
+
+.busca-grupo + .busca-grupo {
+    margin-top: 8px;
+}
+
+.busca-grupo-titulo {
+    padding: 8px 12px 6px;
+    color: var(--p-azul-claro);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.busca-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 14px;
+    color: #ffffff;
+    transition: background 0.2s ease;
+}
+
+.busca-item:hover {
+    background: rgba(107, 134, 255, 0.16);
+    color: #ffffff;
+}
+
+.busca-item-icone {
+    flex: 0 0 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--p-azul), #17228f);
+    color: #ffffff;
+}
+
+.busca-item-icone img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.busca-item-textos {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.busca-item-textos strong {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.busca-item-textos small {
+    color: var(--p-suave);
+    font-size: 0.75rem;
+}
+
+.busca-vazio {
+    padding: 16px;
+    color: var(--p-suave);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+
+/* =====================================================
+   FOTO DE DESTAQUE (BANNER)
+   ===================================================== */
 
 .perfil-banner {
     position: relative;
-
-    width: 100%;
-    height: 350px;
-
+    height: 300px;
     overflow: hidden;
-
-    background: #09090f;
+    border-radius: 28px;
+    background: #0a0f45;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }
 
-.perfil-banner img {
+.perfil-banner-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-
-    display: block;
-
     object-fit: cover;
 }
 
-.perfil-banner::after {
-    content: "";
+.perfil-banner-img[hidden] {
+    display: none;
+}
 
+/* banner padrão (quando o usuário não escolheu foto) */
+.perfil-banner-padrao {
     position: absolute;
-
     inset: 0;
-
     background:
-        linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.15),
-            rgba(3, 3, 8, 0.72)
-        );
+        radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.9) 0 2px, transparent 4px),
+        radial-gradient(circle at 70% 60%, rgba(255, 190, 170, 0.9) 0 2px, transparent 4px),
+        radial-gradient(circle at 55% 18%, rgba(255, 255, 255, 0.85) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 92% 70%, rgba(255, 255, 255, 0.85) 0 1.5px, transparent 3px),
+        radial-gradient(ellipse 420px 300px at 85% 30%, rgba(201, 68, 51, 0.55), transparent 70%),
+        radial-gradient(ellipse 520px 360px at 35% 20%, rgba(107, 134, 255, 0.55), transparent 70%),
+        linear-gradient(120deg, #1c2fbd 0%, #3a2fa8 45%, #7a2c6e 100%);
+}
 
+.perfil-banner-padrao[hidden] {
+    display: none;
+}
+
+/* degradê/blur azul embaixo da foto */
+.perfil-banner-blur {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 46%;
     pointer-events: none;
+    background: linear-gradient(
+        to top,
+        rgba(14, 40, 170, 0.97) 0%,
+        rgba(24, 62, 210, 0.78) 42%,
+        rgba(30, 80, 230, 0) 100%
+    );
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    -webkit-mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 55%, transparent 100%);
 }
 
-.banner-padrao {
-    width: 100%;
-    height: 100%;
+/* data de nascimento, cidade e instituição */
+.perfil-banner-info {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 38px;
+    padding: 0 28px 22px calc(var(--grade-pad) + var(--card-w) + var(--grade-gap));
+}
 
-    background:
-        radial-gradient(
-            ellipse at 20% 30%,
-            rgba(255, 47, 214, 0.18),
-            transparent 40%
-        ),
-        radial-gradient(
-            ellipse at 80% 60%,
-            rgba(139, 47, 247, 0.18),
-            transparent 45%
-        ),
-        #08080f;
+.perfil-banner-info li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.perfil-info-icone {
+    flex: 0 0 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.20);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.perfil-info-texto {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.perfil-info-texto small,
+.perfil-info-campo small {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.perfil-info-texto strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
 }
 
 
-/* =========================================================
-   FOTO DE PERFIL
-   ========================================================= */
+/* =====================================================
+   GRADE: CARD DO USUÁRIO + BIOGRAFIA + INSÍGNIAS
+   ===================================================== */
+
+.perfil-grade {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: var(--card-w) minmax(0, 1fr);
+    gap: var(--grade-gap);
+    margin-top: -210px;               /* o card sobe por cima da foto de destaque */
+    padding: 0 var(--grade-pad);
+    align-items: start;
+}
+
+.perfil-direita {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.85fr) minmax(0, 1.4fr);
+    gap: 20px;
+    align-items: stretch;
+    padding-top: 234px;               /* começa logo abaixo da foto de destaque */
+}
+
+
+/* ---------- card do usuário ---------- */
+
+.perfil-cartao {
+    position: relative;
+    padding: 84px 22px 26px;
+    border: 1px solid var(--p-borda);
+    border-radius: 28px;
+    text-align: center;
+    background: linear-gradient(170deg, #121852 0%, #0b0f2e 60%, #090c26 100%);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.50), 0 0 50px rgba(42, 67, 214, 0.18);
+}
 
 .perfil-foto {
     position: absolute;
-
-    top: 130px;
+    top: -68px;
     left: 50%;
-
+    width: 136px;
+    height: 136px;
     transform: translateX(-50%);
-
-    z-index: 5;
-
-    width: 150px;
-    height: 150px;
-
     padding: 4px;
-
-    box-sizing: border-box;
-
     border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff2fd6,
-            #8b2ff7,
-            #22d3ee
-        );
-
-    box-shadow:
-        0 0 30px rgba(139, 47, 247, 0.25);
+    background: linear-gradient(135deg, var(--p-azul-claro), var(--p-vermelho));
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 0 34px rgba(107, 134, 255, 0.35);
 }
 
-.perfil-foto img,
+.perfil-foto > img,
 .perfil-foto-vazia {
     width: 100%;
     height: 100%;
-
-    display: block;
-
-    object-fit: cover;
-
+    border: 4px solid #0b0f2e;
     border-radius: 50%;
+    object-fit: cover;
+    background: #17228f;
+}
 
-    border: 4px solid #07070c;
+.perfil-foto > img[hidden],
+.perfil-foto-vazia[hidden] {
+    display: none;
 }
 
 .perfil-foto-vazia {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #11111a;
-
-    color: #777;
-
-    font-size: 42px;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 3.4rem;
 }
 
-
-/* =========================================================
-   CARD PRINCIPAL
-   ========================================================= */
-
-.perfil-card-principal {
-    position: relative;
-
-    z-index: 3;
-
-    width: min(680px, calc(100% - 30px));
-
-    margin: -110px auto 0;
-
-    overflow: hidden;
-
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(23, 16, 39, 0.96),
-            rgba(8, 8, 17, 0.97)
-        );
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.65),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-
-/* =========================================================
-   NOME
-   ========================================================= */
-
-.perfil-card-nome {
-    position: relative;
-
-    min-height: 190px;
-
-    padding: 100px 40px 25px;
-
-    box-sizing: border-box;
-
-    text-align: center;
-
-    background:
-        radial-gradient(
-            ellipse 300px 150px at 50% 0%,
-            rgba(139, 47, 247, 0.10),
-            transparent 75%
-        );
-
-    color: #ffffff;
-}
-
-.perfil-card-nome h1 {
-    margin: 0;
-
-    font-size: 38px;
-
-    font-weight: 400;
-
-    line-height: 1.15;
-}
-
-
-/* =========================================================
-   TAG
-   ========================================================= */
-
-.perfil-tipo {
-    position: absolute;
-
-    top: 20px;
-    left: 25px;
-
-    padding: 5px 11px;
-
-    border: 1px solid rgba(255, 47, 214, 0.45);
-
-    border-radius: 5px;
-
-    background: rgba(255, 47, 214, 0.08);
-
-    color: #ff75df;
-
-    font-size: 10px;
-
+.perfil-nome {
+    font-size: 1.4rem;
     font-weight: 700;
-
-    letter-spacing: 0.5px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================================================
-   LINHA
-   ========================================================= */
-
-.linha-perfil {
-    width: 55px;
-    height: 4px;
-
-    margin: 15px auto 0;
-
-    border-radius: 5px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ff2fd6,
-            #8b2ff7,
-            #22d3ee
-        );
-
-    box-shadow:
-        0 0 12px rgba(255, 47, 214, 0.25);
-}
-
-
-/* =========================================================
-   INFORMAÇÕES
-   ========================================================= */
-
-.perfil-card-informacoes {
-    min-height: 80px;
-
+/* estudante ● técnico em informática */
+.perfil-ocupacoes {
     display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 30px;
-
-    padding: 20px 35px;
-
-    box-sizing: border-box;
-
-    background: rgba(255, 255, 255, 0.025);
-
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    color: var(--p-suave);
+    font-size: 0.84rem;
+    line-height: 1.6;
 }
 
-
-/* =========================================================
-   REDES
-   ========================================================= */
+.perfil-ocupacoes li + li::before {
+    content: "●";
+    margin: 0 9px;
+    color: var(--p-vermelho);
+    font-size: 0.5em;
+    vertical-align: middle;
+}
 
 .perfil-redes {
     display: flex;
-
-    align-items: center;
-    justify-content: flex-end;
-
-    gap: 8px;
-
-    margin-left: auto;
-
-    order: 2;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .perfil-redes a {
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    border: 1px solid rgba(255, 255, 255, 0.14);
-
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--p-borda);
     border-radius: 50%;
-
-    color: #aaa;
-
-    text-decoration: none;
-
-    transition: 0.25s;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1.05rem;
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 
 .perfil-redes a:hover {
-    border-color: #ff2fd6;
-
-    color: #ff2fd6;
-
-    box-shadow:
-        0 0 15px rgba(255, 47, 214, 0.18);
-}
-
-
-/* =========================================================
-   ESCOLA + EMAIL
-   ========================================================= */
-
-.perfil-dados {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-    margin-left: 0;
-
-    text-align: left;
-
-    font-size: 13px;
-
-    order: 1;
-}
-
-.perfil-dados div {
-    display: flex;
-
-    justify-content: flex-start;
-
-    gap: 5px;
-}
-
-.perfil-dados strong {
-    font-weight: 600;
-
-    color: #ddd;
-}
-
-.perfil-dados span {
-    color: #888;
-}
-
-
-/* =========================================================
-   CONTEÚDO
-   ========================================================= */
-
-.perfil-conteudo {
-    position: relative;
-
-    z-index: 2;
-
-    width: min(1000px, calc(100% - 30px));
-
-    margin: 0 auto;
-
-    padding-bottom: 100px;
-}
-
-
-/* =========================================================
-   EDITAR
-   ========================================================= */
-
-.perfil-editar-area {
-    display: flex;
-
-    justify-content: flex-end;
-
-    margin-bottom: 30px;
-}
-
-.botao-editar-perfil {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    padding: 10px 16px;
-
-    border: 1px solid rgba(255, 255, 255, 0.13);
-
-    border-radius: 6px;
-
-    background: rgba(255, 255, 255, 0.025);
-
-    color: #aaa;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    transition: 0.25s;
-}
-
-.botao-editar-perfil:hover {
+    transform: translateY(-3px);
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--p-azul), var(--p-vermelho));
     color: #ffffff;
+}
 
-    border-color: #8b2ff7;
+.perfil-redes-vazio {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.8rem;
+}
 
-    box-shadow:
-        0 0 18px rgba(139, 47, 247, 0.16);
+.perfil-cartao-acao {
+    margin-top: 22px;
 }
 
 
-/* =========================================================
-   SOBRE + INSÍGNIAS
-   ========================================================= */
-
-.perfil-duas-colunas {
-    display: grid;
-
-    grid-template-columns: 1.7fr 1fr;
-
-    gap: 20px;
-}
-
-
-/* =========================================================
-   CARDS
-   ========================================================= */
-
-.perfil-card {
-    min-height: 220px;
-
-    padding: 30px;
-
-    box-sizing: border-box;
-
-    background:
-        linear-gradient(
-            165deg,
-            rgba(16, 16, 35, 0.96) 0%,
-            rgba(8, 8, 20, 0.96) 100%
-        );
-
-    border: 1.5px solid rgba(255, 255, 255, 0.11);
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-    transition:
-        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.35s ease,
-        border-color 0.35s ease;
-}
-
-.perfil-card:hover {
-    transform: translateY(-7px);
-
-    border-color: rgba(255, 255, 255, 0.22);
-
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.7),
-        0 0 25px rgba(139, 47, 247, 0.13);
-}
-
-
-/* =========================================================
-   TÍTULOS
-   ========================================================= */
-
-.perfil-card-titulo {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 25px;
-}
-
-.perfil-card-titulo i {
-    color: #22d3ee;
-
-    font-size: 20px;
-
-    text-shadow:
-        0 0 12px rgba(34, 211, 238, 0.3);
-}
-
-.perfil-card-titulo h2 {
-    margin: 0;
-
-    font-size: 24px;
-
-    font-weight: 400;
-}
-
-
-/* =========================================================
-   SOBRE
-   ========================================================= */
+/* ---------- biografia (card vermelho) ---------- */
 
 .perfil-bio {
-    margin: 0 0 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 240px;
+    padding: 22px 22px 70px;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.20), transparent 55%),
+        linear-gradient(150deg, #d8503c 0%, #c94433 45%, #9f2e22 100%);
+    box-shadow: 0 20px 44px rgba(201, 68, 51, 0.30);
+}
 
-    color: #aaa;
-
-    font-size: 14px;
-
-    line-height: 1.7;
+.perfil-bio-texto {
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
 }
 
 .perfil-vazio-texto {
-    color: #666;
-
-    font-size: 14px;
-}
-
-.perfil-info {
-    display: flex;
-
-    gap: 6px;
-
-    margin-top: 10px;
-
-    font-size: 14px;
-}
-
-.perfil-info strong {
-    color: #ffffff;
-}
-
-.perfil-info span {
-    color: #999;
-}
-
-
-/* =========================================================
-   INSÍGNIAS
-   ========================================================= */
-
-.insignias-vazio {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    min-height: 110px;
-
-    text-align: center;
-}
-
-.insignias-vazio i {
-    margin-bottom: 10px;
-
-    color: #8b2ff7;
-
-    font-size: 27px;
-
-    text-shadow:
-        0 0 15px rgba(139, 47, 247, 0.3);
-}
-
-.insignias-vazio p {
-    margin: 0 0 6px;
-
-    color: #999;
-
-    font-size: 13px;
-}
-
-.insignias-vazio span {
-    color: #666;
-
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   SEÇÕES
-   ========================================================= */
-
-.perfil-secao {
-    width: 100%;
-
-    margin-top: 55px;
-}
-
-.perfil-secao-titulo {
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    margin-bottom: 20px;
-}
-
-.perfil-secao-titulo h2 {
-    margin: 0;
-
-    font-size: 27px;
-
-    font-weight: 400;
-}
-
-
-/* =========================================================
-   PRODUÇÃO + FAVORITOS
-   ========================================================= */
-
-.perfil-producao-favoritos {
-    display: grid;
-
-    grid-template-columns: 1.3fr 1fr;
-
-    gap: 20px;
-
-    align-items: start;
-
-    margin-top: 55px;
-}
-
-.perfil-producao-favoritos .perfil-secao {
-    margin-top: 0;
-}
-
-
-/* =========================================================
-   MINHA PRODUÇÃO
-   ========================================================= */
-
-.minha-producao {
-    margin-top: 0;
-}
-
-.minha-producao .perfil-secao-titulo {
-    margin-bottom: 15px;
-}
-
-
-/* =========================================================
-   CARD DA PRODUÇÃO
-   ========================================================= */
-
-.producao-card {
-    position: relative;
-
-    display: grid;
-
-    grid-template-columns: 1fr 45%;
-
-    min-height: 220px;
-
-    overflow: hidden;
-
-    border: 1.5px solid rgba(255, 255, 255, 0.11);
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            165deg,
-            rgba(16, 16, 35, 0.96),
-            rgba(8, 8, 20, 0.96)
-        );
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-/* =========================================================
-   TEXTO DA PRODUÇÃO
-   ========================================================= */
-
-.producao-texto {
-    position: relative;
-
-    z-index: 2;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    padding: 30px;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(16, 16, 35, 1) 0%,
-            rgba(16, 16, 35, 0.98) 35%,
-            rgba(16, 16, 35, 0.80) 55%,
-            rgba(16, 16, 35, 0.35) 75%,
-            rgba(16, 16, 35, 0) 100%
-        );
-}
-
-
-/* NÃO usar mais o degradê antigo */
-.producao-texto::after {
-    display: none;
-}
-
-/* =========================================================
-   NOME DO CURTA
-   ========================================================= */
-
-.producao-texto h3 {
-    margin: 0 0 6px;
-
-    color: #ffffff;
-
-    font-size: 20px;
-
-    font-weight: 500;
-
-    line-height: 1.25;
-}
-
-
-/* =========================================================
-   PRODUTORA
-   ========================================================= */
-
-.producao-grupo {
-    margin: 0 0 18px;
-
-    color: #888;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.7px;
-}
-
-
-/* =========================================================
-   BOTÃO YOUTUBE
-   ========================================================= */
-
-.producao-link {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    width: fit-content;
-
-    padding: 9px 13px;
-
-    border: 1px solid rgba(255, 255, 255, 0.13);
-
-    border-radius: 5px;
-
-    background: rgba(255, 255, 255, 0.025);
-
-    color: #aaa;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    transition: 0.25s;
-}
-
-.producao-link:hover {
-    color: #ffffff;
-
-    border-color: #8b2ff7;
-
-    background: rgba(139, 47, 247, 0.08);
-
-    box-shadow:
-        0 0 18px rgba(139, 47, 247, 0.14);
-}
-
-.producao-link i {
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   FOTO DA PRODUÇÃO
-   ========================================================= */
-
-.producao-imagem {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    min-height: 220px;
-
-    overflow: hidden;
-}
-
-.producao-imagem img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-
-/* =========================================================
-   FAVORITOS
-   ========================================================= */
-
-.favoritos-secao {
-    padding: 0;
-
-    background: transparent;
-
-    border: none;
-
-    box-shadow: none;
-
-    min-height: auto;
-
-    margin-top: 0;
-}
-
-.favoritos-secao:hover {
-    transform: none;
-
-    border-color: transparent;
-
-    box-shadow: none;
-}
-
-
-/* =========================================================
-   CARTAZES FAVORITOS
-   ========================================================= */
-
-.curtas-favoritos {
-    display: grid;
-
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    gap: 4px;
-
-    width: 100%;
-}
-
-
-/* =========================================================
-   CADA FAVORITO
-   ========================================================= */
-
-.curta-favorito {
-    display: block;
-
-    width: 100%;
-
-    min-width: 0;
-
-    box-sizing: border-box;
-
-    text-decoration: none;
-
-    transition:
-        transform 0.2s ease;
-}
-
-.curta-favorito:hover {
-    transform: translateY(-4px);
-}
-
-
-/* =========================================================
-   CARTAZ
-   ========================================================= */
-
-.curta-favorito-cartaz {
-    width: 100%;
-
-    aspect-ratio: 2 / 3;
-
-    box-sizing: border-box;
-
-    background: #080711;
-
-    border: 1px solid rgba(255, 255, 255, 0.30);
-
-    overflow: hidden;
-}
-
-.curta-favorito-cartaz img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    background: #080711;
-}
-
-
-/* =========================================================
-   SEM IMAGEM
-   ========================================================= */
-
-.curta-sem-imagem {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #080711;
-
-    color: #555;
-
-    font-size: 28px;
-}
-
-
-/* =========================================================
-   INFORMAÇÕES DOS FAVORITOS
-   ========================================================= */
-
-.curta-favorito-info {
-    display: none;
-}
-
-
-/* =========================================================
-   FAVORITOS VAZIOS
-   ========================================================= */
-
-.favoritos-vazio {
-    padding: 35px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            165deg,
-            #10163a 0%,
-            #080b1e 100%
-        );
-
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.favoritos-vazio i {
-    display: block;
-
-    margin-bottom: 10px;
-
-    color: #38bdf8;
-
-    font-size: 27px;
-}
-
-.favoritos-vazio p {
-    margin: 0;
-
-    color: #777;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   EDITAR PERFIL
-   ========================================================= */
-
-.pagina-editar-perfil {
-    min-height: 100vh;
-
-    padding: 50px 20px 80px;
-
-    background:
-        radial-gradient(
-            ellipse 600px 400px at 10% 20%,
-            rgba(255, 47, 214, 0.07),
-            transparent 70%
-        ),
-        radial-gradient(
-            ellipse 600px 400px at 90% 70%,
-            rgba(139, 47, 247, 0.08),
-            transparent 70%
-        ),
-        #030308;
-
-    color: #ffffff;
-}
-
-.editar-container {
-    width: min(850px, 100%);
-
-    margin: 0 auto;
-}
-
-.voltar-perfil {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin-bottom: 40px;
-
-    color: #999;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    text-decoration: none;
-}
-
-.voltar-perfil:hover {
-    color: #ffffff;
-}
-
-.editar-cabecalho {
-    margin-bottom: 45px;
-}
-
-.perfil-etiqueta {
-    color: #ff2fd6;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 2px;
-}
-
-.editar-cabecalho h1 {
-    margin: 10px 0;
-
-    font-size: 38px;
-
-    font-weight: 400;
-}
-
-.editar-cabecalho p {
-    margin: 0;
-
-    color: #777;
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   BLOCOS DO FORMULÁRIO
-   ========================================================= */
-
-.editar-bloco {
-    margin-bottom: 35px;
-
-    padding: 30px;
-
-    background:
-        linear-gradient(
-            165deg,
-            rgba(16, 16, 35, 0.95),
-            rgba(8, 8, 20, 0.95)
-        );
-
-    border: 1.5px solid rgba(255, 255, 255, 0.11);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.45);
-}
-
-.editar-numero {
-    color: #ff2fd6;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-}
-
-.editar-bloco h2 {
-    margin: 8px 0;
-
-    font-size: 22px;
-
-    font-weight: 400;
-}
-
-.editar-bloco > p {
-    margin: 0 0 25px;
-
-    color: #777;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   FORMULÁRIO
-   ========================================================= */
-
-.campo-formulario {
-    margin-top: 20px;
-}
-
-.campo-formulario label {
-    display: block;
-
-    margin-bottom: 8px;
-
-    color: #aaa;
-
-    font-size: 12px;
-
-    font-weight: 600;
-}
-
-.campo-formulario input,
-.campo-formulario textarea,
-.campo-formulario select {
-    width: 100%;
-
-    padding: 12px;
-
-    box-sizing: border-box;
-
-    background: #080808;
-
-    color: #ffffff;
-
-    border: 1px solid #333;
-
-    border-radius: 4px;
-
-    outline: none;
-}
-
-.campo-formulario textarea {
-    min-height: 120px;
-
-    resize: vertical;
-}
-
-.campo-formulario input:focus,
-.campo-formulario textarea:focus,
-.campo-formulario select:focus {
-    border-color: #8b2ff7;
-}
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 20px;
-}
-
-
-/* =========================================================
-   PREVISUALIZAÇÕES
-   ========================================================= */
-
-.preview-imagem-edicao {
-    display: block;
-
-    width: 120px;
-    height: 120px;
-
-    margin-bottom: 15px;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
-    border: 2px solid #333;
-}
-
-.preview-banner-edicao {
-    display: block;
-
-    width: 100%;
-    max-height: 220px;
-
-    margin-bottom: 15px;
-
-    object-fit: cover;
-
-    border-radius: 5px;
-
-    border: 1px solid #333;
-}
-
-
-/* =========================================================
-   AÇÕES
-   ========================================================= */
-
-.editar-acoes {
-    display: flex;
-
-    justify-content: flex-end;
-
-    gap: 12px;
-
-    margin-top: 40px;
-}
-
-.botao-cancelar,
-.botao-salvar {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    padding: 12px 18px;
-
-    border-radius: 4px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    cursor: pointer;
-}
-
-.botao-cancelar {
-    background: transparent;
-
-    color: #777;
-
-    border: 1px solid #333;
-}
-
-.botao-cancelar:hover {
-    color: #ffffff;
-}
-
-.botao-salvar {
-    background: #8b2ff7;
-
-    color: #ffffff;
-
-    border: 1px solid #8b2ff7;
-}
-
-
-/* =========================================================
-   BOTÃO NATIVO DE ESCOLHER ARQUIVO
-   ========================================================= */
-
-.campo-formulario input[type="file"] {
-    padding: 10px;
-
-    cursor: pointer;
-
-    font-size: 12px;
-
-    color: #999;
-}
-
-.campo-formulario input[type="file"]::file-selector-button {
-    padding: 8px 16px;
-
-    margin-right: 14px;
-
-    border: none;
-
-    border-radius: 6px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #8b2ff7,
-            #22d3ee
-        );
-
-    color: #ffffff;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.3px;
-
-    cursor: pointer;
-
-    transition: opacity 0.2s ease;
-}
-
-.campo-formulario input[type="file"]::file-selector-button:hover {
+    font-style: italic;
     opacity: 0.85;
 }
 
-
-/* =========================================================
-   LISTA DE CURTAS FAVORITOS NO FORMULÁRIO
-   ========================================================= */
-
-.favoritos-edicao ul {
-    list-style: none;
-
-    margin: 0;
-
-    padding: 0;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(180px, 1fr)
-        );
-
-    gap: 10px;
+/* logo do Miradas no canto, "pulando" */
+.perfil-bio-logo {
+    position: absolute;
+    right: -16px;
+    bottom: -18px;
+    width: 104px;
+    height: auto;
+    pointer-events: none;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.40));
+    animation: perfil-pula 3.2s ease-in-out infinite;
 }
 
-.favoritos-edicao li {
-    background: #080808;
-
-    border: 1px solid #333;
-
-    border-radius: 8px;
-
-    padding: 12px 14px;
-
-    transition:
-        border-color 0.2s ease;
+@keyframes perfil-pula {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    45%      { transform: translateY(-14px) rotate(-4deg); }
 }
 
-.favoritos-edicao li:has(input:checked) {
-    border-color: #8b2ff7;
 
-    background: rgba(139, 47, 247, 0.12);
+/* ---------- blocos escuros (insígnias, etc.) ---------- */
+
+.perfil-bloco {
+    padding: 22px;
+    border: 1px solid var(--p-borda);
+    border-radius: 26px;
+    background: linear-gradient(165deg, #10153f 0%, #0a0d2b 100%);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.40);
 }
 
-.favoritos-edicao label {
+/* título: ícone + nome + linhazinha */
+.perfil-titulo-bloco {
     display: flex;
-
     align-items: center;
-
-    gap: 10px;
-
-    color: #dddddd;
-
-    font-size: 13px;
-
-    cursor: pointer;
-}
-
-.favoritos-edicao input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-
-    accent-color: #8b2ff7;
-
-    cursor: pointer;
-}
-.insignias-lista {
-    display: flex;
-
-    flex-wrap: wrap;
-
     gap: 12px;
+}
 
-    align-items: center;
+.perfil-titulo-bloco h2 {
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.perfil-insignias .perfil-titulo-bloco h2 {
+    text-transform: uppercase;
+}
+
+.perfil-titulo-icone {
+    flex: 0 0 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--p-azul), #17228f);
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-shadow: 0 0 18px rgba(42, 67, 214, 0.55);
+}
+
+.perfil-bio .perfil-titulo-icone {
+    background: #ffffff;
+    color: var(--p-vermelho);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+}
+
+.perfil-linha {
+    height: 1px;
+    margin: 14px 0 16px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.04));
+}
+
+.perfil-linha-longa {
+    flex: 1;
+    margin: 0;
 }
 
 
-.insignia-item {
-    width: 80px;
-    height: 80px;
+/* ---------- insígnias ---------- */
 
+.insignias-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px 20px;
+}
+
+.insignia {
     display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.insignia img {
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--p-borda);
+    padding: 3px;
+}
+
+.insignia-textos {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.insignia-textos strong {
+    color: var(--p-azul-claro);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.insignia-textos small {
+    color: var(--p-suave);
+    font-size: 0.74rem;
+    font-weight: 300;
+    line-height: 1.3;
+}
+
+
+/* ---------- estados vazios ---------- */
+
+.perfil-vazio {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 6px;
+    padding: 22px 12px;
+    color: var(--p-suave);
+    text-align: center;
+}
 
-    padding: 6px;
+.perfil-vazio i {
+    color: var(--p-azul-claro);
+    font-size: 1.9rem;
+}
 
-    border-radius: 16px;
+.perfil-vazio p {
+    font-size: 0.92rem;
+}
 
-    background: rgba(255, 255, 255, 0.04);
+.perfil-vazio span {
+    font-size: 0.78rem;
+    opacity: 0.8;
+}
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+.perfil-vazio-largo {
+    padding: 36px 16px;
+    border: 1px dashed var(--p-borda);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.03);
+}
 
-    transition: 0.2s ease;
+.perfil-vazio-largo .perfil-btn {
+    margin-top: 10px;
+}
 
+
+/* =====================================================
+   SEÇÕES: CURTAS FAVORITOS E MINHA PRODUÇÃO
+   ===================================================== */
+
+.perfil-secao {
+    position: relative;
+    margin-top: 34px;
+    padding: 0 var(--grade-pad);
+    scroll-margin-top: 20px;
+}
+
+.perfil-secao > .perfil-titulo-bloco {
+    margin-bottom: 18px;
+}
+
+/* ---------- favoritos ---------- */
+
+.favoritos-grade {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.favorito {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.favorito-cartaz {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    padding: 4px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--cor-borda-1, #7c3aed), var(--cor-borda-2, #06b6d4));
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.42);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.favorito-cartaz > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+a.favorito-cartaz:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.5), 0 0 34px rgba(107, 134, 255, 0.35);
+}
+
+.sem-imagem {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #141a50, #0a0d2b);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 2.2rem;
+}
+
+.sem-imagem small {
+    font-size: 0.72rem;
+}
+
+.sem-imagem[hidden] {
+    display: none;
+}
+
+.favorito h3 {
+    width: 100%;
+    margin-top: 14px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.favorito p {
+    margin-top: 3px;
+    color: var(--p-suave);
+    font-size: 0.78rem;
+    font-weight: 300;
+}
+
+/* cinco estrelas */
+.estrelas {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.20);
+    font-size: 1.05rem;
+}
+
+.estrelas .cheia {
+    color: var(--p-ouro);
+    filter: drop-shadow(0 0 6px rgba(255, 200, 61, 0.55));
+}
+
+/* espaço vazio */
+.favorito-vazio .favorito-cartaz {
+    background: transparent;
+    border: 2px dashed var(--p-borda);
+    box-shadow: none;
+}
+
+.favorito-vazio .sem-imagem {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.favorito-escolher {
+    margin-top: 14px;
+    color: var(--p-azul-claro);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.favorito-escolher:hover {
+    color: #ffffff;
+}
+
+
+/* ---------- minha produção ---------- */
+
+.producao-grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.producao-card {
+    overflow: hidden;
+    border: 1px solid var(--p-borda);
+    border-radius: 24px;
+    background: linear-gradient(165deg, #10153f 0%, #0a0d2b 100%);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.producao-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5), 0 0 34px rgba(42, 67, 214, 0.28);
+}
+
+.producao-imagem {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0a0d2b;
+}
+
+.producao-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producao-imagem img[hidden] {
+    display: none;
+}
+
+.producao-imagem .sem-imagem {
+    border-radius: 0;
+}
+
+.producao-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px 18px;
+}
+
+.producao-info h3 {
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+
+/* =====================================================
+   BOTÕES (mesmo azul e animação do botão de login)
+   ===================================================== */
+
+.perfil-btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: 1px solid #171d58;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #252b70 0%, #5960a5 50%, #252b70 100%);
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.1s ease 0.25s;
+}
+
+.perfil-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 999px;
+    background: #ffffff;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.45s ease;
+}
+
+.perfil-btn.animando::before {
+    transform: scaleX(1);
+}
+
+.perfil-btn:hover {
+    color: #ffffff;
+}
+
+.perfil-btn.animando {
+    color: #111111 !important;
+}
+
+.perfil-cartao-acao .perfil-btn {
+    width: 100%;
+}
+
+.perfil-btn-pequeno {
+    padding: 9px 20px;
+    font-size: 0.82rem;
+}
+
+/* versão discreta (cancelar, adicionar outro) */
+.perfil-btn-claro {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--p-borda);
+}
+
+
+/* =====================================================
+   PÁGINA DE EDITAR PERFIL
+   ===================================================== */
+
+.perfil-erros {
+    margin-bottom: 18px;
+    padding: 16px 20px;
+    border: 1px solid rgba(255, 90, 100, 0.45);
+    border-radius: 20px;
+    background: rgba(220, 53, 69, 0.14);
+    color: #ffb3bb;
+    font-size: 0.88rem;
+}
+
+.perfil-erros strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #ff8595;
+}
+
+.perfil-erros ul {
+    padding-left: 18px;
+    list-style: disc;
+}
+
+.perfil-erros b {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.perfil-pagina-edicao input[type="file"] {
+    display: none;
+}
+
+/* campos de texto */
+.campo-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--p-borda);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.88rem;
+    outline: 0;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.campo-input::placeholder {
+    color: rgba(255, 255, 255, 0.40);
+}
+
+.campo-input:focus {
+    border-color: var(--p-azul-claro);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 3px rgba(107, 134, 255, 0.20);
+}
+
+input[type="date"].campo-input {
+    color-scheme: dark;
+}
+
+textarea.campo-input {
+    resize: vertical;
+}
+
+/* botão "alterar foto de destaque" */
+.perfil-upload {
+    position: absolute;
+    z-index: 4;
+    top: 16px;
+    right: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    border-radius: 999px;
+    background: rgba(5, 7, 20, 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.perfil-upload:hover {
+    background: rgba(42, 67, 214, 0.85);
+    transform: translateY(-1px);
+}
+
+/* nascimento / cidade / instituição editáveis (dentro do blur azul) */
+.perfil-banner-info-edicao {
+    flex-wrap: nowrap;
+    gap: 14px;
+    padding-right: 20px;
+}
+
+.perfil-banner-info-edicao li {
+    flex: 1 1 0;
+}
+
+.perfil-banner-info-edicao li:last-child {
+    flex: 1.4 1 0;
+}
+
+.perfil-info-campo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.perfil-banner-info-edicao .campo-input {
+    padding: 7px 12px;
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(5, 7, 30, 0.45);
+    font-size: 0.84rem;
+}
+
+/* trocar foto de perfil */
+.perfil-foto-trocar {
+    position: absolute;
+    right: 2px;
+    bottom: 4px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 3px solid #0b0f2e;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--p-azul), var(--p-vermelho));
+    color: #ffffff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.perfil-foto-trocar:hover {
+    transform: scale(1.1);
+}
+
+.perfil-dica {
+    margin: 12px 0 10px;
+    color: var(--p-suave);
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.4;
+}
+
+.perfil-dica-rodape {
+    margin: 16px 0 0;
+    text-align: center;
+}
+
+/* características: estudante ● técnico... (chips) */
+.chips-ocupacoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.chip {
     cursor: pointer;
 }
 
+.chip input {
+    display: none;
+}
 
-.insignia-item img {
-    width: 100%;
-    height: 100%;
+.chip span {
+    display: inline-block;
+    padding: 6px 13px;
+    border: 1px solid var(--p-borda);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--p-suave);
+    font-size: 0.76rem;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
 
-    object-fit: contain;
+.chip:hover span {
+    border-color: var(--p-azul-claro);
+    color: #ffffff;
+}
+
+.chip input:checked + span {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--p-azul), #17228f);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(42, 67, 214, 0.5);
+}
+
+/* redes sociais editáveis */
+.perfil-redes-edicao {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.campo-rede {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--p-azul-claro);
+}
+
+.campo-rede > i,
+.campo-rede > svg {
+    flex: 0 0 18px;
+    font-size: 1.05rem;
+}
+
+/* biografia editável */
+.perfil-bio .campo-input {
+    flex: 1;
+    min-height: 130px;
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(90, 20, 10, 0.28);
+    line-height: 1.55;
+}
+
+.perfil-bio .campo-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.perfil-bio .campo-input:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+}
+
+.perfil-pagina-edicao .perfil-bio {
+    padding-bottom: 54px;
+}
+
+.perfil-pagina-edicao .perfil-bio-logo {
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+/* favoritos: escolher e dar estrelas */
+.favoritos-contador {
+    padding: 5px 14px;
+    border: 1px solid var(--p-borda);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.favoritos-contador.cheio {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--p-azul), #17228f);
+}
+
+.favoritos-contador.tremer {
+    animation: perfil-tremer 0.45s ease;
+}
+
+@keyframes perfil-tremer {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+.favoritos-grade-edicao {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+}
+
+.favorito-edicao {
+    position: relative;
+}
+
+.favorito-check {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.favorito-edicao .favorito-cartaz {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.favorito-edicao .favorito-cartaz:hover {
+    opacity: 0.9;
+    transform: translateY(-4px);
+}
+
+.favorito-check:checked + .favorito-cartaz {
+    opacity: 1;
+    box-shadow: 0 0 0 3px var(--p-azul-claro), 0 0 34px rgba(107, 134, 255, 0.55);
+}
+
+.favorito-marca {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--p-azul), var(--p-vermelho));
+    color: #ffffff;
+    transform: scale(0);
+    transition: transform 0.25s ease;
+}
+
+.favorito-check:checked + .favorito-cartaz .favorito-marca {
+    transform: scale(1);
+}
+
+/* estrelas clicáveis (de 1 a 5) */
+.estrelas-edicao {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+    transition: opacity 0.2s ease;
+}
+
+.estrelas-edicao input {
+    display: none;
+}
+
+.estrelas-edicao label {
+    color: rgba(255, 255, 255, 0.22);
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.estrelas-edicao input:checked ~ label,
+.estrelas-edicao label:hover,
+.estrelas-edicao label:hover ~ label {
+    color: var(--p-ouro);
+}
+
+.estrelas-edicao label:hover {
+    transform: scale(1.18);
+}
+
+/* só dá para dar estrelas aos curtas escolhidos */
+.favorito-edicao:not(:has(.favorito-check:checked)) .estrelas-edicao {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* produção: campos */
+.producao-grade-edicao {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.producao-edicao[hidden] {
+    display: none;
+}
+
+.producao-upload {
+    cursor: pointer;
+}
+
+.producao-upload:hover {
+    filter: brightness(1.15);
+}
+
+.producao-info-edicao {
+    align-items: stretch;
+    gap: 10px;
+}
+
+.producao-remover {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    color: #ff8595;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.producao-remover input {
+    accent-color: #ff5a6a;
+}
+
+#producao-adicionar {
+    margin-top: 18px;
+}
+
+#producao-adicionar[hidden] {
+    display: none;
+}
+
+/* botões salvar / cancelar (ficam fixos embaixo da tela) */
+.perfil-acoes {
+    position: sticky;
+    z-index: 15;
+    bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    width: fit-content;
+    margin: 34px 0 0 auto;
+    padding: 10px;
+    border: 1px solid var(--p-borda);
+    border-radius: 999px;
+    background: rgba(8, 11, 38, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
 
 
-.insignia-item:hover {
-    transform: translateY(-3px);
+/* =====================================================
+   TELAS MENORES (o perfil é pensado para computador)
+   ===================================================== */
 
-    border-color: rgba(139, 47, 247, 0.5);
+@media (max-width: 1200px) {
 
-    box-shadow:
-        0 0 20px rgba(139, 47, 247, 0.15);
+    .perfil-pagina {
+        --card-w: 270px;
+    }
+
+    .perfil-direita {
+        grid-template-columns: 1fr;
+    }
+
+    .favoritos-grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
+@media (max-width: 900px) {
 
-/* =========================================================
-   RESPONSIVO
-   ========================================================= */
+    .perfil-pagina {
+        padding-left: 20px;
+        padding-bottom: 120px;
+    }
 
-@media (max-width: 750px) {
+    /* menu vira uma barra fixa embaixo */
+    .perfil-menu {
+        top: auto;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 16px;
+        border-radius: 24px;
+    }
 
+    .perfil-menu-nav {
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 0 0 14px;
+        border-top: 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.16);
+    }
 
-    /* =====================================================
-       BANNER
-    ===================================================== */
+    .perfil-menu-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .perfil-menu-link {
+        width: 66px;
+        padding: 6px 0;
+    }
+
+    body:has(.perfil-pagina) main > .container {
+        margin-left: 0;
+    }
 
     .perfil-banner {
-        height: 270px;
+        height: 240px;
     }
 
-
-    /* =====================================================
-       FOTO
-    ===================================================== */
-
-    .perfil-foto {
-        top: 185px;
-
-        width: 130px;
-        height: 130px;
+    .perfil-banner-info,
+    .perfil-banner-info-edicao {
+        flex-wrap: wrap;
+        padding: 0 20px 16px;
     }
 
-
-    /* =====================================================
-       CARD PRINCIPAL
-    ===================================================== */
-
-    .perfil-card-principal {
-        width: calc(100% - 20px);
-
-        margin-top: -35px;
-    }
-
-
-    .perfil-card-nome {
-        min-height: 190px;
-
-        padding: 65px 20px 25px;
-    }
-
-
-    .perfil-card-nome h1 {
-        font-size: 29px;
-    }
-
-
-    .perfil-tipo {
-        top: 15px;
-
-        left: 15px;
-    }
-
-
-    .perfil-card-informacoes {
-        padding: 18px 20px;
-    }
-
-
-    .perfil-dados {
-        font-size: 12px;
-    }
-
-
-    /* =====================================================
-       SOBRE + INSÍGNIAS
-    ===================================================== */
-
-    .perfil-duas-colunas {
+    .perfil-grade {
         grid-template-columns: 1fr;
+        margin-top: -90px;
+        padding: 0;
     }
 
-
-    /* =====================================================
-       PRODUÇÃO + FAVORITOS
-    ===================================================== */
-
-    .perfil-producao-favoritos {
-        grid-template-columns: 1fr;
+    .perfil-direita {
+        padding-top: 0;
     }
 
-
-    /* =====================================================
-       PRODUÇÃO
-    ===================================================== */
-
-    .producao-card {
-        grid-template-columns: 1fr;
+    .perfil-cartao {
+        padding-top: 84px;
     }
 
-
-    .producao-texto {
-        padding: 25px;
+    .perfil-secao {
+        padding: 0;
     }
-
-
-    .producao-texto::after {
-        display: none;
-    }
-
-
-    .producao-imagem {
-        min-height: 180px;
-
-        height: 180px;
-    }
-
-
-    /* =====================================================
-       FAVORITOS
-    ===================================================== */
-
-    .curtas-favoritos {
-        gap: 3px;
-    }
-
-
-    .curta-favorito-cartaz {
-        aspect-ratio: 2 / 3;
-    }
-
-    /* =====================================================
-       FORMULÁRIO
-    ===================================================== */
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-
-    .editar-acoes {
-        flex-direction: column;
-    }
-
-
-    .botao-cancelar,
-    .botao-salvar {
-        width: 100%;
-    }
-
-}
-
-.insignias-lista {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.insignias-card .insignias-lista img {
-    width: 40px !important;
-    height: 40px !important;
-    object-fit: contain;
-    background: #101535;
-    border: 1px solid #1E2659;
-    border-radius: 8px;
-    padding: 4px;
 }
