@@ -158,17 +158,6 @@
     transform: translateY(-1px);
 }
 
-@media (min-width: 1200px) and (max-width: 1399.98px) {
-    .nav-links-central {
-        gap: 1.15rem !important;
-    }
-
-    .nav-links-central .nav-link {
-        font-size: 0.85rem;
-        letter-spacing: 0.2px;
-    }
-}
-
 
 /* =========================
    ESTRUTURA GERAL
@@ -897,7 +886,6 @@ footer {
 .selo-estrela {
     position: absolute;
     width: 400px;
-    max-width: 85vw;
     height: 200px;
     object-fit: contain;
     opacity: 0.9;
@@ -908,7 +896,6 @@ footer {
 .selo-imagem {
     position: relative;
     width: 400px;
-    max-width: 85vw;
     height: 200px;
     object-fit: contain;
     z-index: 3;
