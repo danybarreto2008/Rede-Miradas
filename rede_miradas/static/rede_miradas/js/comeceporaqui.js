@@ -87,17 +87,125 @@ function animarAoRolar(elemento, margemInferior) {
 
     observador.observe(elemento);
 }
-/* Aprenda. Crie. Conecte.: círculo, depois título + texto */
-animarAoRolar(document.querySelector('.aprenda-texto'));
+/* ---- COMPUTADOR: animações de cada parte da seção ---- */
+/* (no celular elas não rodam: lá cada seção inteira aparece, veja mais abaixo) */
 
-/* Trilhas: título + texto */
-animarAoRolar(document.querySelector('.trilhas-cabecalho'));
+const ehCelular = window.matchMedia('(max-width: 767.98px)').matches;
 
-/* Trilhas: ícones entram pelas laterais */
-animarAoRolar(document.querySelector('.trilhas'));
+if (!ehCelular) {
 
-/* Júri Popular: estrelas entram uma de cada lado */
-animarAoRolar(document.querySelector('.juri'));
+    /* Aprenda. Crie. Conecte.: círculo, depois título + texto */
+    animarAoRolar(document.querySelector('.aprenda-texto'));
+
+    /* Trilhas: título + texto */
+    animarAoRolar(document.querySelector('.trilhas-cabecalho'));
+
+    /* Trilhas: ícones entram pelas laterais */
+    animarAoRolar(document.querySelector('.trilhas'));
+
+    /* Júri Popular: estrelas entram uma de cada lado */
+    animarAoRolar(document.querySelector('.juri'));
+}
+
+
+/* ---- CELULAR: cada seção aparece suavemente ao rolar a página ---- */
+
+(function () {
+
+    if (!ehCelular || !('IntersectionObserver' in window)) {
+        return;
+    }
+
+    const secoes = document.querySelectorAll(
+        '.aprenda, .painel-curtas, .trilhas, .painel-selos, .juri, .painel-noticias, .secao-final .container'
+    );
+
+    const observadorSecoes = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada) {
+            if (entrada.isIntersecting) {
+                entrada.target.classList.add('revelado');
+                observadorSecoes.unobserve(entrada.target);   /* anima uma vez só */
+            }
+        });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+    secoes.forEach(function (secao) {
+        secao.classList.add('revelar');
+        observadorSecoes.observe(secao);
+    });
+
+})();
+
+
+/* ---------- Cards do Aprenda no celular: um por vez, troca a cada 3s ---------- */
+
+(function () {
+
+    const blocoCards = document.querySelector('.cards-bloco');
+
+    if (!blocoCards) {
+        return;
+    }
+
+    const cards = blocoCards.querySelectorAll('.card-bloco');
+    const telaCelular = window.matchMedia('(max-width: 767.98px)');
+
+    let cardAtual = 0;
+    let timerCards = null;
+
+    function mostrarCard(indice) {
+        cards.forEach(function (card, posicao) {
+            card.classList.toggle('card-ativo', posicao === indice);
+        });
+    }
+
+    function iniciarCards() {
+
+        blocoCards.classList.add('cards-rotativo');
+
+        cardAtual = 0;
+        mostrarCard(cardAtual);
+
+        clearInterval(timerCards);
+
+        if (cards.length > 1) {
+            timerCards = setInterval(function () {
+                cardAtual = (cardAtual + 1) % cards.length;
+                mostrarCard(cardAtual);
+            }, 3000);   /* 3000 = 3 segundos */
+        }
+    }
+
+    function pararCards() {
+
+        clearInterval(timerCards);
+        timerCards = null;
+
+        blocoCards.classList.remove('cards-rotativo');
+
+        cards.forEach(function (card) {
+            card.classList.remove('card-ativo');
+        });
+    }
+
+    function verificarTela() {
+        if (telaCelular.matches) {
+            iniciarCards();
+        } else {
+            pararCards();
+        }
+    }
+
+    verificarTela();
+
+    if (telaCelular.addEventListener) {
+        telaCelular.addEventListener('change', verificarTela);
+    } else {
+        telaCelular.addListener(verificarTela);
+    }
+
+})();
+
 
 /* ---------- Curtas em destaque: setas rolam a lista ---------- */
 
@@ -129,11 +237,72 @@ function mudarCurta(direcao) {
         return;
     }
 
+    /* computador: anda quase uma tela; celular: anda exatamente 3 curtas */
+    let passo = viewportCurtas.clientWidth * 0.85;
+
+    if (window.matchMedia('(max-width: 767.98px)').matches) {
+
+        const curta = viewportCurtas.querySelector('.curta-card');
+        const lista = viewportCurtas.querySelector('.curtas-lista');
+
+        if (curta && lista) {
+            const espaco = parseFloat(getComputedStyle(lista).columnGap) || 0;
+            passo = (curta.offsetWidth + espaco) * 3;
+        }
+    }
+
     viewportCurtas.scrollBy({
-        left: viewportCurtas.clientWidth * 0.85 * direcao,
+        left: passo * direcao,
         behavior: 'smooth'
     });
 }
+
+
+/* ---------- Botões: animação igual à do botão de login ---------- */
+
+(function () {
+
+    const botoesAnimados = document.querySelectorAll(
+        '.btn-pilula, .btn-amarelo, .slide-fixo-botao, .secao-final .btn-neon'
+    );
+
+    botoesAnimados.forEach(function (botao) {
+
+        botao.addEventListener('click', function (evento) {
+
+            const destino = botao.getAttribute('href');
+
+            /* sem link, nova aba ou Ctrl/Shift + clique: deixa o navegador agir normal */
+            if (!destino || botao.target === '_blank' || evento.button !== 0 ||
+                evento.ctrlKey || evento.metaKey || evento.shiftKey) {
+                return;
+            }
+
+            evento.preventDefault();
+
+            /* já está animando: ignora o segundo clique */
+            if (botao.classList.contains('animando')) {
+                return;
+            }
+
+            /* começa a animação (a camada branca abre do centro) */
+            botao.classList.add('animando');
+
+            /* espera a animação terminar e abre a página */
+            setTimeout(function () {
+                window.location.href = botao.href;
+            }, 450);
+        });
+    });
+
+    /* se o usuário voltar pelo botão "voltar" do navegador, o botão volta ao normal */
+    window.addEventListener('pageshow', function () {
+        botoesAnimados.forEach(function (botao) {
+            botao.classList.remove('animando');
+        });
+    });
+
+})();
 
 
 /* ---------- Seção final: triângulos passam por cima do rodapé ---------- */

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=23">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/comeceporaqui.css' %}?v=24">
 
 
 
@@ -324,11 +324,11 @@
             </p>
         {% endif %}
 
-        {% if secao_final.texto_botao and secao_final.link_botao %}
-            <a href="{{ secao_final.link_botao }}" class="btn-neon mt-3 d-inline-block">
-                {{ secao_final.texto_botao }}
-            </a>
-        {% endif %}
+        {# Botão sempre aparece: se não estiver preenchido no admin, usa "Começar agora" -> cadastro #}
+        {% url 'account_signup' as url_cadastro %}
+        <a href="{{ secao_final.link_botao|default:url_cadastro }}" class="btn-neon mt-3 d-inline-block">
+            {{ secao_final.texto_botao|default:"Começar agora" }}
+        </a>
 
     </div>
 
@@ -355,6 +355,6 @@
     }
 </script>
 
-<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=14"></script>
+<script src="{% static 'rede_miradas/js/comeceporaqui.js' %}?v=15"></script>
 
 {% endblock %}
