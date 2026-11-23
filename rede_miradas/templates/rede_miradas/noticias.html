@@ -7,19 +7,32 @@ Notícias | Rede Miradas
 
 {% block conteudo %}
 
-<link rel="stylesheet" href="{% static 'rede_miradas/css/noticias.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/noticias.css' %}?v=20261123_design_v2">
 
 <div class="pagina-noticias">
 
+    {# ================= DESTAQUE PRINCIPAL ================= #}
     {% if destaque %}
 
-        <section class="destaque-full" style="background-color: {{ destaque.cor_fundo_destaque }};">
+        <section class="destaque-full"
+                 {% if destaque.cor_fundo_destaque %}style="--cor-destaque: {{ destaque.cor_fundo_destaque }};"{% endif %}>
+
+            <span class="deco-icone deco-icone-frente deco-lapis" aria-hidden="true">
+                <img src="{% static 'rede_miradas/img/icone-roteiro.png' %}?v=5" alt="">
+            </span>
+
+            <span class="deco-icone deco-icone-frente deco-livro" aria-hidden="true">
+                <img src="{% static 'rede_miradas/img/icone-edicao.svg' %}?v=5" alt="">
+            </span>
 
             <div class="destaque-conteudo">
 
                 <div class="destaque-texto">
 
-                    <span class="destaque-selo">MIRADAS</span>
+                    <span class="destaque-selo">Miradas</span>
 
                     <h1>{{ destaque.titulo }}</h1>
 
@@ -46,7 +59,15 @@ Notícias | Rede Miradas
     {% endif %}
 
 
+    {# ================= ÚLTIMAS NOTÍCIAS + BUSCA ================= #}
     <section class="ultimas-noticias">
+
+        <span class="deco-estrela deco-estrela-esq" aria-hidden="true"></span>
+        <span class="deco-estrela deco-estrela-dir" aria-hidden="true"></span>
+
+        <span class="deco-icone deco-lateral deco-mao" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-equipes.png' %}?v=5" alt="">
+        </span>
 
         <div class="titulo-noticias">
 
@@ -89,6 +110,7 @@ Notícias | Rede Miradas
     </section>
 
 
+    {# ================= DESTAQUES SECUNDÁRIOS ================= #}
     {% if destaques_secundarios %}
 
     <section class="destaques-secundarios">
@@ -105,7 +127,8 @@ Notícias | Rede Miradas
                         {% endif %}
                     </div>
 
-                    <div class="card-destaque-info" style="background-color: {{ noticia.cor_fundo_destaque }};">
+                    <div class="card-destaque-info"
+                         {% if noticia.cor_fundo_destaque %}style="background-color: {{ noticia.cor_fundo_destaque }};"{% endif %}>
                         <h3>{{ noticia.titulo }}</h3>
                         <p class="card-destaque-data">{{ noticia.data_publicacao|date:"d \d\e F \d\e Y" }}</p>
                     </div>
@@ -120,11 +143,15 @@ Notícias | Rede Miradas
 
     {% endif %}
 
+
+    {# ================= OUTROS POSTS + CARREGAR MAIS ================= #}
     {% if pagina_outros %}
 
     <section class="outros-posts"
              data-pagina-atual="{{ pagina_outros.number }}"
              data-total-paginas="{{ pagina_outros.paginator.num_pages }}">
+
+        <span class="deco-estrela deco-estrela-esq" aria-hidden="true"></span>
 
         <div class="outros-posts-grid" id="grid-outros-posts">
             {% include "rede_miradas/_cards_outros_posts.html" %}
@@ -144,8 +171,16 @@ Notícias | Rede Miradas
 
     {% endif %}
 
+    {# ================= TRIÂNGULOS (enfeite do fim da página) ================= #}
+    <div class="deco-rodape" aria-hidden="true">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="deco-triangulo deco-triangulo-esq" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="deco-triangulo deco-triangulo-dir" alt="">
+    </div>
+
 </div>
 
+
+{# ================= BUSCA AUTOMÁTICA ================= #}
 <script>
     (function () {
         const input = document.getElementById('campo-busca');
@@ -162,13 +197,18 @@ Notícias | Rede Miradas
             }, 600);
         });
 
-        input.focus();
-        const valor = input.value;
-        input.value = '';
-        input.value = valor;
+        // Só devolve o foco ao campo depois de uma busca,
+        // para a página não rolar até a busca quando é aberta normalmente
+        if (input.value) {
+            input.focus({ preventScroll: true });
+            const valor = input.value;
+            input.value = '';
+            input.value = valor;
+        }
     })();
 </script>
 
+{# ================= CARREGAR MAIS ================= #}
 <script>
     (function () {
         const secao = document.querySelector('.outros-posts');
@@ -224,6 +264,26 @@ Notícias | Rede Miradas
                 .catch(function () {
                     restaurarBotao();
                 });
+        });
+    })();
+</script>
+
+{# ================= ANIMAÇÃO DO BOTÃO (igual ao Comece por aqui) ================= #}
+<script>
+    (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        document.querySelectorAll('.botao-leia').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || link.target === '_blank') return;
+
+                e.preventDefault();
+                link.classList.add('animando');
+
+                setTimeout(function () {
+                    window.location.href = link.href;
+                }, 450);
+            });
         });
     })();
 </script>

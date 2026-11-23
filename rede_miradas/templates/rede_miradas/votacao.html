@@ -4,7 +4,10 @@
 {% block titulo %}Júri Popular | Rede Miradas{% endblock %}
 
 {% block conteudo %}
-<link rel="stylesheet" href="{% static 'rede_miradas/css/votacao.css' %}?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/votacao.css' %}?v=20261123_v2">
 
 <div class="votacao-pagina">
 
@@ -22,7 +25,11 @@
 
         <div class="votacao-hero-conteudo container">
 
-            <span class="votacao-etiqueta">3º MIRADAS · 2026</span>
+            <div class="votacao-etiqueta-wrapper">
+                <span class="votacao-etiqueta">
+                    <i class="bi bi-trophy-fill"></i> 3º MIRADAS · 2026
+                </span>
+            </div>
 
             <h1 class="votacao-hero-titulo">Júri Popular</h1>
 
@@ -35,7 +42,7 @@
 
                 <div class="votacao-status">
                     <span class="votacao-status-icone">✓</span>
-                    Voto confirmado
+                    <span>Voto confirmado</span>
                 </div>
             {% else %}
                 <p class="votacao-hero-texto">
@@ -44,8 +51,9 @@
                 </p>
 
                 {% if email_votante %}
-                    <div class="votacao-email">
-                        Você vota como <strong>{{ email_votante }}</strong>
+                    <div class="votacao-email-pill">
+                        <i class="bi bi-person-check-fill"></i>
+                        <span>Você vota como <strong>{{ email_votante }}</strong></span>
                     </div>
                 {% endif %}
             {% endif %}
@@ -59,7 +67,10 @@
     <section class="votacao-faixa">
         <div class="votacao-faixa-container">
 
-            <div class="faixa-item">III MIRADAS</div>
+            <div class="faixa-item">
+                <i class="bi bi-stars faixa-icone"></i>
+                <span>III FESTIVAL MIRADAS</span>
+            </div>
 
             <div class="faixa-separador" aria-hidden="true">
                 <svg class="faixa-estrela" viewBox="0 0 24 24">
@@ -67,7 +78,10 @@
                 </svg>
             </div>
 
-            <div class="faixa-item">VISAGENS: O FANTASTICO NO COTIDIANO</div>
+            <div class="faixa-item destaque">
+                <i class="bi bi-film faixa-icone"></i>
+                <span>VISAGENS: O FANTÁSTICO NO COTIDIANO</span>
+            </div>
 
             <div class="faixa-separador" aria-hidden="true">
                 <svg class="faixa-estrela" viewBox="0 0 24 24">
@@ -75,7 +89,21 @@
                 </svg>
             </div>
 
-            <div class="faixa-item">III MIRADAS</div>
+            <div class="faixa-item">
+                <i class="bi bi-check2-circle faixa-icone"></i>
+                <span>VOTAÇÃO ABERTA AO PÚBLICO</span>
+            </div>
+
+            <div class="faixa-separador" aria-hidden="true">
+                <svg class="faixa-estrela" viewBox="0 0 24 24">
+                    <path d="M12 0l3 5.5 6-1.5-2.5 5.5 5.5 2.5-5.5 2.5 2.5 5.5-6-1.5-3 5.5-3-5.5-6 1.5 2.5-5.5-5.5-2.5 5.5-2.5-2.5-5.5 6 1.5z"/>
+                </svg>
+            </div>
+
+            <div class="faixa-item">
+                <i class="bi bi-envelope-check faixa-icone"></i>
+                <span>1 VOTO POR E-MAIL</span>
+            </div>
 
         </div>
     </section>
@@ -95,6 +123,7 @@
 
             {% if sem_email %}
                 <div class="votacao-aviso">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     Sua conta não tem e-mail cadastrado, por isso não é possível votar.
                     Atualize seu perfil com um e-mail e volte aqui.
                 </div>
@@ -114,7 +143,8 @@
                                          loading="lazy">
                                 {% else %}
                                     <div class="voto-card-sem-imagem">
-                                        <span>II MIRADAS</span>
+                                        <i class="bi bi-film fs-2 mb-1"></i>
+                                        <span>III MIRADAS</span>
                                         <span>Cartaz indisponível</span>
                                     </div>
                                 {% endif %}
@@ -168,8 +198,21 @@
                 {% empty %}
                     <div class="col-12">
                         <div class="votacao-vazia">
-                            <h2>Nenhum curta disponível</h2>
-                            <p>Os curtas aparecerão aqui quando estiverem disponíveis para votação.</p>
+                            <div class="votacao-vazia-icone">
+                                <i class="bi bi-film"></i>
+                            </div>
+                            <span class="votacao-vazia-badge">
+                                <i class="bi bi-clock-history me-1"></i> EM BREVE
+                            </span>
+                            <h2 class="votacao-vazia-titulo">Mostra Competitiva em Preparação</h2>
+                            <p class="votacao-vazia-texto">
+                                Os curtas participantes estão sendo finalizados e em breve serão disponibilizados aqui para a votação do público.
+                            </p>
+                            <div class="votacao-vazia-tags">
+                                <span class="vazia-tag-item"><i class="bi bi-shield-check"></i> Voto único por e-mail</span>
+                                <span class="vazia-tag-item"><i class="bi bi-trophy-fill"></i> Prêmio Júri Popular</span>
+                                <span class="vazia-tag-item"><i class="bi bi-camera-reels"></i> Produção Escolar</span>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -183,7 +226,7 @@
 </div>
 
 
-<!-- MODAL DE CONFIRMAÇÃO -->
+<!-- MODAL DE CONFIRMAÇÃO (MANTIDO INTACTO) -->
 <div class="modal fade" id="modalConfirmarVoto" tabindex="-1"
      aria-labelledby="tituloModalVoto" aria-hidden="true">
 

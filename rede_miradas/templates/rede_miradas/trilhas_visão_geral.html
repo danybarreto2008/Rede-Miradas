@@ -4,7 +4,7 @@
 {% block titulo %}Trilhas de Aprendizagem | Rede Miradas{% endblock %}
 
 {% block conteudo %}
-<link rel="stylesheet" href="{% static 'rede_miradas/css/trilhas_visao_geral.css' %}?v=2.0">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/trilhas_visao_geral.css' %}?v=20261123_resp_v1">
 
 <div class="trilhas-visao-geral-page">
     <aside class="trilhas-sidebar" aria-label="Navegação das Trilhas">
@@ -58,8 +58,8 @@
                     <small class="text-white-50">Você estava acessando esta trilha recentemente nesta sessão.</small>
                 </div>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <a href="{{ ultima_trilha_acessada.url }}" class="btn btn-sm px-3 py-2 fw-bold rounded-pill text-white"
+            <div class="d-flex align-items-center gap-2 retomada-cta-wrapper">
+                <a href="{{ ultima_trilha_acessada.url }}" class="btn btn-sm px-3 py-2 fw-bold rounded-pill text-white btn-retomada-cta"
                     style="background: linear-gradient(135deg, #7c3aed 0%, #22d3ee 100%);">
                     Continuar Aula <i class="bi bi-arrow-right ms-1"></i>
                 </a>
