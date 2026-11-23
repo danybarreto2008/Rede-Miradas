@@ -973,3 +973,666 @@ footer {
 .link-voltar-inicio-selo i {
     font-size: 9px;
 }
+/* NAVBAR FIXA DURANTE A ROLAGEM */
+
+.navbar-miradas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050;
+
+    transition:
+        background 0.35s ease,
+        box-shadow 0.35s ease,
+        backdrop-filter 0.35s ease;
+}
+
+/* Página inicial antes da rolagem */
+body.home-miradas .navbar-miradas {
+    background: transparent !important;
+    box-shadow: none;
+}
+
+/* Depois da rolagem */
+body.home-miradas .navbar-miradas.navbar-rolada {
+    background: rgba(5, 7, 20, 0.94) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* =====================================
+   NAVEGAÇÃO COM INDICADOR DESLIZANTE
+   ===================================== */
+
+.nav-links-wrap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-links {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 1;
+}
+
+.nav-links .nav-link {
+    position: relative;
+    z-index: 2;
+    padding: 11px 17px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+}
+
+.nav-links .nav-link:hover {
+    color: #fff;
+}
+
+.nav-links .nav-link.ativo {
+    color: #fff;
+}
+
+.nav-indicador {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 0;
+    height: calc(100% - 12px);
+    border-radius: 999px;
+    background: rgba(255, 95, 120, 0.27);
+    border: 1px solid rgba(255, 120, 140, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        left 0.35s cubic-bezier(.22, 1, .36, 1),
+        width 0.35s cubic-bezier(.22, 1, .36, 1),
+        opacity 0.2s ease;
+}
+
+
+/* =====================================
+   MENU LATERAL NO CELULAR
+   ===================================== */
+
+#menuLateral .nav-link {
+    position: relative;
+    padding: 12px 16px;
+    border-radius: 999px;
+    color: #fff;
+    transition: background 0.25s ease;
+}
+
+#menuLateral .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+#menuLateral .nav-link.ativo {
+    background: rgba(255, 95, 120, 0.22);
+    border: 1px solid rgba(255, 120, 140, 0.3);
+    color: #fff;
+}
+
+
+/* =====================================
+   AJUSTES DE TAMANHO
+   ===================================== */
+
+@media (max-width: 1100px) and (min-width: 992px) {
+    .marca-navbar {
+        font-size: 18px;
+    }
+
+    .logo-navbar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .nav-links .nav-link {
+        padding: 10px 11px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 991px) {
+    .marca-navbar {
+        font-size: 21px;
+    }
+
+    .logo-navbar {
+        width: 46px;
+        height: 46px;
+    }
+}
+
+/* =====================================
+   MARCA DA REDE MIRADAS
+   ===================================== */
+
+.navbar-miradas .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.marca-navbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff;
+    font-size: 21px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.marca-palavra {
+    display: inline-flex;
+}
+
+.marca-palavra span {
+    display: inline-block;
+    color: #fff;
+    background: none;
+    -webkit-text-fill-color: #fff;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.marca-palavra span:hover {
+    background: linear-gradient(
+        90deg,
+        var(--rosa),
+        var(--roxo),
+        var(--azul)
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.marca-destaque {
+    font-weight: 800;
+}
+
+.logo-navbar {
+    width: auto;
+    height: 48px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.navbar-miradas .navbar-brand:hover .logo-navbar {
+    transform: scale(1.07);
+}
+
+
+/* =====================================
+   BARRA DE NAVEGAÇÃO
+   ===================================== */
+
+.nav-links-wrap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+
+    padding: 6px;
+
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-links {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-links .nav-link {
+    position: relative;
+    z-index: 1;
+
+    padding: 11px 15px;
+
+    color: #fff !important;
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    border-radius: 999px;
+
+    transition: color 0.25s ease;
+}
+
+.nav-links .nav-link:hover,
+.nav-links .nav-link.ativo {
+    color: #fff !important;
+    transform: none;
+}
+
+
+/* =====================================
+   CÁPSULA DESLIZANTE
+   ===================================== */
+
+.nav-links-wrap .nav-indicador {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 0;
+
+    width: 0;
+    height: 0;
+
+    opacity: 0;
+
+    background: rgba(255, 95, 120, 0.27);
+
+    border: 1px solid rgba(255, 120, 140, 0.4);
+    border-radius: 999px;
+
+    pointer-events: none;
+
+    transition:
+        left 0.35s cubic-bezier(.22, 1, .36, 1),
+        top 0.35s cubic-bezier(.22, 1, .36, 1),
+        width 0.35s cubic-bezier(.22, 1, .36, 1),
+        height 0.35s cubic-bezier(.22, 1, .36, 1),
+        opacity 0.2s ease;
+}
+
+
+/* =====================================
+   MENU LATERAL NO CELULAR
+   ===================================== */
+
+#menuLateral .nav-link {
+    position: relative;
+
+    padding: 12px 16px;
+
+    border-radius: 999px;
+    color: #fff;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+#menuLateral .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+#menuLateral .nav-link.ativo {
+    background: rgba(255, 95, 120, 0.22);
+    border: 1px solid rgba(255, 120, 140, 0.3);
+    color: #fff;
+}
+
+
+/* =====================================
+   RESPONSIVIDADE
+   ===================================== */
+
+@media (max-width: 1199px) and (min-width: 992px) {
+
+    .marca-navbar {
+        font-size: 18px;
+    }
+
+    .logo-navbar {
+        height: 43px;
+    }
+
+    .nav-links .nav-link {
+        padding: 10px 9px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 991px) {
+
+    .marca-navbar {
+        font-size: 19px;
+    }
+
+    .logo-navbar {
+        height: 43px;
+    }
+}
+
+/* =========================================================
+   NAVBAR — BARRA DE LINKS
+   ========================================================= */
+
+.navbar-links-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    padding: 6px;
+
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.navbar-links-container .nav-link {
+    position: relative;
+    z-index: 1;
+
+    padding: 11px 15px;
+
+    color: #ffffff !important;
+
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+
+    white-space: nowrap;
+    border-radius: 999px;
+
+    transition: color 0.25s ease;
+}
+
+.navbar-links-container .nav-link:hover {
+    color: #ffffff !important;
+    transform: none;
+}
+
+.navbar-links-container .nav-link.active {
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   INDICADOR DA PÁGINA ATIVA
+   ========================================================= */
+
+.nav-indicador {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 0;
+
+    width: 0;
+    height: 0;
+
+    opacity: 0;
+
+    background: rgba(255, 95, 115, 0.25);
+    border: 1px solid rgba(255, 120, 135, 0.45);
+    border-radius: 999px;
+
+    pointer-events: none;
+
+    transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        width 0.32s ease,
+        height 0.32s ease,
+        opacity 0.2s ease;
+}
+
+
+/* =========================================================
+   MENU MOBILE
+   ========================================================= */
+
+.navbar-links-mobile {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.navbar-links-mobile .nav-link {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 45px;
+
+    padding: 12px 16px;
+
+    color: #ffffff !important;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border-radius: 999px;
+
+    transition: color 0.25s ease;
+}
+
+.navbar-links-mobile .nav-link:hover {
+    color: #ffffff !important;
+    transform: none;
+}
+
+.navbar-links-mobile .nav-link.active {
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 1199px) and (min-width: 992px) {
+
+    .navbar-links-container .nav-link {
+        padding: 10px 9px;
+        font-size: 10px;
+    }
+
+    .navbar-miradas .navbar-brand {
+        font-size: 18px;
+    }
+
+    .logo-navbar {
+        height: 43px;
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    .navbar-miradas .navbar-brand {
+        font-size: 19px;
+    }
+
+    .logo-navbar {
+        height: 43px;
+    }
+
+}
+/* Menu lateral acima da navbar */
+#menuLateral {
+    z-index: 1060 !important;
+}
+
+.offcanvas-backdrop {
+    z-index: 1055 !important;
+}
+/* Efeito de brilho na marca */
+.navbar-miradas .marca-navbar {
+    position: relative;
+    display: inline-flex;
+    gap: 5px;
+    isolation: isolate;
+    color: #fff !important;
+}
+
+.navbar-miradas .marca-navbar::before {
+    content: "";
+    position: absolute;
+    inset: -1px -3px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 47, 214, 0.25),
+        rgba(139, 47, 247, 0.3),
+        rgba(34, 211, 238, 0.25)
+    );
+    filter: blur(6px);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity .5s ease;
+    pointer-events: none;
+}
+/* Ativa o brilho ao passar o mouse */
+.navbar-miradas .marca-navbar:hover::before {
+    opacity: 1;
+}
+
+/* Mantém todas as letras brancas */
+.navbar-miradas .marca-palavra > span {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff;
+    background: none;
+}
+/* =====================================
+   NAVBAR AO DESCER A PÁGINA
+   ===================================== */
+
+.navbar-miradas.navbar-rolada {
+    background: rgba(5, 7, 20, 0.60) !important;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =====================================
+   TRANSIÇÃO DAS LOGOS
+   ===================================== */
+
+.logo-navbar-wrap {
+    position: relative;
+
+    display: block;
+
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+}
+
+.logo-navbar-wrap .logo-navbar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    transition:
+        opacity 0.30s ease,
+        transform 0.55s ease;
+}
+
+/* Logo branca */
+
+.logo-navbar-wrap .logo-branca {
+    opacity: 1;
+}
+
+/* Logo colorida */
+
+.logo-navbar-wrap .logo-colorida {
+    opacity: 0;
+}
+
+/* Quando a página desce */
+
+.navbar-miradas.navbar-rolada .logo-branca {
+    opacity: 0;
+}
+
+.navbar-miradas.navbar-rolada .logo-colorida {
+    opacity: 1;
+}
+
+/* Efeito ao passar o cursor */
+
+.navbar-miradas .navbar-brand:hover .logo-navbar {
+    transform: scale(1.07);
+}
+/* Aumenta somente a logo branca */
+.logo-navbar-wrap .logo-branca {
+    transform: scale(2.40);
+}
+/* Espaço da navbar fixa nas páginas internas */
+body main {
+    padding-top: 70px;
+    background-color: #050714;
+}
+
+/* Exceções */
+body main:has(.carrossel),
+body main:has(.trilhas-pagina),
+body main:has(.pagina-sobre) {
+    padding-top: 0;
+}
+
+/* Não adicionar espaço na página inicial */
+body main:has(.carrossel) {
+    padding-top: 0;
+}
+
+/* Não adicionar espaço na página principal de trilhas */
+body main:has(.trilhas-pagina) {
+    padding-top: 0;
+}
+/* Página Como tudo começou */
+body main:has(.pagina-sobre) {
+    padding-top: 0 !important;
+}
