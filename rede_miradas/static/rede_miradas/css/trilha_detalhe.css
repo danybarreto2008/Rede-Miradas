@@ -351,6 +351,45 @@
     text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 
+/* Imagens responsivas no conteúdo rico */
+.topic-rich-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 1.5rem auto;
+}
+
+/* Tabelas responsivas com rolagem interna quando necessário */
+.topic-rich-content table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    display: block;
+}
+
+.topic-rich-content table td,
+.topic-rich-content table th {
+    padding: 0.65rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Vídeos e iframes incorporados (YouTube, Vimeo, oEmbed) */
+.topic-rich-content iframe,
+.topic-rich-content video,
+.topic-rich-content .media,
+.topic-rich-content figure.media {
+    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border-radius: 8px;
+    border: none;
+    margin: 1.5rem 0;
+}
+
 /* ==========================================================================
    SEÇÃO INTERATIVA DE LINKS E RECURSOS ÚTEIS
    ========================================================================== */
@@ -866,6 +905,19 @@
     .btn-trilha-nav {
         width: 100%;
         justify-content: center;
+    }
+
+    .trilha-bottom-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .trilha-nav-group-left,
+    .trilha-nav-group-right {
+        width: 100%;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 }
 

@@ -413,4 +413,42 @@
     .trilha-card-body {
         padding: 1rem 1.15rem;
     }
+
+    .subtopico-text {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 0.88rem;
+    }
+
+    .trilha-subtopico-item {
+        padding: 0.65rem 0.15rem;
+        gap: 0.6rem;
+    }
+
+    .btn-comecar-subtopico {
+        padding: 0.32rem 0.95rem;
+        font-size: 0.78rem;
+        flex-shrink: 0;
+    }
+
+    .trilha-retomada-banner {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+
+    .retomada-cta-wrapper {
+        width: 100%;
+    }
+
+    .btn-retomada-cta {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding-top: 0.55rem !important;
+        padding-bottom: 0.55rem !important;
+    }
 }
