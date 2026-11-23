@@ -7,42 +7,36 @@
 
 {% block conteudo %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/noticias.css' %}"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/noticias.css' %}?v=20261123_design_v2">
 
 <div class="pagina-noticias">
 
     <article class="noticia-detalhe">
+
+        <span class="deco-estrela deco-estrela-dir" aria-hidden="true"></span>
 
         <!-- Categoria da notícia -->
         <span class="categoria-card">
             {{ noticia.get_categoria_display }}
         </span>
 
-
         <!-- Título -->
-        <h1>
-            {{ noticia.titulo }}
-        </h1>
-
+        <h1>{{ noticia.titulo }}</h1>
 
         <!-- Data de publicação -->
         <p class="card-data">
             {{ noticia.data_publicacao|date:"d/m/Y" }}
         </p>
 
-
         <!-- Imagem da notícia -->
-        <div class="noticia-detalhe-imagem">
-
-            <img
-                src="{{ noticia.imagem.url }}"
-                alt="{{ noticia.titulo }}"
-            >
-
-        </div>
+        {% if noticia.imagem %}
+            <div class="noticia-detalhe-imagem">
+                <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+            </div>
+        {% endif %}
 
     </article>
 
@@ -50,8 +44,18 @@
     <!-- Corpo da notícia com menu lateral fixo -->
     <div class="noticia-conteudo">
 
+        <span class="deco-estrela deco-estrela-esq" aria-hidden="true"></span>
+
+        <span class="deco-icone deco-lateral deco-livro" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-edicao.svg' %}?v=5" alt="">
+        </span>
+
+        <span class="deco-icone deco-lateral deco-lapis" aria-hidden="true">
+            <img src="{% static 'rede_miradas/img/icone-roteiro.png' %}?v=5" alt="">
+        </span>
+
         <div class="noticia-indice-wrapper">
-            <nav class="noticia-indice" id="noticia-indice">
+            <nav class="noticia-indice" id="noticia-indice" aria-label="Nesta notícia">
                 <!-- Preenchido automaticamente via JavaScript -->
             </nav>
         </div>
@@ -74,15 +78,12 @@
             <div class="noticias-semelhantes-grid">
 
                 {% for semelhante in noticias_semelhantes %}
-                <a
-                    href="{% url 'noticia_detalhe' semelhante.slug %}"
-                    class="card-semelhante"
-                >
+                <a href="{% url 'noticia_detalhe' semelhante.slug %}" class="card-semelhante">
+
                     <div class="card-semelhante-imagem">
-                        <img
-                            src="{{ semelhante.imagem.url }}"
-                            alt="{{ semelhante.titulo }}"
-                        >
+                        {% if semelhante.imagem %}
+                            <img src="{{ semelhante.imagem.url }}" alt="{{ semelhante.titulo }}">
+                        {% endif %}
                     </div>
 
                     <div class="card-semelhante-info">
@@ -91,6 +92,7 @@
                             {{ semelhante.data_publicacao|date:"d/m/Y" }}
                         </p>
                     </div>
+
                 </a>
                 {% endfor %}
 
@@ -103,18 +105,22 @@
 
 
     <!-- Voltar para a página de notícias -->
-    <div class="noticia-detalhe">
-        <a
-            href="{% url 'noticias' %}"
-            class="botao-leia"
-        >
+    <div class="noticia-voltar">
+        <a href="{% url 'noticias' %}" class="botao-leia">
             ← Voltar para notícias
         </a>
+    </div>
+
+    {# ================= TRIÂNGULOS (enfeite do fim da página) ================= #}
+    <div class="deco-rodape" aria-hidden="true">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="deco-triangulo deco-triangulo-esq" alt="">
+        <img src="{% static 'rede_miradas/img/triangulomiradas.png' %}" class="deco-triangulo deco-triangulo-dir" alt="">
     </div>
 
 </div>
 
 
+{# ================= MENU LATERAL (índice automático) ================= #}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const texto = document.getElementById("noticia-texto");
@@ -183,6 +189,26 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(titulo);
     });
 });
+</script>
+
+{# ================= ANIMAÇÃO DO BOTÃO (igual ao Comece por aqui) ================= #}
+<script>
+    (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        document.querySelectorAll('.botao-leia').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || link.target === '_blank') return;
+
+                e.preventDefault();
+                link.classList.add('animando');
+
+                setTimeout(function () {
+                    window.location.href = link.href;
+                }, 450);
+            });
+        });
+    })();
 </script>
 
 {% endblock %}
