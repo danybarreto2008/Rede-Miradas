@@ -7,27 +7,24 @@ Como Tudo Começou | Rede Miradas
 
 {% block conteudo %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'rede_miradas/css/como_tudo_comecou.css' %}"
->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="{% static 'rede_miradas/css/como_tudo_comecou.css' %}?v=2">
 
 <div class="pagina-sobre">
 
     <!-- Hero -->
-    <section class="sobre-hero">
+    <section class="sobre-hero sobre-anim">
 
-        <div class="container text-center py-5">
+        <span class="sobre-estrela sobre-estrela-esq" aria-hidden="true"></span>
+        <span class="sobre-estrela sobre-estrela-dir" aria-hidden="true"></span>
 
-            <span class="sobre-selo">
-                NOSSA HISTÓRIA
-            </span>
+        <div class="sobre-hero-conteudo">
 
-            <h1 class="gradiente-texto fw-bold mt-3">
-                O Miradas nasceu de uma pergunta simples
-            </h1>
+            <span class="sobre-selo">Nossa história</span>
 
-            <p class="sobre-hero-texto mx-auto mt-3">
+            <h1>O Miradas nasceu de uma pergunta simples</h1>
+
+            <p class="sobre-hero-texto">
                 E se todo estudante interessado em cinema e produção audiovisual
                 tivesse um lugar para aprender, criar e mostrar o próprio trabalho,
                 sem precisar sair da escola pra isso?
@@ -39,24 +36,20 @@ Como Tudo Começou | Rede Miradas
 
 
     <!-- Como tudo começou -->
-    <section class="container sobre-secao py-5">
+    <section class="sobre-secao">
 
-        <div class="row align-items-center g-5">
+        <div class="sobre-wrap sobre-duas-colunas">
 
-            <div class="col-lg-6">
+            <div class="revelar">
 
-                <span class="sobre-tag">
-                    A ORIGEM
-                </span>
+                <span class="sobre-tag">A origem</span>
 
-                <h2 class="mt-3 mb-3">
-                    Como tudo começou
-                </h2>
+                <h2 class="sobre-titulo">Como tudo começou</h2>
 
                 <p class="sobre-paragrafo">
                     O Miradas surgiu dentro do IFRN – Campus São Paulo do Potengi,
-                    a partir de um festival de curtas-metragens organizado pela professora 
-                    Julianny Simião - professora do primeiro ano de Língua Portuguesa e Literatura 
+                    a partir de um festival de curtas-metragens organizado pela professora
+                    Julianny Simião - professora do primeiro ano de Língua Portuguesa e Literatura
                     no campus. Seu desejo era dar mais espaço à produção
                     audiovisual dentro da escola.
                 </p>
@@ -72,23 +65,17 @@ Como Tudo Começou | Rede Miradas
 
             </div>
 
-            <div class="col-lg-6">
+            <div class="sobre-coluna-midia revelar" style="--atraso: 0.2s">
 
-                <div class="sobre-card-imagem card-escuro p-4">
+                <div class="sobre-card sobre-card-destaque">
 
-                    <i class="bi bi-film sobre-card-icone"></i>
+                    <i class="bi bi-film sobre-card-icone" aria-hidden="true"></i>
 
-                    <span class="sobre-tag d-block mb-2">
-                        DESDE
-                    </span>
+                    <span class="sobre-tag">Desde</span>
 
-                    <div class="sobre-numero sobre-numero-grande gradiente-texto">
-                        2024
-                    </div>
+                    <p class="sobre-numero">2024</p>
 
-                    <p class="mb-0 text-white-50">
-                        Ano da primeira edição do festival que deu origem ao projeto
-                    </p>
+                    <p>Ano da primeira edição do festival que deu origem ao projeto</p>
 
                 </div>
 
@@ -100,55 +87,51 @@ Como Tudo Começou | Rede Miradas
 
 
     <!-- Missão: Aprender, Criar, Conectar -->
-    <section class="sobre-secao-escura py-5">
+    <section class="sobre-secao sobre-roxo">
 
-        <div class="container">
+        <div class="sobre-wrap">
 
-            <div class="text-center mb-5">
+            <div class="sobre-centro revelar">
 
-                <span class="sobre-tag">
-                    NOSSA MISSÃO
-                </span>
+                <span class="sobre-tag">Nossa missão</span>
 
-                <h2 class="mt-3">
-                    Três pilares guiam tudo o que fazemos
-                </h2>
+                <h2 class="sobre-titulo">Três pilares guiam tudo o que fazemos</h2>
 
             </div>
 
-            <div class="row g-4">
+            <div class="sobre-pilares">
 
-                <div class="col-md-4">
-                    <div class="card-escuro sobre-pilar h-100 p-4 text-center">
-                        <div class="sobre-pilar-emoji">🎬</div>
-                        <h3 class="h5 mt-3">Aprender</h3>
-                        <p class="text-white-50 mb-0">
+                <div class="revelar" style="--atraso: 0s">
+                    <article class="sobre-card sobre-pilar">
+                        <span class="sobre-pilar-emoji" aria-hidden="true">🎬</span>
+                        <h3>Aprender</h3>
+                        <p>
                             Conteúdo prático sobre roteiro, direção, fotografia e
                             edição, pensado para quem está começando agora.
                         </p>
-                    </div>
+                    </article>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card-escuro sobre-pilar h-100 p-4 text-center">
-                        <div class="sobre-pilar-emoji">✂️</div>
-                        <h3 class="h5 mt-3">Criar</h3>
-                        <p class="text-white-50 mb-0">
+                <div class="revelar" style="--atraso: 0.2s">
+                    <article class="sobre-card sobre-pilar">
+                        <span class="sobre-pilar-emoji" aria-hidden="true">✂️</span>
+                        <h3>Criar</h3>
+                        <p>
                             Trilhas de aprendizagem que acompanham cada etapa da
                             produção de um curta-metragem, do zero à exibição.
                         </p>
-                    </div>
+                    </article>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card-escuro sobre-pilar h-100 p-4 text-center">
-                        <div class="sobre-pilar-emoji">🔗</div>
-                        <h3 class="h5 mt-3">Conectar</h3>
-                        <p class="text-white-50 mb-0">
+                <div class="revelar" style="--atraso: 0.4s">
+                    <article class="sobre-card sobre-pilar">
+                        <span class="sobre-pilar-emoji" aria-hidden="true">🔗</span>
+                        <h3>Conectar</h3>
+                        <p>
                             Um espaço para estudantes e professores compartilharem
                             produções, bastidores e conquistas da comunidade.
                         </p>
-                    </div>
+                    </article>
                 </div>
 
             </div>
@@ -158,69 +141,73 @@ Como Tudo Começou | Rede Miradas
     </section>
 
 
-    <!-- Curtas em destaque -->
-    <section class="container sobre-secao py-5">
+    <!-- Curtas em destaque (painel vermelho com curvas) -->
+    <section class="sobre-painel-area">
 
-        <div class="text-center mb-5">
+        <div class="painel-curtas revelar">
 
-            <span class="sobre-tag">
-                NOSSAS PRODUÇÕES
-            </span>
+            <div class="painel-curtas-texto">
 
-            <h2 class="mt-3">
-                Alguns dos curtas que já saíram daqui
-            </h2>
+                <span class="painel-curtas-tag">Nossas produções</span>
 
-        </div>
+                <h2 class="painel-titulo">Alguns dos curtas que já saíram daqui</h2>
 
-        <div class="row g-4">
+                <p class="painel-curtas-paragrafo">
+                    Histórias criadas por estudantes do Miradas, do roteiro até a tela.
+                </p>
 
-            <div class="col-md-4">
-                <div class="card-escuro sobre-curta h-100 overflow-hidden">
-                    <div class="sobre-curta-imagem">
-                        <img
-                            src="{% static 'rede_miradas/img/como_comecou/avidaetudoisso.png' %}"
-                            alt="Curta-metragem 1"
-                            onerror="this.parentElement.classList.add('sem-imagem')"
-                        >
-                    </div>
-                    <div class="p-3">
-                        <h3 class="h6 mb-1">A Vida é Tudo Isso</h3>
-                        <p class="text-white-50 small mb-0">Equipe responsável: Gelo&Gela</p>
-                    </div>
-                </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card-escuro sobre-curta h-100 overflow-hidden">
-                    <div class="sobre-curta-imagem">
-                        <img
-                            src="{% static 'rede_miradas/img/como_comecou/amgdalas.png' %}"
-                            alt="Curta-metragem 2"
-                            onerror="this.parentElement.classList.add('sem-imagem')"
-                        >
-                    </div>
-                    <div class="p-3">
-                        <h3 class="h6 mb-1">Amígdalas</h3>
-                        <p class="text-white-50 small mb-0">Equipe responsável: Lírio Aranha</p>
-                    </div>
-                </div>
-            </div>
+            <div class="curtas-grade">
 
-            <div class="col-md-4">
-                <div class="card-escuro sobre-curta h-100 overflow-hidden">
-                    <div class="sobre-curta-imagem">
-                        <img
-                            src="{% static 'rede_miradas/img/como_comecou/lagartas.png' %}"
-                            alt="Curta-metragem 3"
-                            onerror="this.parentElement.classList.add('sem-imagem')"
-                        >
+                <article class="curta">
+                    <div class="curta-card">
+                        <div class="curta-midia">
+                            <img
+                                src="{% static 'rede_miradas/img/como_comecou/avidaetudoisso.png' %}"
+                                alt="Curta-metragem A Vida é Tudo Isso"
+                                onerror="this.parentElement.classList.add('sem-imagem')"
+                            >
+                        </div>
+                        <div class="curta-legenda">
+                            <h3>A Vida é Tudo Isso</h3>
+                            <p>Equipe responsável: Gelo&amp;Gela</p>
+                        </div>
                     </div>
-                    <div class="p-3">
-                        <h3 class="h6 mb-1">Largatas Não Falam</h3>
-                        <p class="text-white-50 small mb-0">Equipe responsável: Crisálida</p>
+                </article>
+
+                <article class="curta">
+                    <div class="curta-card">
+                        <div class="curta-midia">
+                            <img
+                                src="{% static 'rede_miradas/img/como_comecou/amgdalas.png' %}"
+                                alt="Curta-metragem Amígdalas"
+                                onerror="this.parentElement.classList.add('sem-imagem')"
+                            >
+                        </div>
+                        <div class="curta-legenda">
+                            <h3>Amígdalas</h3>
+                            <p>Equipe responsável: Lírio Aranha</p>
+                        </div>
                     </div>
-                </div>
+                </article>
+
+                <article class="curta">
+                    <div class="curta-card">
+                        <div class="curta-midia">
+                            <img
+                                src="{% static 'rede_miradas/img/como_comecou/lagartas.png' %}"
+                                alt="Curta-metragem Largatas Não Falam"
+                                onerror="this.parentElement.classList.add('sem-imagem')"
+                            >
+                        </div>
+                        <div class="curta-legenda">
+                            <h3>Largatas Não Falam</h3>
+                            <p>Equipe responsável: Crisálida</p>
+                        </div>
+                    </div>
+                </article>
+
             </div>
 
         </div>
@@ -228,42 +215,39 @@ Como Tudo Começou | Rede Miradas
     </section>
 
 
-    <!-- Prêmio LED -->
-    <section class="sobre-secao-escura py-5">
+    <!-- Prêmio LED (estrelas entrando pelas laterais, igual ao Júri Popular) -->
+    <section class="sobre-secao sobre-secao-estrelas sobre-anim">
 
-        <div class="container">
+        <span class="sobre-estrela sobre-estrela-esq" aria-hidden="true"></span>
+        <span class="sobre-estrela sobre-estrela-dir" aria-hidden="true"></span>
 
-            <div class="row align-items-center g-5">
+        <div class="sobre-wrap sobre-duas-colunas inverter sobre-conteudo-estrelas">
 
-                <div class="col-lg-6 order-lg-2">
-                    <div class="sobre-premio-imagem card-escuro">
-                        <img
-                            src="{% static 'rede_miradas/img/como_comecou/premio-led.png' %}"
-                            alt="Prêmio LED"
-                            onerror="this.parentElement.classList.add('sem-imagem')"
-                        >
-                    </div>
+            <div class="sobre-coluna-midia revelar">
+                <div class="sobre-imagem-card">
+                    <img
+                        src="{% static 'rede_miradas/img/como_comecou/premio-led.png' %}"
+                        alt="Prêmio LED"
+                        onerror="this.parentElement.classList.add('sem-imagem')"
+                    >
                 </div>
+            </div>
 
-                <div class="col-lg-6 order-lg-1">
+            <div class="revelar" style="--atraso: 0.2s">
 
-                    <span class="sobre-tag">
-                        RECONHECIMENTO
-                    </span>
+                <span class="sobre-tag">Reconhecimento</span>
 
-                    <h2 class="mt-3 mb-3">
-                        Selecionado entre as 80 iniciativas mais inovadoras da educação brasileira
-                    </h2>
+                <h2 class="sobre-titulo">
+                    Selecionado entre as 80 iniciativas mais inovadoras da educação brasileira
+                </h2>
 
-                    <p class="sobre-paragrafo">
-                        Em 2026, o Miradas foi reconhecido pelo Prêmio LED como uma das
-                        80 iniciativas mais inovadoras da educação no Brasil — um
-                        reconhecimento nacional do trabalho desenvolvido dentro do
-                        projeto, unindo produção audiovisual e aprendizagem prática
-                        no dia a dia da escola.
-                    </p>
-
-                </div>
+                <p class="sobre-paragrafo">
+                    Em 2026, o Miradas foi reconhecido pelo Prêmio LED como uma das
+                    80 iniciativas mais inovadoras da educação no Brasil — um
+                    reconhecimento nacional do trabalho desenvolvido dentro do
+                    projeto, unindo produção audiovisual e aprendizagem prática
+                    no dia a dia da escola.
+                </p>
 
             </div>
 
@@ -273,29 +257,15 @@ Como Tudo Começou | Rede Miradas
 
 
     <!-- Reconhecimento nacional -->
-    <section class="container sobre-secao py-5">
+    <section class="sobre-secao">
 
-        <div class="row align-items-center g-5">
+        <div class="sobre-wrap sobre-duas-colunas">
 
-            <div class="col-lg-6">
+            <div class="revelar">
 
-                <div class="sobre-premio-imagem card-escuro">
-                    <img
-                        src="{% static 'rede_miradas/img/como_comecou/achuvaguarda.png' %}"
-                        alt="Curta premiado nacionalmente"
-                        onerror="this.parentElement.classList.add('sem-imagem')"
-                    >
-                </div>
+                <span class="sobre-tag">Prêmio nacional</span>
 
-            </div>
-
-            <div class="col-lg-6">
-
-                <span class="sobre-tag">
-                    PRÊMIO NACIONAL
-                </span>
-
-                <h2 class="mt-3 mb-3">
+                <h2 class="sobre-titulo">
                     Um curta nosso, reconhecido em festival nacional
                 </h2>
 
@@ -308,31 +278,35 @@ Como Tudo Começou | Rede Miradas
 
             </div>
 
+            <div class="sobre-coluna-midia revelar" style="--atraso: 0.2s">
+                <div class="sobre-imagem-card" style="--cor-1: #ff2fd6; --cor-2: #8b2ff7;">
+                    <img
+                        src="{% static 'rede_miradas/img/como_comecou/achuvaguarda.png' %}"
+                        alt="Curta A Chuva Guarda"
+                        onerror="this.parentElement.classList.add('sem-imagem')"
+                    >
+                </div>
+            </div>
+
         </div>
 
     </section>
 
 
     <!-- Chamada final -->
-    <section class="sobre-cta py-5">
+    <section class="sobre-cta sobre-roxo">
 
-        <div class="container text-center">
+        <div class="revelar">
 
-            <h2 class="mb-3">
-                Faz parte dessa história com a gente
-            </h2>
+            <h2>Vem fazer parte dessa história com a gente!</h2>
 
-            <p class="sobre-hero-texto mx-auto mb-4">
+            <p>
                 Explore as trilhas de aprendizagem, acompanhe as notícias mais
                 recentes e comece a construir o seu próprio projeto audiovisual.
             </p>
 
-            <a
-                href="{% url 'inicial_trilhas' %}"
-                class="btn btn-neon rounded-pill px-4 py-2"
-            >
+            <a href="{% url 'inicial_trilhas' %}" class="btn-pilula">
                 Conheça as trilhas
-                <i class="bi bi-arrow-right ms-1"></i>
             </a>
 
         </div>
@@ -340,5 +314,7 @@ Como Tudo Começou | Rede Miradas
     </section>
 
 </div>
+
+<script src="{% static 'rede_miradas/js/como_tudo_comecou.js' %}?v=1"></script>
 
 {% endblock %}

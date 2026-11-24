@@ -1,322 +1,710 @@
-/* =========================================================
-   PÁGINA SOBRE — HISTÓRIA DO PROJETO MIRADAS
-   Página 100% estática (sem conteúdo cadastrado pelo admin).
-   Segue a mesma identidade visual do resto do site.
-   ========================================================= */
+/* =====================================================
+   PÁGINA "COMO TUDO COMEÇOU"
+   Mesma linguagem visual da home (comeceporaqui.css):
+   fonte Lexend, fundo #050714, painel vermelho, cards com
+   borda em degradê e brilho roxo, estrelas laterais e botão
+   azul com a animação da camada branca.
+   Tudo fica dentro de .pagina-sobre (não depende de Bootstrap).
+   ===================================================== */
 
 .pagina-sobre {
+    --vermelho: #c94433;
+    --margem: clamp(24px, 7.3vw, 100px);
+
+    font-family: "Lexend", "Segoe UI", system-ui, sans-serif;
+    background: #050714;
+    color: #fff;
+    overflow-x: clip;
+}
+
+.pagina-sobre h1,
+.pagina-sobre h2,
+.pagina-sobre h3,
+.pagina-sobre p {
+    margin: 0;
+}
+
+.pagina-sobre img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.sobre-wrap {
     width: 100%;
-
-    background-color: #03050d;
-}
-
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-.sobre-hero {
-    width: 100%;
-    padding: 80px 0 40px;
-
-    background-color: #03050d;
-    background-image: radial-gradient(
-        circle at 50% 0%,
-        rgba(139, 47, 247, 0.22),
-        transparent 60%
-    );
-}
-
-.sobre-selo {
-    display: inline-block;
-
-    padding: 6px 18px;
-
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-
-    border-radius: 999px;
-}
-
-.sobre-hero h1 {
-    font-size: 40px;
-    max-width: 780px;
+    max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.sobre-hero-texto {
-    max-width: 640px;
-
-    font-size: 17px;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.75);
+.sobre-secao {
+    position: relative;
+    padding: clamp(60px, 7vw, 100px) var(--margem);
 }
 
 
-/* =========================================================
-   SEÇÕES GERAIS
-   ========================================================= */
-
-.sobre-secao h2 {
-    font-size: 28px;
-    font-weight: 700;
-    color: #ffffff;
-}
+/* =====================================================
+   TEXTOS PADRÃO
+   ===================================================== */
 
 .sobre-tag {
     display: inline-block;
-
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: #22d3ee;
 }
 
-.sobre-paragrafo {
-    font-size: 16px;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.75);
+.sobre-titulo {
+    margin-top: 0.8rem !important;
+    font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
 }
 
-.sobre-card-imagem {
+.sobre-paragrafo {
+    margin-top: 1.1rem !important;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.sobre-centro {
+    text-align: center;
+}
+
+
+/* =====================================================
+   HERO
+   ===================================================== */
+
+.sobre-hero {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: clamp(110px, 13vw, 190px) var(--margem) clamp(70px, 8vw, 120px);
+
+    background:
+        radial-gradient(ellipse 60% 55% at 50% 0%, rgba(139, 47, 247, 0.3), transparent 70%),
+        #050714;
+}
+
+.sobre-hero-conteudo {
+    position: relative;
+    z-index: 1;
+}
+
+.sobre-selo {
+    display: inline-block;
+    padding: 0.45rem 1.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.sobre-hero h1 {
+    max-width: 900px;
+    margin: 1.4rem auto 0 !important;
+    font-size: clamp(2.2rem, 5.2vw, 4rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+}
+
+.sobre-hero-texto {
+    max-width: 620px;
+    margin: 1.4rem auto 0 !important;
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: #d3c8f3;
+}
+
+
+/* =====================================================
+   ESTRELAS DECORATIVAS (iguais às do Júri Popular)
+   ===================================================== */
+
+.sobre-estrela {
+    position: absolute;
+    z-index: 0;
+    aspect-ratio: 1;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,9 61,38 92,38 67,57 77,88 50,70 23,88 33,57 8,38 39,38' fill='%23262262' stroke='%23262262' stroke-width='9' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+
+    transform: rotate(var(--rot));
+    transition:
+        transform 1s cubic-bezier(0.22, 0.9, 0.3, 1) var(--atraso, 0s),
+        opacity 0.7s ease var(--atraso, 0s);
+}
+
+.sobre-estrela-esq {
+    width: clamp(200px, 30vw, 420px);
+    left: -9%;
+    top: 6%;
+    --rot: -16deg;
+    --entra-x: -70vw;
+    --atraso: 0.1s;
+}
+
+.sobre-estrela-dir {
+    width: clamp(180px, 27vw, 380px);
+    right: -11%;
+    top: 40%;
+    --rot: 18deg;
+    --entra-x: 70vw;
+    --atraso: 0.3s;
+}
+
+/* antes de a seção aparecer: estrelas fora da tela, cada uma do seu lado */
+.sobre-anim.anim-pronto:not(.visivel) .sobre-estrela {
+    opacity: 0;
+    transform: translateX(var(--entra-x)) rotate(var(--rot));
+}
+
+
+/* =====================================================
+   DUAS COLUNAS (texto + imagem/card)
+   ===================================================== */
+
+.sobre-duas-colunas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+}
+
+.sobre-duas-colunas.inverter .sobre-coluna-midia {
+    order: -1;
+}
+
+
+/* =====================================================
+   CARD COM BORDA EM DEGRADÊ (igual ao card da home)
+   ===================================================== */
+
+.sobre-card {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background:
+        linear-gradient(#000, #000) padding-box,
+        linear-gradient(135deg, var(--cor-1, #8b2ff7), var(--cor-2, #22d3ee)) border-box;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.sobre-card:hover {
+    z-index: 2;
+    transform: translateY(-8px) scale(1.04);
+    box-shadow:
+        0 0 40px 6px rgba(139, 47, 247, 0.55),
+        0 0 110px 24px rgba(139, 47, 247, 0.3);
+}
+
+/* card do "2024" */
+.sobre-card-destaque {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    min-height: 260px;
     text-align: center;
-
-    position: relative;
-    overflow: hidden;
-
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background-image: radial-gradient(
-        circle at 50% 30%,
-        rgba(139, 47, 247, 0.18),
-        transparent 65%
-    );
-
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    min-height: 300px;
+    padding: 2.4rem 1.8rem;
 }
 
 .sobre-card-icone {
-    font-size: 26px;
-    margin-bottom: 12px;
-
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.8rem;
+    margin-bottom: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
 }
 
-.sobre-numero-grande {
-    font-size: 56px;
-    font-weight: 800;
+.sobre-numero {
+    margin: 0.5rem 0 0.9rem !important;
+    font-size: clamp(3.6rem, 7vw, 5.6rem);
+    font-weight: 600;
     line-height: 1;
-    margin-bottom: 12px;
+    background: linear-gradient(135deg, #8b2ff7, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.sobre-card-destaque p {
+    max-width: 260px;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 
-/* =========================================================
-   MISSÃO (fundo escuro com destaque)
-   ========================================================= */
+/* =====================================================
+   MISSÃO (degradê roxo igual ao das Trilhas)
+   ===================================================== */
 
-.sobre-secao-escura {
-    width: 100%;
-
-    background-color: #060815;
-    background-image: radial-gradient(
-        circle at 20% 20%,
-        rgba(34, 211, 238, 0.1),
-        transparent 50%
-    ),
-    radial-gradient(
-        circle at 80% 80%,
-        rgba(255, 47, 214, 0.1),
-        transparent 50%
-    );
-
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.sobre-roxo {
+    background:
+        radial-gradient(ellipse 70% 45% at 50% 36%, rgba(120, 105, 210, 0.25), transparent 70%),
+        linear-gradient(
+            180deg,
+            #050714 0%,
+            #13112a 18%,
+            #1f1b48 42%,
+            #1a1740 66%,
+            #0a0914 88%,
+            #050714 100%
+        );
 }
 
-.sobre-secao-escura h2 {
-    font-size: 26px;
-    font-weight: 700;
-    color: #ffffff;
+.sobre-pilares {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(24px, 5vw, 72px);
+    margin-top: clamp(70px, 8vw, 110px);
 }
 
 .sobre-pilar {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 260px;
+    padding: 3.4rem 1.6rem 2rem;
 }
 
-.sobre-pilar:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(124, 58, 237, 0.25);
-}
+.sobre-pilares > :nth-child(1) .sobre-pilar { --cor-1: #8b2ff7; --cor-2: #22d3ee; }
+.sobre-pilares > :nth-child(2) .sobre-pilar { --cor-1: #ff2fd6; --cor-2: #8b2ff7; }
+.sobre-pilares > :nth-child(3) .sobre-pilar { --cor-1: #22d3ee; --cor-2: #ff2fd6; }
 
 .sobre-pilar-emoji {
-    font-size: 32px;
+    position: absolute;
+    top: clamp(-52px, -4vw, -38px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(3.6rem, 6vw, 5.6rem);
+    line-height: 1;
+}
+
+.sobre-pilar h3 {
+    font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+    font-weight: 600;
+    margin-bottom: 0.6rem !important;
+}
+
+.sobre-pilar p {
+    font-size: 0.98rem;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 
-/* =========================================================
-   CURTAS EM DESTAQUE
-   ========================================================= */
+/* =====================================================
+   PAINEL VERMELHO (curtas) — formato orgânico, com curvas
+   ===================================================== */
 
-.sobre-curta {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+.sobre-painel-area {
+    padding: clamp(40px, 6vw, 90px) 0;
 }
 
-.sobre-curta:hover {
-    transform: translateY(-6px);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(124, 58, 237, 0.25);
-}
-
-.sobre-curta-imagem {
-    width: 100%;
-    height: 200px;
-
-    background: linear-gradient(160deg, #1a1436, #0a0818);
+.painel-curtas {
     position: relative;
     overflow: hidden;
+    isolation: isolate;
+
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+
+    margin: 0 clamp(12px, 1.5vw, 40px);
+    padding: clamp(44px, 5vw, 76px) clamp(28px, 4.5vw, 72px);
+
+    /* faixa ondulada mais clara embaixo + vermelho de base */
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath d='M0,110 C200,30 380,190 620,110 C860,30 1020,150 1200,70 L1200,200 L0,200 Z' fill='%23ffffff' fill-opacity='0.08'/%3E%3C/svg%3E") bottom / 100% 42% no-repeat,
+        var(--vermelho);
+
+    /* cantos diferentes entre si: nada de simetria */
+    border-radius: 150px 48px 120px 60px / 120px 60px 100px 70px;
 }
 
-.sobre-curta-imagem img {
-    width: 100%;
+/* manchas suaves atrás do conteúdo */
+.painel-curtas::before,
+.painel-curtas::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.painel-curtas::before {
+    width: clamp(260px, 34vw, 520px);
+    aspect-ratio: 1;
+    right: -8%;
+    top: -42%;
+    border-radius: 54% 46% 50% 50% / 48% 56% 44% 52%;
+    background: #d65a46;
+}
+
+.painel-curtas::after {
+    width: clamp(220px, 28vw, 420px);
+    aspect-ratio: 1;
+    left: -7%;
+    bottom: -48%;
+    border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%;
+    background: #b43928;
+}
+
+.painel-curtas-tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.painel-titulo {
+    margin-top: 0.8rem !important;
+    font-size: clamp(1.7rem, 3vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.005em;
+}
+
+.painel-curtas-paragrafo {
+    margin-top: 1rem !important;
+    max-width: 340px;
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.curtas-grade {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(10px, 1.6vw, 22px);
+}
+
+.curta {
     height: 100%;
-    object-fit: cover;
-    display: block;
 }
 
-
-/* =========================================================
-   IMAGENS DE DESTAQUE (Prêmio LED, curta premiado)
-   ========================================================= */
-
-.sobre-premio-imagem {
-    width: 100%;
-
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+/* card branco: foto inteira em cima, legenda embaixo */
+.curta-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     overflow: hidden;
-
-    background: linear-gradient(160deg, #1a1436, #0a0818);
-    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.sobre-premio-imagem img {
+.curta-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.curta-midia {
+    position: relative;
+    background: #1a1436;
+}
+
+/* sem altura fixa nem recorte: a imagem aparece no tamanho natural */
+.curta-midia img {
     width: 100%;
     height: auto;
     display: block;
 }
 
+.curta-legenda {
+    margin-top: auto;
+    padding: 0.85rem 1rem 1rem;
+    text-align: left;
+    color: #1b1b1b;
+}
 
-/* Enquanto a imagem real não é adicionada, mostra um aviso discreto */
+.curta-legenda h3 {
+    font-size: clamp(0.85rem, 1.15vw, 1.05rem);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.curta-legenda p {
+    margin-top: 0.2rem !important;
+    font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+    font-weight: 300;
+    color: #5b5b66;
+}
+
+
+/* =====================================================
+   IMAGEM EM MOLDURA (Prêmio LED / A Chuva Guarda)
+   ===================================================== */
+
+.sobre-imagem-card {
+    position: relative;
+    padding: 4px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--cor-1, #8b2ff7), var(--cor-2, #22d3ee));
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.sobre-imagem-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 0 40px 6px rgba(139, 47, 247, 0.55),
+        0 0 110px 24px rgba(139, 47, 247, 0.3);
+}
+
+.sobre-imagem-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.sobre-conteudo-estrelas {
+    position: relative;
+    z-index: 1;
+}
+
+.sobre-secao-estrelas {
+    overflow: hidden;
+}
+
+
+/* enquanto a imagem real não existe, mostra um aviso discreto */
+.sem-imagem {
+    position: relative;
+    min-height: 220px;
+    background: linear-gradient(160deg, #1a1436, #0a0818);
+}
+
 .sem-imagem img {
     display: none;
 }
 
-.sobre-premio-imagem.sem-imagem,
-.sobre-curta-imagem.sem-imagem {
-    min-height: 220px;
-}
-
 .sem-imagem::after {
     content: "Foto ainda não adicionada";
-
     position: absolute;
     inset: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 16px;
-
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
 }
 
 
-/* =========================================================
-   NÚMEROS
-   ========================================================= */
-
-.sobre-numero {
-    font-size: 36px;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 8px;
-}
-
-
-/* =========================================================
+/* =====================================================
    CHAMADA FINAL
-   ========================================================= */
+   ===================================================== */
 
 .sobre-cta {
-    width: 100%;
-
-    background-color: #03050d;
-    background-image: radial-gradient(
-        circle at 50% 100%,
-        rgba(255, 47, 214, 0.15),
-        transparent 60%
-    );
-
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    padding: clamp(90px, 10vw, 150px) var(--margem);
 }
 
 .sobre-cta h2 {
-    font-size: 26px;
-    font-weight: 700;
-    color: #ffffff;
+    font-size: clamp(2rem, 4.4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.9rem !important;
+}
+
+.sobre-cta p {
+    max-width: 540px;
+    margin: 0 auto 2rem !important;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
 }
 
 
-/* =========================================================
-   RESPONSIVIDADE
-   ========================================================= */
+/* =====================================================
+   BOTÃO AZUL COM ANIMAÇÃO (igual ao da home)
+   ao clicar, uma camada branca abre do centro e só depois a página muda
+   ===================================================== */
 
-@media (max-width: 768px) {
+.pagina-sobre .btn-pilula {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.85rem 2.4rem;
+    border: 1px solid #171d58;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #252b70 0%, #5960a5 50%, #252b70 100%);
+    transition: color 0.1s ease 0.25s;
+}
+
+.pagina-sobre .btn-pilula::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    border-radius: 999px;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.45s ease;
+}
+
+.pagina-sobre .btn-pilula.animando::before {
+    transform: scaleX(1);
+}
+
+.pagina-sobre .btn-pilula:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.pagina-sobre .btn-pilula.animando {
+    color: #111111 !important;
+}
+
+
+/* =====================================================
+   ANIMAÇÃO AO ROLAR (aparece uma vez só)
+   a classe "anim-pronto" é colocada pelo JS; sem JS, tudo fica visível
+   ===================================================== */
+
+.revelar {
+    transition: opacity 0.9s ease var(--atraso, 0s), transform 0.9s ease var(--atraso, 0s);
+}
+
+.revelar.anim-pronto:not(.visivel) {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .revelar,
+    .sobre-estrela {
+        transition: none;
+    }
+
+    .revelar.anim-pronto:not(.visivel) {
+        opacity: 1;
+        transform: none;
+    }
+
+    .sobre-anim.anim-pronto:not(.visivel) .sobre-estrela {
+        opacity: 1;
+        transform: rotate(var(--rot));
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVO
+   ===================================================== */
+
+@media (max-width: 991.98px) {
+
+    .sobre-duas-colunas {
+        grid-template-columns: 1fr;
+    }
+
+    .sobre-duas-colunas.inverter .sobre-coluna-midia {
+        order: 0;
+    }
+
+    .sobre-card-destaque {
+        min-height: 240px;
+    }
+
+    .sobre-pilares {
+        grid-template-columns: 1fr;
+        gap: 84px;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sobre-pilar {
+        min-height: 220px;
+    }
+
+    .painel-curtas {
+        grid-template-columns: 1fr;
+    }
+
+    .painel-curtas-paragrafo {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 767.98px) {
 
     .sobre-hero {
-        padding: 60px 0 30px;
+        padding-top: 100px;
     }
 
-    .sobre-hero h1 {
-        font-size: 26px;
+    /* sem estrelas no celular (igual à home) */
+    .sobre-estrela {
+        display: none;
     }
 
-    .sobre-hero-texto {
-        font-size: 15px;
+    /* painel menor, com as mesmas curvas */
+    .painel-curtas {
+        margin: 0 10px;
+        padding: 30px 14px 22px;
+        gap: 18px;
+        border-radius: 70px 24px 56px 30px / 56px 30px 48px 34px;
     }
 
-    .sobre-secao h2,
-    .sobre-secao-escura h2,
-    .sobre-cta h2 {
-        font-size: 22px;
+    .painel-titulo {
+        font-size: 1.35rem;
     }
 
-    .sobre-numero {
-        font-size: 28px;
+    .painel-curtas-paragrafo {
+        font-size: 0.85rem;
     }
 
-    .sobre-card-imagem {
-        min-height: 200px;
+    .curtas-grade {
+        gap: 8px;
     }
 
-    .sobre-numero-grande {
-        font-size: 40px;
+    .curta-card {
+        border-radius: 12px;
+    }
+
+    .curta-legenda {
+        padding: 0.5rem 0.5rem 0.6rem;
+    }
+
+    .curta-legenda h3 {
+        font-size: 0.66rem;
+    }
+
+    .curta-legenda p {
+        font-size: 0.56rem;
+    }
+
+    .sobre-card:hover,
+    .sobre-imagem-card:hover {
+        transform: none;
     }
 }
