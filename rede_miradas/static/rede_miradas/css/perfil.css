@@ -152,10 +152,20 @@ body:has(.perfil-pagina) main > .container {
     height: 58px;
     display: grid;
     place-items: center;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.30);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
     transition: transform 0.25s ease;
+}
+
+.perfil-menu-logo:hover {
+    transform: translateY(-2px) scale(1.04);
+}
+
+.perfil-menu-logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
 }
 
 .perfil-menu-logo:hover {
@@ -486,9 +496,9 @@ body:has(.perfil-pagina) main > .container {
     display: grid;
     grid-template-columns: var(--card-w) minmax(0, 1fr);
     gap: var(--grade-gap);
-    margin-top: -210px;               /* o card sobe por cima da foto de destaque */
+    margin-top: -195px;
     padding: 0 var(--grade-pad);
-    align-items: start;
+    align-items: stretch;
 }
 
 .perfil-direita {
@@ -510,6 +520,8 @@ body:has(.perfil-pagina) main > .container {
     text-align: center;
     background: linear-gradient(170deg, #121852 0%, #0b0f2e 60%, #090c26 100%);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.50), 0 0 50px rgba(42, 67, 214, 0.18);
+    height: 100%;
+    align-self: stretch;
 }
 
 .perfil-foto {
@@ -1155,8 +1167,11 @@ textarea.campo-input {
 /* nascimento / cidade / instituição editáveis (dentro do blur azul) */
 .perfil-banner-info-edicao {
     flex-wrap: nowrap;
-    gap: 14px;
+    gap: 14px 60px;
     padding-right: 20px;
+}
+.perfil-banner-info li {
+    flex-shrink: 0;
 }
 
 .perfil-banner-info-edicao li {
@@ -1570,4 +1585,116 @@ textarea.campo-input {
     .perfil-secao {
         padding: 0;
     }
+}
+/* =====================================================
+   AJUSTES DE RESPONSIVIDADE E ALINHAMENTO — PERFIL
+   ===================================================== */
+
+/* Remove o espaço superior excessivo do conteúdo */
+body:has(.perfil-pagina) main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+body:has(.perfil-pagina) main > .container {
+    padding-top: 0 !important;
+}
+
+/* Ajusta o início da página */
+.perfil-pagina {
+    padding-top: 10px;
+}
+/* =====================================================
+   RESPONSIVIDADE PARA CELULARES
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    /* Espaçamento geral */
+    .perfil-pagina {
+        padding: 10px 14px 120px;
+    }
+
+    /* Banner cresce conforme as informações */
+    .perfil-banner {
+        height: auto;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .perfil-banner-info,
+    .perfil-banner-info-edicao {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        flex-wrap: nowrap;
+
+        gap: 16px;
+
+        padding: 180px 18px 22px;
+    }
+
+    /* Cada informação ocupa uma linha */
+    .perfil-banner-info li,
+    .perfil-banner-info-edicao li {
+        width: 100%;
+        flex: none;
+        min-width: 0;
+    }
+
+    .perfil-banner-info-edicao li:last-child {
+        flex: none;
+    }
+
+    /* Card do usuário fica abaixo das informações */
+    .perfil-grade {
+        grid-template-columns: 1fr;
+        margin-top: 84px;
+        padding: 0;
+        gap: 24px;
+    }
+
+    .perfil-cartao {
+        width: 100%;
+        height: auto;
+        padding-top: 84px;
+    }
+
+    /* Evita sobreposição dos cards */
+    .perfil-direita {
+        grid-template-columns: 1fr;
+        padding-top: 0;
+    }
+
+    /* Espaçamento das seções */
+    .perfil-secao {
+        padding: 0;
+    }
+
+    /* Quatro curtas lado a lado */
+    .favoritos-grade,
+    .favoritos-grade-edicao {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .favorito h3 {
+        font-size: 0.68rem;
+        overflow-wrap: anywhere;
+    }
+
+    .favorito p {
+        font-size: 0.62rem;
+        overflow-wrap: anywhere;
+    }
+
+    .favorito .estrelas {
+        font-size: 0.65rem;
+    }
+
 }
