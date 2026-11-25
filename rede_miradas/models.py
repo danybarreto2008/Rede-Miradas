@@ -98,7 +98,6 @@ class Voto(models.Model):
         return f"{self.usuario} → {self.curta}"
 
 
-# Diz se o usuário é Aluno ou Professor, ou comum
 class Perfil(models.Model):
     ALUNO = "aluno"
     PROFESSOR = "professor"
@@ -108,6 +107,22 @@ class Perfil(models.Model):
         (ALUNO, "Aluno"),
         (PROFESSOR, "Professor"),
         (COMUM, "Usuário comum"),
+    ]
+
+    # Características que o usuário pode escolher (mais de uma)
+    OCUPACOES_CHOICES = [
+        ("estudante", "Estudante"),
+        ("tec_informatica", "Técnico em Informática"),
+        ("tec_meio_ambiente", "Técnico em Meio Ambiente"),
+        ("tec_edificacoes", "Técnico em Edificações"),
+        ("professor", "Professor(a)"),
+        ("realizador", "Realizador(a)"),
+        ("roteirista", "Roteirista"),
+        ("diretor", "Diretor(a)"),
+        ("editor", "Editor(a) de vídeo"),
+        ("ator", "Ator / Atriz"),
+        ("fotografo", "Fotógrafo(a)"),
+        ("designer", "Designer"),
     ]
 
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -154,6 +169,23 @@ class Perfil(models.Model):
         "Curta", blank=True, related_name="favoritado_por"
     )
 
+    # ---- Campos novos do perfil ----
+
+    data_nascimento = models.DateField(
+        null=True, blank=True, verbose_name="Data de nascimento"
+    )
+
+    cidade = models.CharField(max_length=100, blank=True)
+
+    # guarda as chaves de OCUPACOES_CHOICES separadas por vírgula
+    ocupacoes = models.CharField(
+        max_length=300, blank=True, verbose_name="Características"
+    )
+
+    facebook = models.URLField(blank=True)
+
+    vsco = models.URLField(blank=True)
+
     class Meta:
         verbose_name = "Perfil"
         verbose_name_plural = "Perfis"
@@ -162,6 +194,70 @@ class Perfil(models.Model):
     def __str__(self):
         return f"{self.usuario} ({self.get_tipo_display()})"
 
+    @property
+    def ocupacoes_lista(self):
+        """Nomes das características escolhidas, na ordem da lista."""
+        escolhidas = [c for c in self.ocupacoes.split(",") if c]
+        return [
+            nome
+            for chave, nome in self.OCUPACOES_CHOICES
+            if chave in escolhidas
+        ]
+
+
+class NotaCurtaFavorito(models.Model):
+    """Quantas estrelas (0 a 5) o usuário deu para cada curta favorito."""
+
+    perfil = models.ForeignKey(
+        Perfil, on_delete=models.CASCADE, related_name="notas_curtas"
+    )
+
+    curta = models.ForeignKey(
+        "Curta", on_delete=models.CASCADE, related_name="notas_perfis"
+    )
+
+    nota = models.PositiveSmallIntegerField(
+        default=0, choices=[(i, i) for i in range(6)]
+    )
+
+    class Meta:
+        verbose_name = "Nota de curta favorito"
+        verbose_name_plural = "Notas de curtas favoritos"
+        unique_together = ("perfil", "curta")
+
+    def __str__(self):
+        return f"{self.perfil} → {self.curta} ({self.nota}★)"
+
+
+class ProducaoPerfil(models.Model):
+    """Curtas que o usuário produziu (seção "Minha produção")."""
+
+    perfil = models.ForeignKey(
+        Perfil, on_delete=models.CASCADE, related_name="producoes"
+    )
+
+    nome = models.CharField(max_length=200, verbose_name="Nome do curta")
+
+    link_youtube = models.URLField(
+        blank=True, verbose_name="Link do YouTube"
+    )
+
+    cartaz = models.ImageField(
+        upload_to="producoes_perfil/",
+        blank=True,
+        null=True,
+        verbose_name="Cartaz ou foto",
+    )
+
+    ordem = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Produção do perfil"
+        verbose_name_plural = "Produções do perfil"
+        ordering = ["ordem", "id"]
+
+    def __str__(self):
+        return f"{self.nome} ({self.perfil})"
 
 # Modelo dos destaques da página "Comece por aqui"
 class Destaque(models.Model):

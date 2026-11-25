@@ -55,6 +55,8 @@ urlpatterns = [
     path("votacao/", views.votacao, name="votacao"),
     path("perfil/", views.meu_perfil, name="meu_perfil"),
     path("perfil/editar/", views.editar_perfil, name="editar_perfil"),
+    path("perfil/buscar/", views.buscar_perfis, name="buscar_perfis"),
+    path("perfil/<int:pk>/", views.ver_perfil, name="ver_perfil"),
     path(
         "selos/confirmar/<int:conquista_id>/",
         views.confirmar_selo,
@@ -342,4 +344,5 @@ urlpatterns = [
         admin_views.admin_usuario_excluir,
         name="admin_usuario_excluir",
     ),
+
 ]

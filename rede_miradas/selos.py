@@ -1,6 +1,8 @@
+
 SELOS = {
     'primeiro-login': {
         'nome': 'A vida É tudo isso',
+        'motivo': 'Selo de login',
         'descricao': (
             'Você pode colecionar selos pela Rede Miradas e '
             'acessá-los no seu perfil.'
@@ -9,9 +11,9 @@ SELOS = {
     },
     'primeiro-voto': {
         'nome': 'Júri Popular',
+        'motivo': 'Selo de votação',
         'descricao': 'Você votou no júri popular pela primeira vez.',
         'imagem': 'rede_miradas/img/selos/camaleao.png',
         'estrela': 'rede_miradas/img/selos/estrelaCamaleao.png',
     },
 }
-

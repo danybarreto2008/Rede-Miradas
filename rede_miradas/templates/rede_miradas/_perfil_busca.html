@@ -1,0 +1,235 @@
+<!-- BARRA DE BUSCA (perfis, curtas e funcionalidades) -->
+
+<div class="perfil-busca" id="perfil-busca">
+
+    <i class="bi bi-search perfil-busca-lupa"></i>
+
+    <input
+        type="search"
+        id="perfil-busca-input"
+        placeholder="Buscar perfis, curtas ou funcionalidades..."
+        autocomplete="off"
+        aria-label="Buscar perfis, curtas ou funcionalidades"
+    >
+
+    <span class="perfil-busca-atalho" title="Atalho: aperte / para buscar">/</span>
+
+    <div class="perfil-busca-resultados" id="perfil-busca-resultados" hidden></div>
+
+</div>
+
+{{ busca_itens|json_script:"dados-busca-perfil" }}
+
+<script>
+(function () {
+
+    const itensLocais = JSON.parse(
+        document.getElementById('dados-busca-perfil').textContent
+    );
+
+    const urlPerfis = "{% url 'buscar_perfis' %}";
+
+    const caixa = document.getElementById('perfil-busca');
+    const input = document.getElementById('perfil-busca-input');
+    const lista = document.getElementById('perfil-busca-resultados');
+
+    let timer = null;
+    let perfisEncontrados = [];
+    let pedido = 0;
+
+    function limpar(texto) {
+        return texto
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    }
+
+    function criarItem(icone, titulo, detalhe, url, externo, foto) {
+
+        const a = document.createElement('a');
+        a.className = 'busca-item';
+        a.href = url;
+
+        if (externo) {
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+        }
+
+        const ic = document.createElement('span');
+        ic.className = 'busca-item-icone';
+
+        if (foto) {
+            const img = document.createElement('img');
+            img.src = foto;
+            img.alt = '';
+            ic.appendChild(img);
+        } else {
+            const i = document.createElement('i');
+            i.className = 'bi ' + icone;
+            ic.appendChild(i);
+        }
+
+        const textos = document.createElement('span');
+        textos.className = 'busca-item-textos';
+
+        const t = document.createElement('strong');
+        t.textContent = titulo;
+        textos.appendChild(t);
+
+        if (detalhe) {
+            const d = document.createElement('small');
+            d.textContent = detalhe;
+            textos.appendChild(d);
+        }
+
+        a.appendChild(ic);
+        a.appendChild(textos);
+
+        return a;
+    }
+
+    function criarGrupo(nome, itens) {
+
+        if (!itens.length) {
+            return null;
+        }
+
+        const grupo = document.createElement('div');
+        grupo.className = 'busca-grupo';
+
+        const titulo = document.createElement('div');
+        titulo.className = 'busca-grupo-titulo';
+        titulo.textContent = nome;
+        grupo.appendChild(titulo);
+
+        itens.forEach(function (item) {
+            grupo.appendChild(item);
+        });
+
+        return grupo;
+    }
+
+    function desenhar() {
+
+        const termo = limpar(input.value.trim());
+
+        if (termo.length < 1) {
+            lista.hidden = true;
+            lista.innerHTML = '';
+            return;
+        }
+
+        const locais = itensLocais.filter(function (item) {
+            return limpar(item.titulo).indexOf(termo) !== -1;
+        });
+
+        const curtas = locais
+            .filter(function (i) { return i.tipo === 'Curta'; })
+            .slice(0, 5)
+            .map(function (i) {
+                return criarItem(i.icone, i.titulo, 'Curta · abre no YouTube', i.url, true);
+            });
+
+        const paginas = locais
+            .filter(function (i) { return i.tipo !== 'Curta'; })
+            .slice(0, 5)
+            .map(function (i) {
+                return criarItem(i.icone, i.titulo, i.tipo, i.url, false);
+            });
+
+        const perfis = perfisEncontrados.map(function (p) {
+            return criarItem('bi-person', p.titulo, p.detalhe, p.url, false, p.foto);
+        });
+
+        lista.innerHTML = '';
+
+        [
+            criarGrupo('Perfis', perfis),
+            criarGrupo('Curtas', curtas),
+            criarGrupo('Páginas e funções', paginas)
+        ].forEach(function (grupo) {
+            if (grupo) {
+                lista.appendChild(grupo);
+            }
+        });
+
+        if (!lista.children.length) {
+            const vazio = document.createElement('div');
+            vazio.className = 'busca-vazio';
+            vazio.textContent = 'Nada encontrado para essa busca.';
+            lista.appendChild(vazio);
+        }
+
+        lista.hidden = false;
+    }
+
+    function buscarPerfis() {
+
+        const termo = input.value.trim();
+        const numero = ++pedido;
+
+        if (termo.length < 2) {
+            perfisEncontrados = [];
+            desenhar();
+            return;
+        }
+
+        fetch(urlPerfis + '?q=' + encodeURIComponent(termo), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(function (resposta) { return resposta.json(); })
+            .then(function (dados) {
+                if (numero === pedido) {
+                    perfisEncontrados = dados.perfis || [];
+                    desenhar();
+                }
+            })
+            .catch(function () {});
+    }
+
+    input.addEventListener('input', function () {
+        desenhar();
+        clearTimeout(timer);
+        timer = setTimeout(buscarPerfis, 250);
+    });
+
+    input.addEventListener('focus', desenhar);
+
+    input.addEventListener('keydown', function (evento) {
+
+        if (evento.key === 'Escape') {
+            lista.hidden = true;
+            input.blur();
+        }
+
+        if (evento.key === 'Enter') {
+            const primeiro = lista.querySelector('.busca-item');
+            if (primeiro) {
+                evento.preventDefault();
+                primeiro.click();
+            }
+        }
+    });
+
+    /* fecha a lista ao clicar fora */
+    document.addEventListener('click', function (evento) {
+        if (!caixa.contains(evento.target)) {
+            lista.hidden = true;
+        }
+    });
+
+    /* atalho: aperte "/" para buscar */
+    document.addEventListener('keydown', function (evento) {
+
+        const digitando = /^(input|textarea|select)$/i.test(
+            (document.activeElement || {}).tagName || ''
+        );
+
+        if (evento.key === '/' && !digitando) {
+            evento.preventDefault();
+            input.focus();
+        }
+    });
+
+})();
+</script>
